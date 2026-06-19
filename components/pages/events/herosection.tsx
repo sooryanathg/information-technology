@@ -1,41 +1,41 @@
+import Image from "next/image";
+
 export default function HeroSection() {
   return (
-    <div className="bg-zinc-50 font-sans">
-    <section className="w-full h-dvh flex flex-col items-center justify-center relative overflow-hidden">
-      <img
-        src="/image1.png"
-        alt="Description of image"
-        className="absolute w-full h-full object-cover object-center inset-0"
+    <section className="relative h-dvh w-full overflow-hidden">
+      <Image
+        src="/events/heroevents.webp"
+        alt="IT Department building"
+        fill
+        priority
+        className="object-cover object-center"
       />
-      <div className="relative z-10 flex flex-col justify-center w-full h-full">
-        <nav className="absolute top-8 left-24 gap-3 px-20 py-2 rounded-full backdrop-blur-md border border-white/20 text-white font-medium bg-[#939090] flex shadow-xl opacity-60">
-        <a href="/" className="hover:opacity-75 transition-opacity">
-            Home
-        </a>
-        <span className="opacity-40 font-bold text-lg">
-            {'>'}
-        </span>
-        <span className="text-white">
-            <a href="/events">Events</a>
-        </span>
-        </nav>
-        <div className="flex flex-col text-white text-left justify-left gap-4 px-20 py-4 -mt-64">
-          <h1 className="text-6xl font-bold mb-4 underline underline-offset-8 decoration-4">EVENTS</h1>
-          <p className="text-3xl max-w-2xl opacity-70">
-            Explore learn and grow through exciting events organised by the IT department.
+
+      <div className="absolute inset-0 bg-black/10" />
+
+
+      <div className="relative z-10 flex h-full items-center justify-center">
+        <div className="flex flex-col items-center gap-8">
+
+          <p className="max-w-7xl text-left text-[64px] font-semibold bg-gradient-to-b from-[#BABABA] to-[#FFFFFF] bg-clip-text text-transparent">
+            Explore, learn and grow exciting events
+            organised by the department of IT
           </p>
-          <div className="flex flex-wrap gap-4 mt-4">
-            <button className="text-xl px-8 py-3 bg-white text-blue-900 font-semibold rounded-full hover:bg-gray-200 transition-colors shadow-lg">
+
+          <div className="flex gap-40 h-14 ">
+            <button className=" rounded-[15px] border-3 border-white bg-white px-15 py-3 text-[24px] font-semibold text-blue-900 transition-colors hover:bg-gray-200">
               Explore Events
             </button>
-            <button className="text-xl px-8 py-3 bg-transparent border-2 border-white text-white font-semibold rounded-full hover:bg-white/10 backdrop-blur-sm transition-colors">
-              View Past Events
+
+            <button className="rounded-[15px] border-3 border-[#133D65] bg-transparent px-15 py-3 text-[24px] font-semibold text-white backdrop-blur-sm transition-colors hover:bg-white/10">
+              Explore Events
             </button>
           </div>
+
         </div>
       </div>
-      
+
     </section>
-    </div>
+
   );
 }
