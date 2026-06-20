@@ -23,11 +23,11 @@ export default function HeroSection() {
           </p>
 
           <div className="flex gap-40 h-14 ">
-            <button className=" rounded-[15px] border-3 border-white bg-white px-15 py-3 text-[24px] font-semibold text-blue-900 transition-colors hover:bg-gray-200">
+            <button className=" rounded-[15px] border-3 border-white bg-white px-15 py-3 text-[24px] font-semibold text-blue-900 transition-colors hover:bg-gray-200 text-center -mt-2">
               Explore Events
             </button>
 
-            <button className="rounded-[15px] border-3 border-[#133D65] bg-transparent px-15 py-3 text-[24px] font-semibold text-white backdrop-blur-sm transition-colors hover:bg-white/10">
+            <button className="rounded-[15px] border-3 border-[#133D65] bg-transparent px-15 py-3 text-[24px] font-semibold text-white backdrop-blur-sm transition-colors hover:bg-white/10 text-center -mt-2">
               Explore Events
             </button>
           </div>
