@@ -9,6 +9,14 @@
   --color-text-light: #F8F4F3;
   --color-divider: #E0EDFF;
   --color-white: #FFFFFF;
+
+  /* Hero Overlay */
+  --hero-overlay: rgba(0, 0, 0, 0.48);
+  --hero-soft-filter: rgba(255, 255, 255, 0.20);
+
+  --hero-heading-width: 894px;
+--hero-description-width: 820px;
+
 }
 
 @theme inline {
@@ -22,6 +30,11 @@
   --color-text-light: var(--color-text-light);
   --color-divider: var(--color-divider);
   --color-white: var(--color-white);
+
+  --hero-overlay: var(--hero-overlay);
+
+  --font-poppins: var(--font-poppins);
+--font-inter: var(--font-inter);
 }
 
 @media (prefers-color-scheme: dark) {
