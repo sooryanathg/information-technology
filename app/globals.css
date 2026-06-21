@@ -4,19 +4,34 @@
   --background: #ffffff;
   --foreground: #171717;
 
-  /* Reusable Design Tokens */
   --color-brand-blue: #133D65;
   --color-text-light: #F8F4F3;
   --color-divider: #E0EDFF;
   --color-white: #FFFFFF;
 
-  /* Hero Overlay */
   --hero-overlay: rgba(0, 0, 0, 0.48);
   --hero-soft-filter: rgba(255, 255, 255, 0.20);
 
-  --hero-heading-width: 894px;
---hero-description-width: 820px;
+  
 
+  --hero-left-column-width: 700px;
+  --hero-button-column-width: 320px;
+  --hero-column-gap: 8rem;
+  --hero-horizontal-padding: 5rem;
+
+  --hero-divider-width: 700px;
+  --hero-description-width: 700px;
+
+  --hero-button-width: 340px;
+  --hero-button-height: 52px;
+  --hero-button-radius: 10px;
+  --hero-button-padding-x: 1rem;
+  --hero-button-bg: #E2DDD7;
+  --hero-button-border: rgba(79, 93, 117, 0.2);
+  --hero-button-text: #1E3A5F;
+  --hero-button-gap: 0.5rem;
+  --hero-button-stack-gap: 1.25rem;
+  --hero-icon-size: 20px;
 }
 
 @theme inline {
@@ -25,16 +40,13 @@
 
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-poppins: var(--font-poppins);
+  --font-inter: var(--font-inter);
 
   --color-brand-blue: var(--color-brand-blue);
   --color-text-light: var(--color-text-light);
   --color-divider: var(--color-divider);
   --color-white: var(--color-white);
-
-  --hero-overlay: var(--hero-overlay);
-
-  --font-poppins: var(--font-poppins);
---font-inter: var(--font-inter);
 }
 
 @media (prefers-color-scheme: dark) {
