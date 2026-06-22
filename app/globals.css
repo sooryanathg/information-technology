@@ -36,3 +36,8 @@ p {
   font-size: 60px;
   font-weight: 700; 
 }
+h4 {
+  font-family: inter, sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+}
