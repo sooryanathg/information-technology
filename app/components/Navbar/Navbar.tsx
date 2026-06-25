@@ -5,12 +5,12 @@ import { navigationLinks } from "../../data/navigation";
 export default function Navbar() {
   return (
     <nav
-      className="
-        h-[77px]
-        bg-[#1E3A5F]
-        shadow-[0px_4px_4px_rgba(0,0,0,0.25)]
-      "
-    >
+  className="
+    h-[77px]
+    bg-transparent
+    shadow-[0px_4px_4px_rgba(0,0,0,0.25)]
+  "
+>
       <div className="h-full flex items-center px-[51px]">
         
         {/* Logo Section */}
