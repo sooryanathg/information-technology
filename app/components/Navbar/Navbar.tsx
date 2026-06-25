@@ -11,12 +11,12 @@ export default function Navbar() {
     shadow-[0px_4px_4px_rgba(0,0,0,0.25)]
   "
 >
-      <div className="h-full flex items-center px-[51px]">
+      <div className="h-full flex items-center px-4 md:px-8 lg:px-[51px]">
         
         {/* Logo Section */}
         <div className="flex items-center gap-3">
           <Image
-            src="/logo/object.svg"
+            src="/logo/dept-logo.svg"
             alt="Department of IT Logo"
             width={47}
             height={47}
@@ -36,14 +36,15 @@ export default function Navbar() {
         </div>
 
         {/* Navigation Links */}
-        <div className="ml-auto flex items-center gap-[20px]">
+        <div className="ml-auto flex items-center gap-2 lg:gap-[20px] overflow-x-auto">
           {navigationLinks.map((link, index) => (
             <Link
               key={link.label}
               href={link.href}
               className={`
-                w-[124px]
-                h-[36px]
+               min-w-[90px]
+lg:w-[124px]
+h-[36px]
                 rounded-[10px]
                 flex
                 items-center
