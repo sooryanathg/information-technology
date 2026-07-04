@@ -1,9 +1,12 @@
 import Image from "next/image";
-import {cards, categories, sections} from "./data/gear";
+import {cards, categories, sections} from "./data/dataset";
+import {Inter} from "next/font/google";
+
+const inter = Inter({ subsets: ["latin"], weight: ["400", "500", "600", "700", "800", "900"]});
 
 export default function Cards() {
   return (
-    <div className="w-full bg-white">
+    <div className={'w-full bg-white ${inter.className}'}>
         
       <div className="relative z-20 mx-auto -mt-32 w-[90vw] xl:w-[70vw] max-w-[1300px] pb-20">
         
@@ -20,7 +23,7 @@ export default function Cards() {
                 width={75}
                 height={75}
               />
-              <h3 className="text-xl md:text-2xl font-bold mt-4">{category.title}</h3>
+              <h3 className="text-xl md:text-2xl font-black mt-4">{category.title}</h3>
             </div>
           ))}
         </div>
@@ -66,16 +69,16 @@ export default function Cards() {
                   />
                   <span className="ml-2 font-medium">{card.time}</span>
                 </div>
-                
+
                 {/* Footer Section */}
                 <div className="flex items-center justify-between mt-auto">
                   <div className="flex items-center gap-3">
-                    <div className="rounded-full overflow-hidden flex items-center justify-center text-white bg-[#CFD6DF]">
+                    <div className="flex items-center justify-center px-10">
                       <Image 
                         src={card.pfp}
                         alt="Profile Picture"
-                        width={40}
-                        height={40}
+                        width={80}
+                        height={80}
                         className="object-cover"
                       />
                     </div>
@@ -94,7 +97,7 @@ export default function Cards() {
 
       </div>
       <div className="flex flex-col items-center justify-center pb-24">
-        <button className="rounded-[15px] border-[3px] border-[#1d426a] bg-[#1d426a] px-[60px] py-3 text-[24px] font-semibold text-white transition-colors hover:bg-[#245080] text-center cursor-pointer">
+        <button className="rounded-[40px] border-[3px] border-[#1d426a] bg-[#1d426a] px-[60px] py-3 text-[24px] font-semibold text-white transition-colors hover:bg-[#245080] text-center cursor-pointer">
           Explore All
         </button>
       </div>

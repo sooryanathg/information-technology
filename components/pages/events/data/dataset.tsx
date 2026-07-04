@@ -1,7 +1,4 @@
-import Image from "next/image";
-
-export const sections = [
-  { title: "All Categories", bg: "bg-[#e8e6e1]", hover: "hover:bg-gray-300" },
+export const sections = [  { title: "All Categories", bg: "bg-[#e8e6e1]", hover: "hover:bg-gray-300" },
   { title: "Select Date", bg: "bg-[#e8e6e1]", hover: "hover:bg-gray-300" },
   { title: "Upcoming", bg: "bg-[#e8e6e1]", hover: "hover:bg-gray-300" },
   { title: "Search Events", bg: "bg-[#e8e6e1]", hover: "hover:bg-gray-300" },
@@ -37,6 +34,36 @@ export const cards = [
     },
     {
       id: 3,
+      title: "IEEE MATRIX 3.0",
+      description: "IEEE MATRIX 3.0 is a high-energy hackathon organized by IEEE Student Branch Gec Palakkad",
+      time: "2h",
+      org: "IEEE",
+      tag: "Online",
+      pfp: "/events/profile.webp",
+      clock: "/events/clock.webp"
+    },
+    {
+      id: 4,
+      title: "IEEE MATRIX 3.0",
+      description: "IEEE MATRIX 3.0 is a high-energy hackathon organized by IEEE Student Branch Gec Palakkad",
+      time: "2h",
+      org: "IEEE",
+      tag: "Online",
+      pfp: "/events/profile.webp",
+      clock: "/events/clock.webp"
+    },
+    {
+      id: 5,
+      title: "IEEE MATRIX 3.0",
+      description: "IEEE MATRIX 3.0 is a high-energy hackathon organized by IEEE Student Branch Gec Palakkad",
+      time: "2h",
+      org: "IEEE",
+      tag: "Online",
+      pfp: "/events/profile.webp",
+      clock: "/events/clock.webp"
+    },
+    {
+      id: 6,
       title: "IEEE MATRIX 3.0",
       description: "IEEE MATRIX 3.0 is a high-energy hackathon organized by IEEE Student Branch Gec Palakkad",
       time: "2h",
