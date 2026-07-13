@@ -31,7 +31,7 @@ export default function Navbar() {
 
           <h1
             className="
-              text-black
+              text-white
               text-[24px]
               font-semibold
               tracking-[-0.6px]
@@ -55,7 +55,7 @@ export default function Navbar() {
                 flex
                 items-center
                 justify-center
-                text-black
+                text-white
                 text-[14px]
                 font-semibold
                 tracking-[0.35px]
@@ -119,7 +119,7 @@ export default function Navbar() {
                 flex
                 items-center
                 justify-center
-                text-black
+                text-white
                 text-[14px]
                 font-semibold
                 tracking-[0.35px]
