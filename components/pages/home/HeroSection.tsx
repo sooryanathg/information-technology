@@ -5,8 +5,9 @@ export default function HeroSection() {
   return (
     <section className="relative flex min-h-screen w-full items-center overflow-hidden">
       <img src="/hero-bg.webp" alt="Hero Background" className="absolute inset-0 h-full w-full object-cover" />
-<div className="absolute inset-0 bg-black/50" />
-      
+      <div className="absolute inset-0 bg-black/35" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.02),transparent_50%),linear-gradient(90deg,rgba(18,25,31,0.35),rgba(18,25,31,0.25),rgba(18,25,31,0.10))]" />
+
       {/* Main Container */}
       <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-col items-center gap-18 px-6 lg:flex-row lg:justify-between lg:px-16">
         
