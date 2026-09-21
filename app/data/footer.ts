@@ -16,8 +16,8 @@ export const footerContact = {
   addressText:
     "WG3M+8GW, Government Engineering\nCollege Rd, Manampatta,\nSreekrishnapuram, Kerala 678633",
   addressMapUrl: "https://maps.app.goo.gl/pVKDeuSTWuVTPoN46",
-  emailDisplay: "informationtechnologygecskp.gmail.com",
-  emailHref: "mailto:informationtechnologygecskp.gmail.com",
+  emailDisplay: "itassociation@gecskp.ac.in",
+  emailHref: "mailto:itassociation@gecskp.ac.in",
 };
 
 export const footerCopyright =
