@@ -7,22 +7,19 @@ export default function HeroButton({ title, icon }: HeroButtonProps) {
   return (
     <button
       type="button"
-      className="flex w-full items-center justify-between rounded-xl border border-[#4F5D75]/20 bg-[#E2DDD7] px-4 py-3"
+      className="flex min-h-[62px] w-full items-center justify-between gap-4 rounded-2xl border border-[#5b4c40]/15 bg-[#eeeae5]/90 px-5 py-3 text-left shadow-[0_3px_8px_rgba(33,24,18,0.14)] transition-transform hover:-translate-y-0.5 hover:bg-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
     >
-      <div className="flex w-full items-center gap-3">
-        {/* Fixed width 'w-8' forces icon alignment */}
-        <span className="flex w-8 shrink-0 items-center justify-center text-[#1E3A5F]">
+      <div className="flex min-w-0 items-center gap-4">
+        <span className="flex w-6 shrink-0 items-center justify-center text-[#4d3b2d]">
           {icon}
         </span>
 
-        <span className="whitespace-nowrap font-inter text-[15px] font-medium text-[#1E3A5F]">
+        <span className="font-inter text-base font-medium text-[#4d3b2d] sm:text-lg">
           {title}
         </span>
       </div>
 
-      <span className="shrink-0 text-2xl leading-none text-[#1E3A5F]">
-        ›
-      </span>
+      <span aria-hidden="true" className="shrink-0 text-3xl font-light leading-none text-[#4d3b2d]">›</span>
     </button>
   );
 }
