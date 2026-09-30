@@ -30,13 +30,15 @@ export default function AboutHero() {
             Inspiring innovation, advancing knowledge, and driving technological excellence since 1999.
           </p>
 
-          <button
-            type="button"
+          <a
+            href="https://www.gecskp.ac.in/IT.php"
+            target="_blank"
+            rel="noopener noreferrer"
             className="mt-10 flex w-[235px] items-center justify-center gap-3 rounded-full bg-gold px-8 py-4 text-xl font-medium leading-none text-white transition hover:brightness-110"
           >
             explore more
             <Image src="/icons/arrow-up-right.svg" alt="" width={13} height={13} />
-          </button>
+          </a>
         </div>
       </div>
     </section>
