@@ -62,5 +62,177 @@ body {
   color: var(--color-espresso);
 }
 
+/* ------------------------------------------------------------------ */
+/* Pixel intro: boot loader + home hero entrance                       */
+/* <html data-boot> is set by the inline script in app/layout.tsx.     */
+/* ------------------------------------------------------------------ */
 
+html:not([data-boot="run"]):not([data-boot="exit"]) .boot-loader {
+  display: none;
+}
 
+/* Scrolling is blocked while the loader shows by BootLoader's input listeners,
+   not overflow:hidden, so the scrollbar never appears or disappears and the
+   page width stays constant. That keeps the loader tiles aligned with the
+   hero's pixel frame underneath. */
+
+.boot-tile {
+  animation: boot-tile-out 160ms steps(2, end) forwards;
+}
+
+@keyframes boot-tile-out {
+  to {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+}
+
+/* Hero pixel frame tiles stepping in when there was no loader handoff. */
+.pixel-tile-in {
+  animation: pixel-tile-in 160ms steps(2, end) backwards;
+}
+
+@keyframes pixel-tile-in {
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+}
+
+.boot-content-out {
+  animation: pixel-fade-out 180ms steps(3, end) forwards;
+}
+
+.boot-caret {
+  animation: boot-blink 900ms steps(1, end) infinite;
+}
+
+@keyframes boot-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+/* Hero: pixelated copy of the photo that sharpens, then steps out. */
+.hero-pixel-canvas.is-fading {
+  animation: pixel-fade-out 280ms steps(4, end) forwards;
+}
+
+@keyframes pixel-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+/* Hero: elements wait hidden until the loader is out of the way. */
+[data-intro="pending"] .intro-item {
+  opacity: 0;
+}
+
+/* Stepped left-to-right reveal. `backwards` fill so no clip-path lingers
+   afterwards to cut off focus rings or hover lifts. */
+[data-intro="play"] .intro-wipe {
+  animation: pixel-wipe var(--intro-duration, 420ms) steps(var(--intro-steps, 12), end)
+    var(--intro-delay, 0ms) backwards;
+}
+
+@keyframes pixel-wipe {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+[data-intro="play"] .intro-fade {
+  animation: pixel-fade-in 450ms steps(5, end) var(--intro-delay, 0ms) backwards;
+}
+
+@keyframes pixel-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+/* Buttons: a band of small gold pixels sweeps across on hover / focus. */
+.pixel-glitch {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.pixel-glitch::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0;
+  background-image: conic-gradient(
+    from 90deg,
+    #cb9437 25%,
+    transparent 0 50%,
+    #cb9437 0 75%,
+    transparent 0
+  );
+  background-size: 6px 6px;
+  -webkit-mask-image: linear-gradient(90deg, transparent 38%, #000 50%, transparent 62%);
+  mask-image: linear-gradient(90deg, transparent 38%, #000 50%, transparent 62%);
+  -webkit-mask-size: 300% 100%;
+  mask-size: 300% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: 100% 0;
+  mask-position: 100% 0;
+}
+
+.pixel-glitch:hover::after,
+.pixel-glitch:focus-visible::after {
+  opacity: 0.35;
+  animation: pixel-sweep 620ms steps(14, end) forwards;
+}
+
+@keyframes pixel-sweep {
+  to {
+    -webkit-mask-position: 0 0;
+    mask-position: 0 0;
+  }
+}
+
+/* Hero heading: the buttons' gold pixel band, clipped to the letter shapes.
+   PixelText re-mounts this layer to replay it. */
+.heading-sweep {
+  color: transparent;
+  background-image: conic-gradient(
+    from 90deg,
+    #e0a94a 25%,
+    transparent 0 50%,
+    #e0a94a 0 75%,
+    transparent 0
+  );
+  background-size: 8px 8px;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-mask-image: linear-gradient(90deg, transparent 38%, #000 50%, transparent 62%);
+  mask-image: linear-gradient(90deg, transparent 38%, #000 50%, transparent 62%);
+  -webkit-mask-size: 300% 100%;
+  mask-size: 300% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: 100% 0;
+  mask-position: 100% 0;
+  animation: pixel-sweep 3000ms steps(60, end) forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-intro] .intro-item {
+    opacity: 1 !important;
+    animation: none !important;
+  }
+
+  .pixel-glitch::after {
+    display: none;
+  }
+}

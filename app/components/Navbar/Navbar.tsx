@@ -49,16 +49,22 @@ export default function Navbar() {
     <nav
       ref={navRef}
       aria-label="Main navigation"
-      className="absolute inset-x-0 top-0 z-50 h-[77px] bg-linear-to-b from-black/35 to-transparent font-heading"
+      className="absolute inset-x-0 top-0 z-50 h-[77px] font-heading"
     >
-      <div className="flex h-full items-center px-4 md:px-8 lg:px-[51px]">
+      {/* Top shade for link legibility. Masked off on the left so it doesn't
+          grey out the hero's off-white pixel corner behind the logo. */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 bg-linear-to-b from-black/35 to-transparent [mask-image:linear-gradient(90deg,transparent_0%,transparent_28%,#000_50%)]"
+      />
+      <div className="relative flex h-full items-center px-4 md:px-8 lg:px-[51px]">
         <Link
           href="/"
           className="flex shrink-0 items-center gap-3 rounded-md focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
         >
           <Image src="/logo/Object.png" alt="" width={47} height={47} priority />
-          <span className="whitespace-nowrap text-xl font-semibold tracking-[-0.6px] text-white lg:text-2xl">
-            Dept. of IT
+          <span className="whitespace-nowrap text-xl font-bold tracking-[-0.6px] text-bark lg:text-2xl">
+            Dept. of <span className="text-[#b8822a]">IT</span>
           </span>
         </Link>
 
