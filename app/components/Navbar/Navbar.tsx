@@ -1,139 +1,135 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { navigationLinks } from "../../data/navigation";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const pathname = usePathname();
+  const navRef = useRef<HTMLElement>(null);
+
+  // Close the mobile menu whenever the route changes (state adjusted during render).
+  const [prevPathname, setPrevPathname] = useState(pathname);
+  if (prevPathname !== pathname) {
+    setPrevPathname(pathname);
+    setMenuOpen(false);
+  }
+
+  const isActive = (href: string) =>
+    href === "/" ? pathname === "/" : pathname.startsWith(href);
+
+  // Close the mobile menu on Escape or a click outside the nav.
+  useEffect(() => {
+    if (!menuOpen) return;
+
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setMenuOpen(false);
+    };
+    const onPointerDown = (e: PointerEvent) => {
+      if (navRef.current && !navRef.current.contains(e.target as Node)) {
+        setMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("keydown", onKeyDown);
+    document.addEventListener("pointerdown", onPointerDown);
+    return () => {
+      document.removeEventListener("keydown", onKeyDown);
+      document.removeEventListener("pointerdown", onPointerDown);
+    };
+  }, [menuOpen]);
+
+  const linkClass = (href: string) =>
+    `h-[36px] rounded-[10px] flex items-center justify-center px-3
+     text-white text-[14px] font-semibold tracking-[0.35px] whitespace-nowrap
+     transition-colors hover:bg-[rgba(217,217,217,0.25)]
+     focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white
+     ${
+       isActive(href)
+         ? "bg-[rgba(217,217,217,0.40)]"
+         : "bg-[rgba(217,217,217,0.05)]"
+     }`;
 
   return (
     <nav
-      className="
-        relative
-        h-[77px]
-        bg-transparent
-        shadow-[0px_4px_4px_rgba(0,0,0,0.25)]
-      "
+      ref={navRef}
+      aria-label="Main navigation"
+      className="absolute inset-x-0 top-0 z-50 h-[77px] bg-linear-to-b from-black/35 to-transparent"
     >
-      <div className="h-full flex items-center px-4 md:px-8 lg:px-[51px]">
-
+      <div className="flex h-full items-center px-4 md:px-8 lg:px-[51px]">
         {/* Logo Section */}
-        <div className="flex items-center gap-3">
+        <Link
+          href="/"
+          className="flex shrink-0 items-center gap-3 rounded-md focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
+        >
           <Image
-            src="/logo/dept-logo.svg"
-            alt="Department of IT Logo"
+            src="/logo/Object.png"
+            alt=""
             width={47}
             height={47}
             priority
           />
-
-          <h1
-            className="
-              text-white
-              text-[24px]
-              font-semibold
-              tracking-[-0.6px]
-            "
-          >
+          <span className="whitespace-nowrap text-[20px] font-semibold tracking-[-0.6px] text-white lg:text-[24px]">
             Dept. of IT
-          </h1>
-        </div>
+          </span>
+        </Link>
 
         {/* Desktop Navigation */}
-        <div className="ml-auto hidden md:flex items-center gap-2 lg:gap-[20px]">
-          {navigationLinks.map((link, index) => (
-            <Link
-              key={link.label}
-              href={link.href}
-              className={`
-                min-w-[90px]
-                lg:w-[124px]
-                h-[36px]
-                rounded-[10px]
-                flex
-                items-center
-                justify-center
-                text-white
-                text-[14px]
-                font-semibold
-                tracking-[0.35px]
-                transition-all
-                ${
-                  index === 0
-                    ? "bg-[rgba(217,217,217,0.40)]"
-                    : "bg-[rgba(217,217,217,0.05)]"
-                }
-              `}
-            >
-              {link.label}
-            </Link>
+        <ul className="ml-auto hidden items-center gap-1.5 md:flex lg:gap-3 xl:gap-[20px]">
+          {navigationLinks.map((link) => (
+            <li key={link.label}>
+              <Link
+                href={link.href}
+                aria-current={isActive(link.href) ? "page" : undefined}
+                className={`${linkClass(link.href)} xl:w-[124px] xl:px-0`}
+              >
+                {link.label}
+              </Link>
+            </li>
           ))}
-        </div>
+        </ul>
 
         {/* Mobile Hamburger */}
-        <div className="ml-auto md:hidden">
-          <button
-            onClick={() => setMenuOpen(!menuOpen)}
-            aria-label="Toggle navigation menu"
-          >
-            <Image
-  src="/icons/hamburger.svg"
-  alt="Menu"
-  width={69}
-  height={69}
-  priority
-/>
-          </button>
-        </div>
+        <button
+          type="button"
+          onClick={() => setMenuOpen((open) => !open)}
+          aria-label={menuOpen ? "Close navigation menu" : "Open navigation menu"}
+          aria-expanded={menuOpen}
+          aria-controls="mobile-nav-menu"
+          className="ml-auto flex h-11 w-11 items-center justify-center rounded-md md:hidden focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+        >
+          <Image
+            src="/icons/hamburger.svg"
+            alt=""
+            width={36}
+            height={36}
+            priority
+          />
+        </button>
       </div>
 
       {/* Mobile Dropdown */}
       {menuOpen && (
-        <div
-          className="
-            absolute
-            right-4
-            top-[90px]
-            w-[169px]
-            rounded-[25px]
-            bg-[rgba(225,229,233,0.04)]
-            backdrop-blur-md
-            p-6
-            flex
-            flex-col
-            gap-[35px]
-            md:hidden
-          "
+        <ul
+          id="mobile-nav-menu"
+          className="absolute right-4 top-[84px] flex w-[169px] flex-col gap-2 rounded-[25px] border border-white/15 bg-[#2f2925]/85 p-4 shadow-[0_8px_24px_rgba(0,0,0,0.35)] backdrop-blur-md md:hidden"
         >
-          {navigationLinks.map((link, index) => (
-            <Link
-              key={link.label}
-              href={link.href}
-              onClick={() => setMenuOpen(false)}
-              className={`
-                w-[124px]
-                h-[36px]
-                rounded-[10px]
-                flex
-                items-center
-                justify-center
-                text-white
-                text-[14px]
-                font-semibold
-                tracking-[0.35px]
-                ${
-                  index === 0
-                    ? "bg-[rgba(217,217,217,0.50)]"
-                    : "bg-[rgba(217,217,217,0.05)]"
-                }
-              `}
-            >
-              {link.label}
-            </Link>
+          {navigationLinks.map((link) => (
+            <li key={link.label}>
+              <Link
+                href={link.href}
+                aria-current={isActive(link.href) ? "page" : undefined}
+                onClick={() => setMenuOpen(false)}
+                className={`${linkClass(link.href)} w-full`}
+              >
+                {link.label}
+              </Link>
+            </li>
           ))}
-        </div>
+        </ul>
       )}
     </nav>
   );

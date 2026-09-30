@@ -31,8 +31,8 @@ export default function HeroSection() {
           <div className="my-6 h-[3px] w-full max-w-[900px] rounded-full bg-white/80" />
 
           <p className="max-w-[1060px] font-inter text-[1.125rem] font-semibold leading-[1.2] text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.18)] md:text-[1.75rem]">
-            Empowering innovation through knowledge and technology,
-            <br className="hidden md:block" />
+            Empowering innovation through knowledge and technology,{" "}
+            <br className="hidden lg:block" />
             creating future ready engineers for a connected world
           </p>
         </div>
