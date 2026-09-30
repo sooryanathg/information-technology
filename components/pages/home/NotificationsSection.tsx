@@ -22,7 +22,7 @@ export default function NotificationsSection() {
     <section aria-labelledby="notifications-heading" className="rounded-[19px] border border-[#d4cfc7] bg-[#fffaf3] p-4 shadow-[0_2px_5px_rgba(44,32,21,0.12)] sm:p-5">
       <h2 id="notifications-heading" className="font-poppins text-[1.35rem] font-bold uppercase text-[#30251c] sm:text-[1.5rem]">Notification</h2>
 
-      <div className="mt-3 flex gap-5 border-b border-[#e7d8c5] pb-3">
+      <div className="mt-3 flex flex-wrap gap-x-3 gap-y-1 border-b border-[#e7d8c5] pb-3 sm:gap-x-5">
         {categories.map((category) => (
           <button
             key={category}
@@ -37,12 +37,12 @@ export default function NotificationsSection() {
 
       <ul className="mt-1 divide-y divide-[#eee4d8]">
         {visibleNotifications.map(({ title, date, Icon }) => (
-          <li key={title} className="flex min-h-[46px] items-center gap-3 py-2">
+          <li key={title} className="flex min-h-[46px] flex-wrap items-center gap-x-3 gap-y-1 py-2 sm:flex-nowrap">
             <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-[4px] bg-[#f0dfc5] text-[#7c5633]">
               <Icon aria-hidden="true" className="h-4 w-4" strokeWidth={1.7} />
             </span>
-            <span className="min-w-0 flex-1 font-inter text-[0.65rem] font-medium text-[#33271d]">{title}</span>
-            <time className="shrink-0 font-mono text-[0.62rem] text-[#4d3929]">{date}</time>
+            <span className="min-w-0 flex-1 font-inter text-xs font-medium text-[#33271d] sm:text-[0.65rem]">{title}</span>
+            <time className="ml-10 shrink-0 font-mono text-[0.62rem] text-[#4d3929] sm:ml-0">{date}</time>
           </li>
         ))}
       </ul>

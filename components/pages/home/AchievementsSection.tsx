@@ -52,7 +52,7 @@ export default function AchievementsSection() {
         </h2>
 
         {/* Subtitle */}
-        <p className="mt-1 font-inter text-[0.48rem] text-black sm:mt-2 sm:text-xl lg:text-[26px]">
+        <p className="mx-auto mt-1 max-w-2xl font-inter text-xs leading-relaxed text-black sm:mt-2 sm:text-xl lg:text-[26px]">
           Celebrating placements, internships and achievements of our students
         </p>
 
@@ -71,7 +71,7 @@ export default function AchievementsSection() {
               setActiveSlide((current) => (current + 1) % posterImages.length);
             }
           }}
-          className="mx-auto mt-4 grid max-w-[1170px] grid-cols-3 items-center gap-2 sm:mt-8 sm:gap-6 lg:mt-10 lg:gap-7"
+          className="mx-auto mt-4 grid max-w-[1170px] grid-cols-1 items-center gap-2 sm:mt-8 sm:grid-cols-3 sm:gap-6 lg:mt-10 lg:gap-7"
         >
           {visiblePosters.map((posterIndex, position) => (
             <button
@@ -82,10 +82,10 @@ export default function AchievementsSection() {
               onFocus={() => setActiveSlide(posterIndex)}
               onMouseEnter={() => setHoveredSlide(posterIndex)}
               onMouseLeave={() => setHoveredSlide(null)}
-              className={`mx-auto w-full cursor-pointer overflow-hidden rounded-[20px] shadow-[0_12px_18px_rgba(44,34,25,0.22)] transition-all duration-500 hover:z-10 hover:scale-[1.12] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#a96b39] ${
+              className={`mx-auto w-full cursor-pointer overflow-hidden rounded-xl shadow-[0_12px_18px_rgba(44,34,25,0.22)] transition-all duration-500 hover:z-10 hover:scale-[1.04] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#a96b39] sm:rounded-[20px] sm:hover:scale-[1.12] ${
                 position === 1
-                  ? "max-w-[170px] sm:-mt-2 sm:max-w-[460px]"
-                    : "max-w-[140px] sm:mt-10 sm:max-w-[390px]"
+                  ? "max-w-[min(68vw,280px)] sm:-mt-2 sm:max-w-[460px]"
+                    : "hidden max-w-[140px] sm:mt-10 sm:block sm:max-w-[390px]"
               }`}
             >
               <Image

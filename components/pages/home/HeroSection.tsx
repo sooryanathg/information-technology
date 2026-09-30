@@ -65,7 +65,7 @@ export default function HeroSection() {
   }, [activeDetail]);
 
   return (
-    <section className="relative flex min-h-screen w-full items-center overflow-hidden bg-[#6d5b4d]">
+    <section className="relative flex min-h-[100svh] w-full items-center overflow-hidden bg-[#6d5b4d]">
       <Image
         src="/hero-bg.webp"
         alt="Department building surrounded by trees"
@@ -82,23 +82,23 @@ export default function HeroSection() {
         className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_18%_48%,rgba(238,232,225,0.08)_0%,rgba(238,232,225,0.03)_28%,transparent_60%),radial-gradient(ellipse_at_78%_84%,rgba(226,218,204,0.04)_0%,transparent_54%),linear-gradient(0deg,rgba(232,225,214,0.025),transparent_48%)]"
       />
 
-      <div className="relative z-10 mx-auto flex w-full flex-col items-center gap-12 px-6 py-16 lg:flex-row lg:items-center lg:justify-between lg:gap-[5vw] lg:px-[5vw] lg:py-0">
-        <div className="flex w-full flex-1 flex-col">
-          <h1 className="font-poppins text-[clamp(2.5rem,4.2vw,4.5rem)] font-semibold leading-[0.99] tracking-[-0.02em] text-white drop-shadow-[0_2px_3px_rgba(0,0,0,0.22)]">
+      <div className="relative z-10 mx-auto flex w-full flex-col items-center gap-8 px-5 py-12 sm:gap-12 sm:px-8 sm:py-16 lg:flex-row lg:items-center lg:justify-between lg:gap-[5vw] lg:px-[5vw] lg:py-10">
+        <div className="flex w-full flex-1 flex-col text-center lg:text-left">
+          <h1 className="font-poppins text-[clamp(1.8rem,7.4vw,2.45rem)] font-semibold leading-[1.02] tracking-[-0.02em] text-white drop-shadow-[0_2px_3px_rgba(0,0,0,0.22)] sm:text-[clamp(2.5rem,4.2vw,4.5rem)]">
             <span className="block">DEPARTMENT OF</span>
-            <span className="block">INFORMATION TECHNOLOGY</span>
+            <span className="block">INFORMATION <span className="block sm:inline">TECHNOLOGY</span></span>
           </h1>
 
-          <div className="my-7 h-[3px] w-full max-w-[960px] rounded-full bg-white/80" />
+          <div className="mx-auto my-6 h-[3px] w-full max-w-[960px] rounded-full bg-white/80 lg:mx-0 sm:my-7" />
 
-          <p className="max-w-[820px] font-inter text-[1.125rem] font-semibold leading-[1.25] text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.18)] md:text-2xl">
+          <p className="mx-auto max-w-[540px] font-inter text-base font-semibold leading-snug text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.18)] sm:max-w-[820px] sm:text-xl md:text-2xl lg:mx-0">
             Empowering innovation through knowledge and technology,
             <br className="hidden md:block" />
             creating future ready engineers for a connected world
           </p>
         </div>
 
-        <div className="flex w-full shrink-0 flex-col gap-10 lg:w-[25vw] lg:max-w-[440px]">
+        <div className="flex w-full shrink-0 flex-col gap-3 sm:gap-5 lg:w-[25vw] lg:max-w-[440px] lg:gap-8">
           {(Object.keys(departmentDetails) as DepartmentDetail[]).map((key) => {
             const detail = departmentDetails[key];
             return (

@@ -28,10 +28,10 @@ export default function StatsSection() {
     >
       <div
         className="
-          mx-auto grid max-w-[1357px] grid-cols-6 gap-1
+          mx-auto grid max-w-[1357px] grid-cols-2 gap-2
           rounded-[6px] bg-[#5D442F] p-1.5
-          sm:gap-2 sm:rounded-[12px] sm:p-2
-          lg:min-h-[180px] lg:gap-3 lg:rounded-[19px] lg:p-3
+          sm:grid-cols-3 sm:gap-2 sm:rounded-[12px] sm:p-2
+          lg:grid-cols-6 lg:min-h-[180px] lg:gap-3 lg:rounded-[19px] lg:p-3
         "
       >
         {stats.map(({ value, label, Icon }) => (
@@ -41,7 +41,7 @@ export default function StatsSection() {
               flex min-h-[78px] flex-col
               items-center justify-center
               gap-1 rounded-[3px] bg-[#fffaf4]
-              px-0.5 py-2
+              px-2 py-3
               text-center
               sm:min-h-[130px] sm:gap-2 sm:px-2 sm:py-4
               lg:min-h-[156px] lg:rounded-xl lg:gap-3
@@ -63,7 +63,7 @@ export default function StatsSection() {
             <p
               className="
                 font-poppins
-                text-[0.48rem]
+                text-sm
                 font-bold
                 leading-tight
                 text-black
@@ -78,7 +78,7 @@ export default function StatsSection() {
             <p
               className="
                 font-poppins
-                text-[0.45rem]
+                text-xs
                 font-bold
                 leading-tight
                 text-black
