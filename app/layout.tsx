@@ -1,16 +1,8 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Poppins, Inter } from "next/font/google";
+import { Inter, Poppins } from "next/font/google";
 import "./globals.css";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+import Navbar from "@/app/components/Navbar/Navbar";
+import Footer from "@/app/components/Footer/Footer";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -20,13 +12,14 @@ const poppins = Poppins({
 
 const inter = Inter({
   subsets: ["latin"],
-  weight: ["400", "500", "600"],
+  weight: ["400", "500", "600", "700", "800"],
   variable: "--font-inter",
 });
 
 export const metadata: Metadata = {
   title: "Department of Information Technology",
-  description: "Department Website",
+  description:
+    "Empowering innovation through knowledge and technology, creating future ready engineers for a connected world",
 };
 
 export default function RootLayout({
@@ -35,19 +28,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      className={`
-        ${geistSans.variable}
-        ${geistMono.variable}
-        ${poppins.variable}
-        ${inter.variable}
-        h-full
-        antialiased
-      `}
-    >
+    <html lang="en" className={`${poppins.variable} ${inter.variable} h-full antialiased`}>
       <body className="flex min-h-full flex-col">
+        <Navbar />
         {children}
+        <Footer />
       </body>
     </html>
   );
