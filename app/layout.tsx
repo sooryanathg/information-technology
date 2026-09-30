@@ -30,6 +30,15 @@ export const metadata: Metadata = {
   title: "Department of Information Technology",
   description: "Department Website",
 };
+// app/layout.tsx
+import { Poppins } from "next/font/google";
+
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["400", "600"],
+  variable: "--font-poppins",
+});
+
 
 export default function RootLayout({
   children,
@@ -39,14 +48,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`
-        ${geistSans.variable}
-        ${geistMono.variable}
-        ${poppins.variable}
-        ${inter.variable}
-        h-full
-        antialiased
-      `}
+      className={`${geistSans.variable} ${geistMono.variable} ${poppins.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
         <Navbar />
