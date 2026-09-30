@@ -1,107 +1,86 @@
-import Image from "next/image";
-import {cards, categories, sections} from "./data/dataset";
-import {Inter} from "next/font/google";
+"use client";
 
-const inter = Inter({ subsets: ["latin"], weight: ["400", "500", "600", "700", "800", "900"]});
+import { useEffect, useMemo, useState } from "react";
+import CategoryBar from "./CategoryBar";
+import EventCard from "./EventCard";
+import EventFilters, { PAST_EVENTS_ANCHOR, type FilterState } from "./EventFilters";
+import { events } from "./data/dataset";
+import { inter, poppins } from "./fonts";
+
+const INITIAL_VISIBLE = 6;
+
+const INITIAL_FILTERS: FilterState = { category: "all", status: "upcoming", date: "", query: "" };
+
+const SHOW_EVERYTHING: FilterState = { category: "all", status: "all", date: "", query: "" };
 
 export default function Cards() {
+  const [filter, setFilter] = useState<FilterState>(INITIAL_FILTERS);
+  const [showAll, setShowAll] = useState(false);
+  const update = (patch: Partial<FilterState>) => setFilter((f) => ({ ...f, ...patch }));
+
+  // The hero's "View Past Events" link points at the filters' anchor.
+  useEffect(() => {
+    const sync = () => {
+      if (window.location.hash === `#${PAST_EVENTS_ANCHOR}`) setFilter((f) => ({ ...f, status: "past" }));
+    };
+    const raf = requestAnimationFrame(sync);
+    window.addEventListener("hashchange", sync);
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener("hashchange", sync);
+    };
+  }, []);
+
+  const matches = useMemo(() => {
+    const q = filter.query.trim().toLowerCase();
+    return events.filter(
+      (e) =>
+        (filter.category === "all" || e.category === filter.category) &&
+        (filter.status === "all" || e.status === filter.status) &&
+        (!filter.date || e.date === filter.date) &&
+        (!q || `${e.title} ${e.description} ${e.org}`.toLowerCase().includes(q))
+    );
+  }, [filter]);
+
+  const visible = showAll ? matches : matches.slice(0, INITIAL_VISIBLE);
+
   return (
-    <div className={'w-full bg-white ${inter.className}'}>
-        
-      <div className="relative z-20 mx-auto -mt-32 w-[90vw] xl:w-[70vw] max-w-[1300px] pb-20">
-        
-        {/* ROW 1: The Blue Category Boxes */}
-        <div className="grid grid-cols-2 md:grid-cols-4 shadow-xl">
-          {categories.map((category) => (
-            <div 
-              key={category.title}
-              className={`flex flex-col items-center justify-center py-14 text-white transition-colors cursor-pointer ${category.bg} ${category.hover}`}
-            >
-              <Image
-                src={category.image}
-                alt={category.title}
-                width={75}
-                height={75}
-              />
-              <h3 className="text-xl md:text-2xl font-black mt-4">{category.title}</h3>
-            </div>
-          ))}
+    <section
+      id="events"
+      className={`w-full scroll-mt-6 bg-[linear-gradient(180deg,#FFFBF7_0%,#FBEFE3_45%,#EBCBA6_100%)] ${inter.className}`}
+    >
+      <div className="relative z-20 mx-auto -mt-[72px] w-[90vw] max-w-[1190px] pb-16">
+        <CategoryBar active={filter.category} onSelect={(category) => update({ category })} />
+        <div className="mt-12">
+          <EventFilters value={filter} onChange={update} />
         </div>
-
-        {/* ROW 2: The Grey Filter Buttons */}
-        <div className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-          {sections.map((section) => (
-            <div 
-              key={section.title}
-              className={`relative w-full flex items-center justify-center rounded-[15px] py-3 text-black cursor-pointer shadow-sm ${section.bg} ${section.hover}`}
-            >
-              <h3 className="text-lg md:text-xl font-medium">{section.title}</h3>
-            </div>
-          ))}
-        </div>
-
-        {/* ROW 3: The Event Cards */}
-        <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8">
-          {cards.map((card) => (
-            <div key={card.id} className="bg-gradient-to-b from-[#e4e9f0] to-[#f4f6f9] overflow-hidden flex flex-col rounded-[2rem] shadow-lg">
-              
-              {/* Top Blank Placeholder Area */}
-              <div className="h-52 bg-[#CFD6DF] relative">
-                <div className="absolute top-6 left-6 bg-white/70 backdrop-blur-md text-[#153252] px-5 py-1.5 rounded-full text-sm font-semibold">
-                  {card.tag}
-                </div>
-              </div>
-              
-              {/* Card Content Area */}
-              <div className="p-8 flex flex-col flex-grow">
-                <h3 className="text-[24px] font-black text-[#153252] mb-3">{card.title}</h3>
-                <h4 className="text-slate-600 text-sm leading-relaxed mb-6">
-                  {card.description}
-                </h4>
-                
-                {/* Time Section */}
-                <div className="flex items-center text-slate-600 text-sm mb-5">
-                  <Image 
-                    src={card.clock}
-                    alt="Clock"
-                    width={20}
-                    height={20}
-                  />
-                  <span className="ml-2 font-medium">{card.time}</span>
-                </div>
-
-                {/* Footer Section */}
-                <div className="flex items-center justify-between mt-auto">
-                  <div className="flex items-center gap-3">
-                    <div className="flex items-center justify-center px-10">
-                      <Image 
-                        src={card.pfp}
-                        alt="Profile Picture"
-                        width={80}
-                        height={80}
-                        className="object-cover"
-                      />
-                    </div>
-                    <span className="font-bold text-[#153252]">{card.org}</span>
-                  </div>
-                  
-                  <button className="border-[2px] border-[#153252] text-[#153252] px-5 py-1.5 rounded-full text-sm font-bold hover:bg-[#153252] hover:text-white transition-colors tracking-wide">
-                    REGISTER
-                  </button>
-                </div>
-              </div>
-
-            </div>
-          ))}
-        </div>
-
       </div>
-      <div className="flex flex-col items-center justify-center pb-24">
-        <button className="rounded-[40px] border-[3px] border-[#1d426a] bg-[#1d426a] px-[60px] py-3 text-[24px] font-semibold text-white transition-colors hover:bg-[#245080] text-center cursor-pointer">
+
+      {/* Wider than the category bar, as in the design. */}
+      <div className="mx-auto w-[90vw] max-w-[1344px] pb-20">
+        {visible.length ? (
+          <div className="grid grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-3">
+            {visible.map((event) => (
+              <EventCard key={event.id} event={event} />
+            ))}
+          </div>
+        ) : (
+          <p className="text-center text-lg text-[#2B2119]">No events match these filters.</p>
+        )}
+      </div>
+
+      <div className="flex justify-center pb-24">
+        <button
+          type="button"
+          onClick={() => {
+            setFilter(SHOW_EVERYTHING);
+            setShowAll(true);
+          }}
+          className={`${poppins.className} h-16 rounded-full bg-[#B8804F] px-[70px] text-[22px] font-semibold text-white shadow-[0_4px_12px_rgba(120,70,30,0.25)] transition-colors hover:bg-[#a9733f]`}
+        >
           Explore All
         </button>
       </div>
-
-    </div>
+    </section>
   );
 }

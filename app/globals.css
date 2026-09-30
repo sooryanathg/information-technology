@@ -26,14 +26,19 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
-a {
-  font-family: Poppins, sans-serif;
-  font-size: 24px;
-  font-weight: 500; 
-}
+/* Element defaults live in the base layer so Tailwind utility classes on a
+   specific link or heading can still override them. Unlayered rules would
+   win over every utility class in Tailwind v4. */
+@layer base {
+  a {
+    font-family: Poppins, sans-serif;
+    font-size: 24px;
+    font-weight: 500;
+  }
 
-h4 {
-  font-family: inter, sans-serif;
-  font-size: 16px;
-  font-weight: 400;
+  h4 {
+    font-family: inter, sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+  }
 }

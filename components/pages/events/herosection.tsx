@@ -1,36 +1,43 @@
 import Image from "next/image";
+import { PAST_EVENTS_ANCHOR } from "./EventFilters";
+import { poppins } from "./fonts";
+
+const ctaBase =
+  "flex h-14 w-[260px] items-center justify-center rounded-[10px] border-2 border-[#C98C5F] text-[20px] font-semibold text-white transition-colors [font-family:inherit] md:w-[300px] md:text-[22px]";
 
 export default function HeroSection() {
   return (
-  <div className="w-full">
-    <section className="relative h-dvh w-full">
+    <section className={`relative h-dvh min-h-[600px] w-full ${poppins.className}`}>
       <Image
-        src="/events/heroevents.webp"
-        alt="IT Department building"
+        src="/events/heroevents.png"
+        alt="IT Department building corridor"
         fill
         priority
         className="object-cover object-center"
       />
-      <div className="relative z-10 flex h-full items-center justify-center">
-        <div className="flex flex-col items-center gap-8">
+      <div className="absolute inset-0 bg-black/50" />
 
-          <p className="max-w-7xl text-left text-[64px] font-semibold bg-gradient-to-b from-[#BABABA] to-[#FFFFFF] bg-clip-text text-transparent">
+      <div className="relative z-10 flex h-full items-center justify-center px-6 pb-24">
+        <div className="flex flex-col items-center gap-10">
+          <h1 className="max-w-[1280px] text-center text-[clamp(2rem,4.3vw,4rem)] font-semibold leading-[1.2] text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.25)]">
             Explore, learn and grow exciting events
-            organised by the department of IT
-          </p>
+            <br className="hidden md:block" /> organised by the department of IT
+          </h1>
 
-          <div className="flex gap-40 h-14 ">
-            <button className=" rounded-[15px] border-3 border-white bg-white px-15 py-3 text-[24px] font-semibold text-blue-900 transition-colors hover:bg-gray-200 text-center -mt-2">
+          <div className="flex flex-col gap-3 sm:flex-row">
+            <a href="#events" className={`${ctaBase} bg-[#C98C5F]/85 hover:bg-[#C98C5F]`}>
               Explore Events
-            </button>
-
-            <button className="rounded-[15px] border-3 border-[#133D65] bg-transparent px-15 py-3 text-[24px] font-semibold text-white backdrop-blur-sm transition-colors hover:bg-white/10 text-center -mt-2">
+            </a>
+            {/* Jumps to the filters, which switch to "Past" on arrival. */}
+            <a
+              href={`#${PAST_EVENTS_ANCHOR}`}
+              className={`${ctaBase} bg-transparent backdrop-blur-[2px] hover:bg-white/10`}
+            >
               View Past Events
-            </button>
+            </a>
           </div>
         </div>
       </div>
     </section>
-  </div>
   );
 }
