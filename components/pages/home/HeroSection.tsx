@@ -9,6 +9,19 @@ const heroLinks = [
 ];
 
 export default function HeroSection() {
+  const [activeDetail, setActiveDetail] = useState<DepartmentDetail | null>(null);
+
+  useEffect(() => {
+    if (!activeDetail) return;
+
+    function handleEscape(event: KeyboardEvent) {
+      if (event.key === "Escape") setActiveDetail(null);
+    }
+
+    window.addEventListener("keydown", handleEscape);
+    return () => window.removeEventListener("keydown", handleEscape);
+  }, [activeDetail]);
+
   return (
     <section className="relative flex min-h-screen w-full items-center overflow-hidden bg-umber">
       <Image
@@ -35,7 +48,7 @@ export default function HeroSection() {
             <span className="block">Information Technology</span>
           </h1>
 
-          <div className="my-6 h-[3px] w-full max-w-[900px] rounded-full bg-white/80" />
+          <div className="mx-auto my-6 h-[3px] w-full max-w-[960px] rounded-full bg-white/80 lg:mx-0 sm:my-7" />
 
           <p className="max-w-[1060px] text-lg font-semibold leading-[1.2] text-white drop-shadow-[0_1px_2px_rgb(0_0_0/0.18)] md:text-[1.75rem]">
             Empowering innovation through knowledge and technology,{" "}
@@ -50,6 +63,40 @@ export default function HeroSection() {
           ))}
         </div>
       </div>
+
+      {activeDetail && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/55 px-5 py-8"
+          onMouseDown={(event) => {
+            if (event.target === event.currentTarget) setActiveDetail(null);
+          }}
+        >
+          <section
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="department-dialog-title"
+            className="relative w-full max-w-[560px] rounded-[10px] bg-[#b7885a] px-6 py-5 text-white shadow-[0_16px_50px_rgba(0,0,0,0.35)] sm:px-8 sm:py-6"
+          >
+            <button
+              type="button"
+              aria-label="Close dialog"
+              onClick={() => setActiveDetail(null)}
+              className="absolute right-3 top-3 rounded p-1 text-white/90 transition hover:bg-black/10 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+            >
+              <X size={18} />
+            </button>
+            <h2
+              id="department-dialog-title"
+              className="mb-3 pr-7 font-inter text-base font-bold uppercase"
+            >
+              {departmentDetails[activeDetail].title}:
+            </h2>
+            <div className="font-inter text-sm leading-relaxed text-white/95">
+              {departmentDetails[activeDetail].content}
+            </div>
+          </section>
+        </div>
+      )}
     </section>
   );
 }
