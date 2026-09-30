@@ -36,7 +36,7 @@ export default function AboutHero() {
                 Inspiring innovation, advancing knowledge, and driving technological excellence since 1999.
                 </p>
 
-                <button className="mt-10 flex w-[235px] items-center justify-center gap-3 rounded-[40px] bg-[#CB9437] px-8 py-4 text-[24px] font-medium leading-none text-white transition hover:brightness-110">
+                <button className="mt-10 flex w-[235px] items-center justify-center gap-3 rounded-[40px] bg-[#CB9437] px-8 py-4 text-[20px] font-medium leading-none text-white transition hover:brightness-110">
                 explore more
                 <Image
                     src="/Icon.svg"
