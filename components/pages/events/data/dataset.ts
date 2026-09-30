@@ -1,5 +1,3 @@
-// Event data for the events page.
-
 export type EventCategory = "Tech" | "Non-Tech" | "Talks" | "Seminars";
 export type EventStatus = "upcoming" | "past";
 
@@ -12,18 +10,17 @@ export type EventItem = {
   mode: string;
   category: EventCategory;
   status: EventStatus;
-  /** ISO date, yyyy-mm-dd */
+  /** ISO format, yyyy-mm-dd */
   date: string;
-  /** Cover photo in /public. Cards without one show a warm placeholder. */
+  /** Path under /public */
   image?: string;
 };
 
-// Light-to-dark orange ramp, left to right, as in the design.
-export const categories: { title: EventCategory; bg: string; hover: string; icon: string }[] = [
-  { title: "Tech", bg: "bg-[#DC9A6C]", hover: "hover:bg-[#d38f60]", icon: "/events/gear.webp" },
-  { title: "Non-Tech", bg: "bg-[#CF8A5A]", hover: "hover:bg-[#c47f4f]", icon: "/events/gear.webp" },
-  { title: "Talks", bg: "bg-[#BD7A4B]", hover: "hover:bg-[#b16f41]", icon: "/events/gear.webp" },
-  { title: "Seminars", bg: "bg-[#9C6441]", hover: "hover:bg-[#8f5a39]", icon: "/events/gear.webp" },
+export const categories: { title: EventCategory; color: string; icon: string }[] = [
+  { title: "Tech", color: "bg-copper-300", icon: "/events/gear.webp" },
+  { title: "Non-Tech", color: "bg-copper-400", icon: "/events/gear.webp" },
+  { title: "Talks", color: "bg-copper-500", icon: "/events/gear.webp" },
+  { title: "Seminars", color: "bg-clay", icon: "/events/gear.webp" },
 ];
 
 const matrix = {

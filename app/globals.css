@@ -1,51 +1,62 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-  --color-brand-blue: #133D65;
-  --color-white: #FFFFFF;
-  --font-poppins: 'Poppins', sans-serif;
-}
 @theme inline {
-  /* Existing theme variables */
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-
-  /* Add these */
-  --font-poppins: var(--font-poppins);
-  --font-inter: var(--font-inter);
+  --font-sans: var(--font-inter);
+  --font-heading: var(--font-poppins);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+@theme {
+  /* Browns, darkest to lightest */
+  --color-espresso: #2b2119;
+  --color-bark: #2f2925;
+  --color-coffee: #3c2a1c;
+  --color-cocoa: #3f3025;
+  --color-mocha: #4a3b30;
+  --color-driftwood: #5b4c40;
+  --color-walnut: #5d4630;
+  --color-umber: #6d5b4d;
+  --color-taupe: #8a7768;
+
+  /* Warm neutrals */
+  --color-latte: #c4a882;
+  --color-parchment: #e8ddd0;
+  --color-sand-deep: #e6d5be;
+  --color-sand: #f0e6d6;
+  --color-linen: #efeae6;
+  --color-mist: #d9d9d9;
+
+  /* Accents */
+  --color-gold: #cb9437;
+  --color-gold-soft: #d79b47;
+  --color-tan: #c98c5f;
+  --color-caramel: #b8804f;
+  --color-apricot: #d58b5e;
+  --color-copper-300: #dc9a6c;
+  --color-copper-400: #cf8a5a;
+  --color-copper-500: #bd7a4b;
+  --color-clay: #9c6441;
+
+  --shadow-soft: 0 2px 6px rgb(80 45 20 / 0.1);
+  --shadow-card: 0 8px 24px rgb(90 55 25 / 0.18);
+  --shadow-panel: 0 10px 30px rgb(80 45 20 / 0.25);
+  --shadow-raised: 0 4px 12px rgb(120 70 30 / 0.25);
+  --shadow-photo: 0 4px 16px rgb(0 0 0 / 0.15);
+}
+
+@utility bg-cream-fade {
+  background-image: linear-gradient(180deg, #fffbf7 0%, #fbefe3 45%, #ebcba6 100%);
+}
+
+@utility bg-card-cream {
+  background-image: linear-gradient(180deg, #fff7ec 0%, #f9e3c4 100%);
+}
+
+@utility bg-photo-placeholder {
+  background-image: linear-gradient(135deg, #a98463 0%, #d9b48c 55%, #8c6a4f 100%);
 }
 
 body {
   min-width: 320px;
-  background: #6d5b4d;
-  color: var(--foreground);
-  font-family: var(--font-inter), sans-serif;
-}
-/* Element defaults live in the base layer so Tailwind utility classes on a
-   specific link or heading can still override them. Unlayered rules would
-   win over every utility class in Tailwind v4. */
-@layer base {
-  a {
-    font-family: Poppins, sans-serif;
-    font-size: 24px;
-    font-weight: 500;
-  }
-
-  h4 {
-    font-family: inter, sans-serif;
-    font-size: 16px;
-    font-weight: 400;
-  }
+  background: var(--color-umber);
+  color: var(--color-espresso);
 }
