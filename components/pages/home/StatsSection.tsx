@@ -62,7 +62,7 @@ export default function StatsSection() {
             {/* Number */}
             <p
               className="
-                font-poppins
+                font-heading
                 text-sm
                 font-bold
                 leading-tight
@@ -77,7 +77,7 @@ export default function StatsSection() {
             {/* Label */}
             <p
               className="
-                font-poppins
+                font-heading
                 text-xs
                 font-bold
                 leading-tight

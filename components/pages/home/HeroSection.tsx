@@ -1,12 +1,54 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import Image from "next/image";
-import { Eye, GraduationCap, Shield } from "lucide-react";
+import { Eye, GraduationCap, Shield, X } from "lucide-react";
 import HeroButton from "./HeroButton";
 
-const heroLinks = [
-  { title: "Department Vision", icon: Eye },
-  { title: "Department Mission", icon: Shield },
-  { title: "Educational Objectives", icon: GraduationCap },
-];
+const departmentDetails = {
+  vision: {
+    title: "Department Vision",
+    icon: Eye,
+    content: (
+      <p>
+        To achieve excellent standards in IT education and research by keeping abreast of innovations in
+        Information Technology.
+      </p>
+    ),
+  },
+  mission: {
+    title: "Department Mission",
+    icon: Shield,
+    content: (
+      <ol className="list-decimal space-y-2 pl-5">
+        <li>
+          To nurture and develop students as competent IT professionals capable of undertaking challenging and
+          innovative work.
+        </li>
+        <li>To foster self-discipline and socially committed entrepreneurs.</li>
+      </ol>
+    ),
+  },
+  objectives: {
+    title: "Educational Objectives",
+    icon: GraduationCap,
+    content: (
+      <div className="space-y-3">
+        <p className="font-semibold">Program Educational Objectives (PEOs)</p>
+        <ol className="list-decimal space-y-2 pl-5">
+          <li>Apply computing knowledge to solve real-world problems.</li>
+          <li>Build successful careers and contribute to the IT profession.</li>
+          <li>Continue learning and adapt to emerging technologies.</li>
+          <li>Work ethically and collaboratively for society.</li>
+        </ol>
+      </div>
+    ),
+  },
+};
+
+type DepartmentDetail = keyof typeof departmentDetails;
+
+const detailKeys = Object.keys(departmentDetails) as DepartmentDetail[];
 
 export default function HeroSection() {
   const [activeDetail, setActiveDetail] = useState<DepartmentDetail | null>(null);
@@ -14,16 +56,16 @@ export default function HeroSection() {
   useEffect(() => {
     if (!activeDetail) return;
 
-    function handleEscape(event: KeyboardEvent) {
+    const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") setActiveDetail(null);
-    }
+    };
 
-    window.addEventListener("keydown", handleEscape);
-    return () => window.removeEventListener("keydown", handleEscape);
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
   }, [activeDetail]);
 
   return (
-    <section className="relative flex min-h-screen w-full items-center overflow-hidden bg-umber">
+    <section className="relative flex min-h-svh w-full items-center overflow-hidden bg-umber">
       <Image
         src="/home/hero-bg.webp"
         alt="Department building surrounded by trees"
@@ -41,26 +83,30 @@ export default function HeroSection() {
         className="absolute inset-0 bg-[radial-gradient(ellipse_at_18%_48%,rgb(238_232_225/0.08)_0%,rgb(238_232_225/0.03)_28%,transparent_60%),radial-gradient(ellipse_at_78%_84%,rgb(226_218_204/0.04)_0%,transparent_54%),linear-gradient(0deg,rgb(232_225_214/0.025),transparent_48%),linear-gradient(90deg,rgb(232_226_219/0.05),rgb(232_226_219/0.02),transparent)]"
       />
 
-      <div className="relative z-10 mx-auto flex w-full flex-col items-center gap-8 px-6 py-12 lg:flex-row lg:justify-between lg:gap-[2vw] lg:px-[4vw] lg:py-0">
-        <div className="flex w-full flex-1 flex-col">
-          <h1 className="font-heading text-[clamp(2.5rem,4.2vw,4.5rem)] font-semibold uppercase leading-[0.99] tracking-[-0.02em] text-white/75 drop-shadow-[0_3px_3px_rgb(35_29_25/0.55)]">
+      <div className="relative z-10 mx-auto flex w-full flex-col items-center gap-8 px-5 py-12 sm:gap-12 sm:px-8 sm:py-16 lg:flex-row lg:justify-between lg:gap-[5vw] lg:px-[5vw] lg:py-10">
+        <div className="flex w-full flex-1 flex-col text-center lg:text-left">
+          <h1 className="font-heading text-[clamp(1.8rem,7.4vw,2.45rem)] font-semibold uppercase leading-[1.02] tracking-[-0.02em] text-white drop-shadow-[0_2px_3px_rgb(0_0_0/0.22)] sm:text-[clamp(2.5rem,4.2vw,4.5rem)]">
             <span className="block">Department of</span>
-            <span className="block">Information Technology</span>
+            <span className="block">
+              Information <span className="block sm:inline">Technology</span>
+            </span>
           </h1>
 
-          <div className="mx-auto my-6 h-[3px] w-full max-w-[960px] rounded-full bg-white/80 lg:mx-0 sm:my-7" />
+          <div className="mx-auto my-6 h-[3px] w-full max-w-[960px] rounded-full bg-white/80 sm:my-7 lg:mx-0" />
 
-          <p className="max-w-[1060px] text-lg font-semibold leading-[1.2] text-white drop-shadow-[0_1px_2px_rgb(0_0_0/0.18)] md:text-[1.75rem]">
-            Empowering innovation through knowledge and technology,{" "}
-            <br className="hidden lg:block" />
-            creating future ready engineers for a connected world
+          <p className="mx-auto max-w-[540px] text-base font-semibold leading-snug text-white drop-shadow-[0_1px_2px_rgb(0_0_0/0.18)] sm:max-w-[820px] sm:text-xl md:text-2xl lg:mx-0">
+            Empowering innovation through knowledge and technology,
+            <br className="hidden md:block" /> creating future ready engineers for a connected world
           </p>
         </div>
 
-        <div className="flex w-full shrink-0 flex-col gap-9 lg:mr-[3vw] lg:w-[360px]">
-          {heroLinks.map(({ title, icon: Icon }) => (
-            <HeroButton key={title} title={title} icon={<Icon size={23} />} />
-          ))}
+        <div className="flex w-full shrink-0 flex-col gap-3 sm:gap-5 lg:w-[25vw] lg:max-w-[440px] lg:gap-8">
+          {detailKeys.map((key) => {
+            const { title, icon: Icon } = departmentDetails[key];
+            return (
+              <HeroButton key={key} title={title} icon={<Icon size={23} />} onClick={() => setActiveDetail(key)} />
+            );
+          })}
         </div>
       </div>
 
@@ -71,11 +117,11 @@ export default function HeroSection() {
             if (event.target === event.currentTarget) setActiveDetail(null);
           }}
         >
-          <section
+          <div
             role="dialog"
             aria-modal="true"
             aria-labelledby="department-dialog-title"
-            className="relative w-full max-w-[560px] rounded-[10px] bg-[#b7885a] px-6 py-5 text-white shadow-[0_16px_50px_rgba(0,0,0,0.35)] sm:px-8 sm:py-6"
+            className="relative w-full max-w-[560px] rounded-[10px] bg-toffee px-6 py-5 text-white shadow-[0_16px_50px_rgb(0_0_0/0.35)] sm:px-8 sm:py-6"
           >
             <button
               type="button"
@@ -85,16 +131,11 @@ export default function HeroSection() {
             >
               <X size={18} />
             </button>
-            <h2
-              id="department-dialog-title"
-              className="mb-3 pr-7 font-inter text-base font-bold uppercase"
-            >
+            <h2 id="department-dialog-title" className="mb-3 pr-7 text-base font-bold uppercase">
               {departmentDetails[activeDetail].title}:
             </h2>
-            <div className="font-inter text-sm leading-relaxed text-white/95">
-              {departmentDetails[activeDetail].content}
-            </div>
-          </section>
+            <div className="text-sm leading-relaxed text-white/95">{departmentDetails[activeDetail].content}</div>
+          </div>
         </div>
       )}
     </section>

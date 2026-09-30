@@ -38,7 +38,7 @@ export default function ResourcesSection() {
 
   return (
     <section aria-labelledby="resources-heading" className="rounded-[19px] border border-[#d4c2aa] bg-[#f0e3d0] p-4 shadow-[0_2px_5px_rgba(44,32,21,0.12)] sm:p-5">
-      <h2 id="resources-heading" className="font-poppins text-[1.35rem] font-bold uppercase text-[#30251c] sm:text-[1.5rem]">Resources</h2>
+      <h2 id="resources-heading" className="font-heading text-[1.35rem] font-bold uppercase text-[#30251c] sm:text-[1.5rem]">Resources</h2>
 
       <div className="mt-4 flex flex-wrap gap-2 border-b border-[#dbc9b0] pb-3">
         {programs.map((program) => (
@@ -46,7 +46,7 @@ export default function ResourcesSection() {
             key={program}
             type="button"
             onClick={() => handleProgramChange(program)}
-            className={`rounded-[9px] border px-4 py-1.5 font-inter text-[0.65rem] font-medium transition-colors ${selectedProgram === program ? "border-[#65472d] bg-[#65472d] text-white" : "border-[#d9c2a2] bg-transparent text-[#594430] hover:bg-[#e7d6be]"}`}
+            className={`rounded-[9px] border px-4 py-1.5 text-[0.65rem] font-medium transition-colors ${selectedProgram === program ? "border-[#65472d] bg-[#65472d] text-white" : "border-[#d9c2a2] bg-transparent text-[#594430] hover:bg-[#e7d6be]"}`}
           >
             {program}
           </button>
@@ -60,7 +60,7 @@ export default function ResourcesSection() {
             type="button"
             onClick={() => setSelectedSemester(semester)}
             aria-pressed={selectedSemester === semester}
-            className={`min-w-8 rounded-[3px] px-2 py-1.5 font-inter text-[0.65rem] transition-colors ${selectedSemester === semester ? "bg-[#806d5d] text-white" : "bg-[#f8efe3] text-[#34281e] hover:bg-[#e6d4bb]"}`}
+            className={`min-w-8 rounded-[3px] px-2 py-1.5 text-[0.65rem] transition-colors ${selectedSemester === semester ? "bg-[#806d5d] text-white" : "bg-[#f8efe3] text-[#34281e] hover:bg-[#e6d4bb]"}`}
           >
             {semester}
           </button>
@@ -77,7 +77,7 @@ export default function ResourcesSection() {
               <span className="flex h-7 w-7 items-center justify-center rounded-[3px] bg-[#bc8b57] text-[#33271d]">
                 <Icon aria-hidden="true" className="h-4 w-4" strokeWidth={1.8} />
               </span>
-              <span className="font-inter text-[0.65rem] font-medium">{label}</span>
+              <span className="text-[0.65rem] font-medium">{label}</span>
             </button>
           </li>
         ))}

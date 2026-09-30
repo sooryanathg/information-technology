@@ -6,10 +6,10 @@ import { Star } from "lucide-react";
 import { useState } from "react";
 
 const posterImages = [
-  "/achievement1.png",
-  "/achievement2.png",
-  "/achievement3.png",
-  "/achievement4.png",
+  "/home/achievements/achievement1.png",
+  "/home/achievements/achievement2.png",
+  "/home/achievements/achievement3.png",
+  "/home/achievements/achievement4.png",
 ];
 
 export default function AchievementsSection() {
@@ -45,14 +45,14 @@ export default function AchievementsSection() {
         {/* Heading */}
         <h2
           id="achievements-heading"
-          className="font-poppins text-[0.95rem] font-semibold leading-tight text-black sm:text-3xl lg:text-[48px]"
+          className="font-heading text-[0.95rem] font-semibold leading-tight text-black sm:text-3xl lg:text-[48px]"
         >
           Our Students are{" "}
           <span className="text-[#ad7746]">Making Us Proud</span>
         </h2>
 
         {/* Subtitle */}
-        <p className="mx-auto mt-1 max-w-2xl font-inter text-xs leading-relaxed text-black sm:mt-2 sm:text-xl lg:text-[26px]">
+        <p className="mx-auto mt-1 max-w-2xl text-xs leading-relaxed text-black sm:mt-2 sm:text-xl lg:text-[26px]">
           Celebrating placements, internships and achievements of our students
         </p>
 
