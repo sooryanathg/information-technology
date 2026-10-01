@@ -73,8 +73,7 @@ html:not([data-boot="run"]):not([data-boot="exit"]) .boot-loader {
 
 /* Scrolling is blocked while the loader shows by BootLoader's input listeners,
    not overflow:hidden, so the scrollbar never appears or disappears and the
-   page width stays constant. That keeps the loader tiles aligned with the
-   hero's pixel frame underneath. */
+   page width stays constant under the loader's tiles. */
 
 .boot-tile {
   animation: boot-tile-out 160ms steps(2, end) forwards;
@@ -87,9 +86,17 @@ html:not([data-boot="run"]):not([data-boot="exit"]) .boot-loader {
   }
 }
 
-/* Hero pixel frame tiles stepping in when there was no loader handoff. */
+/* Hero pixel frame: every tile is a window onto the blurred copy of the photo
+   that HeroPixelFrame sets on the frame as --glass. */
+.pixel-glass {
+  background-image: var(--glass);
+  background-size: var(--glass-size);
+  background-repeat: no-repeat;
+}
+
+/* The tiles stepping in. */
 .pixel-tile-in {
-  animation: pixel-tile-in 160ms steps(2, end) backwards;
+  animation: pixel-tile-in 160ms steps(2, end) var(--tile-delay, 0ms) backwards;
 }
 
 @keyframes pixel-tile-in {
@@ -97,6 +104,69 @@ html:not([data-boot="run"]):not([data-boot="exit"]) .boot-loader {
     opacity: 0;
     transform: scale(0.5);
   }
+}
+
+/* Hero pixel frame at rest: tiles in the dithered edge drop out now and then
+   and fall back into place a tile at a time, trailing a fading ghost; a few
+   more fall into empty cells and stay a while. Every tile runs its own cycle
+   (set inline by HeroPixelFrame, with --tile on the frame), and `visibility`
+   leaves opacity free for the step-in above. */
+.pixel-shimmer {
+  animation: pixel-shimmer var(--shimmer-duration, 10s) step-end var(--shimmer-delay, 0ms) infinite;
+}
+
+.pixel-tile-in.pixel-shimmer {
+  animation:
+    pixel-tile-in 160ms steps(2, end) var(--tile-delay, 0ms) backwards,
+    pixel-shimmer var(--shimmer-duration, 10s) step-end var(--shimmer-delay, 0ms) infinite;
+}
+
+@keyframes pixel-shimmer {
+  80% {
+    visibility: hidden;
+    transform: translateY(calc(var(--tile) * -8));
+    box-shadow: var(--pixel-trail);
+  }
+  90% {
+    visibility: visible;
+    transform: translateY(calc(var(--tile) * -8));
+    box-shadow: var(--pixel-trail);
+    animation-timing-function: steps(8, end);
+  }
+  96% {
+    visibility: visible;
+    transform: none;
+    box-shadow: 0 0 0 transparent, 0 0 0 transparent;
+  }
+}
+
+.pixel-spark {
+  visibility: hidden;
+  animation: pixel-spark var(--shimmer-duration, 10s) step-end var(--shimmer-delay, 0ms) infinite;
+}
+
+@keyframes pixel-spark {
+  70% {
+    visibility: visible;
+    transform: translateY(calc(var(--tile) * -8));
+    box-shadow: var(--pixel-trail);
+    animation-timing-function: steps(8, end);
+  }
+  76% {
+    visibility: visible;
+    transform: none;
+    box-shadow: 0 0 0 transparent, 0 0 0 transparent;
+  }
+  96% {
+    visibility: hidden;
+  }
+}
+
+/* Ghost of the tile's last two positions while it falls. */
+[data-pixel-frame] {
+  --pixel-trail:
+    0 calc(var(--tile) * -1) 0 color-mix(in srgb, currentColor 28%, transparent),
+    0 calc(var(--tile) * -2) 0 color-mix(in srgb, currentColor 10%, transparent);
 }
 
 .boot-content-out {

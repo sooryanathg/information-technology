@@ -35,16 +35,14 @@ function subscribeBootPhase(onChange: () => void) {
 
 /**
  * Where the boot loader is: "pending" while it covers the page (or during SSR),
- * "handoff" once it finished and left its tiles in place for the hero frame,
- * "free" when it is gone and page elements should animate in themselves.
+ * "free" once it is gone and page elements should animate in themselves.
  */
-export function useBootPhase(): "pending" | "handoff" | "free" {
+export function useBootPhase(): "pending" | "free" {
   return useSyncExternalStore(
     subscribeBootPhase,
     () => {
-      const { boot, bootHandoff } = document.documentElement.dataset;
-      if (boot === "run" || boot === "exit") return "pending";
-      return bootHandoff ? "handoff" : "free";
+      const { boot } = document.documentElement.dataset;
+      return boot === "run" || boot === "exit" ? "pending" : "free";
     },
     () => "pending"
   );

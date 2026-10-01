@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { drawPixelated } from "@/lib/pixelate";
 import { BOOT_DONE_EVENT, BOOT_EVENT, BOOT_SEEN_KEY, hash } from "@/lib/intro";
-import { FRAME_COLOR, frameGeometry, frameTiles, tilePosition } from "@/lib/pixelFrame";
+import { FRAME_COLOR, frameGeometry } from "@/lib/pixelFrame";
 
 const MIN_DURATION = 2600; // ms the counter takes to reach 100
 const MAX_WAIT = 5000; // stop waiting for window "load" after this
@@ -18,7 +18,7 @@ const TILE_OUT_MS = 160; // must match .boot-tile in globals.css
 const INK = "#2f2925";
 const GOLD = "#b8822a";
 
-type Tile = { x: number; y: number; size: number; delay: number; keep: boolean };
+type Tile = { x: number; y: number; size: number; delay: number };
 
 const STATUS = [
   [25, "loading modules"],
@@ -33,38 +33,30 @@ function statusFor(p: number) {
 }
 
 /**
- * Tiles covering the viewport. When the hero's pixel frame sits exactly under
- * the viewport, its tiles are marked `keep` so they stay put and the hero frame
- * takes over from them without a visible change.
+ * Tiles covering the viewport, anchored to the bottom-left like the hero's
+ * pixel frame but twice its tile size, which keeps the number of animated
+ * elements down.
  */
-function buildTiles(): { tiles: Tile[]; total: number; handoff: boolean } {
+function buildTiles(): { tiles: Tile[]; total: number } {
   const vw = window.innerWidth;
   const vh = window.innerHeight;
-  const frameEl = document.querySelector<HTMLElement>("[data-pixel-frame]");
-  const rect = frameEl?.getBoundingClientRect();
-  const aligned = !!rect && Math.abs(rect.top) < 1 && Math.abs(rect.left) < 1 && Math.abs(rect.height - vh) < 2;
-
-  // Use the hero's own box when aligned so both grids match exactly.
-  const g = aligned ? frameGeometry(rect!.width, rect!.height) : frameGeometry(vw, vh);
-  const keep = aligned ? frameTiles(g) : new Set<number>();
-  const cols = Math.ceil(vw / g.size); // may exceed g.cols to cover a scrollbar gutter
+  const size = frameGeometry(vw, vh).size * 2;
+  const cols = Math.ceil(vw / size);
+  const rows = Math.ceil(vh / size);
 
   const tiles: Tile[] = [];
-  for (let r = 0; r < g.rows; r++) {
+  for (let r = 0; r < rows; r++) {
     for (let c = 0; c < cols; c++) {
-      const i = r * cols + c;
-      const { x, y } = tilePosition(g, c, r);
       tiles.push({
-        x,
-        y,
-        size: g.size,
-        // Clears top to bottom, so the last tiles to go sit next to the frame.
-        delay: Math.round((r / Math.max(1, g.rows - 1)) * TILE_SPREAD + hash(i) * TILE_JITTER),
-        keep: c < g.cols && keep.has(r * g.cols + c),
+        x: c * size,
+        y: vh - (rows - r) * size,
+        size,
+        // Clears top to bottom.
+        delay: Math.round((r / Math.max(1, rows - 1)) * TILE_SPREAD + hash(r * cols + c) * TILE_JITTER),
       });
     }
   }
-  return { tiles, total: TILE_SPREAD + TILE_JITTER + TILE_OUT_MS + 60, handoff: keep.size > 0 };
+  return { tiles, total: TILE_SPREAD + TILE_JITTER + TILE_OUT_MS + 60 };
 }
 
 export default function BootLoader() {
@@ -149,10 +141,9 @@ export default function BootLoader() {
       try {
         sessionStorage.setItem(BOOT_SEEN_KEY, "1");
       } catch {}
-      const { tiles, total, handoff } = buildTiles();
+      const { tiles, total } = buildTiles();
       setTiles(tiles);
       setPhase("exit");
-      if (handoff) root.dataset.bootHandoff = "1";
       root.dataset.boot = "exit";
       window.dispatchEvent(new Event(BOOT_EVENT));
       timers.push(
@@ -189,7 +180,7 @@ export default function BootLoader() {
         tiles.map((t, i) => (
           <span
             key={i}
-            className={`absolute ${t.keep ? "" : "boot-tile"}`}
+            className="boot-tile absolute"
             style={{
               left: t.x,
               top: t.y,

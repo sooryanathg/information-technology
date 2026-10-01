@@ -106,7 +106,7 @@ export default function HeroSection() {
         className="absolute inset-0 bg-[radial-gradient(ellipse_at_18%_48%,rgb(238_232_225/0.08)_0%,rgb(238_232_225/0.03)_28%,transparent_60%),radial-gradient(ellipse_at_78%_84%,rgb(226_218_204/0.04)_0%,transparent_54%),linear-gradient(0deg,rgb(232_225_214/0.025),transparent_48%),linear-gradient(90deg,rgb(232_226_219/0.05),rgb(232_226_219/0.02),transparent)]"
       />
 
-      <HeroPixelFrame />
+      <HeroPixelFrame imgRef={imgRef} background={HERO_BG} alpha={0.94} />
 
       <div className="relative z-10 mx-auto flex w-full flex-col items-center gap-8 px-5 py-12 sm:gap-12 sm:px-8 sm:py-16 lg:flex-row lg:justify-between lg:gap-[5vw] lg:px-[5vw] lg:py-10">
         <div className="flex w-full flex-1 flex-col text-center lg:text-left">
