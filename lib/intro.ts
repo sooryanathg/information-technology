@@ -1,6 +1,6 @@
 "use client";
 
-import { useSyncExternalStore } from "react";
+import { useEffect, useState, useSyncExternalStore, type RefObject } from "react";
 
 // The boot loader drives <html data-boot>:
 //   "run"  -> loader is showing, page intros should wait
@@ -46,6 +46,31 @@ export function useBootPhase(): "pending" | "free" {
     },
     () => "pending"
   );
+}
+
+/**
+ * True once `threshold` of `ref` has scrolled into view. With `once` it then
+ * stays true; without, it turns false again when `ref` has left the view
+ * completely, so an intro can replay on the next visit.
+ */
+export function useInView(ref: RefObject<Element | null>, { threshold = 0.3, once = true } = {}) {
+  const [inView, setInView] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || (once && inView)) return;
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && entry.intersectionRatio >= threshold * 0.95) setInView(true);
+        else if (!once && !entry.isIntersecting) setInView(false);
+      },
+      { threshold: [0, threshold] }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [ref, inView, threshold, once]);
+
+  return inView;
 }
 
 const REDUCED_QUERY = "(prefers-reduced-motion: reduce)";

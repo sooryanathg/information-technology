@@ -13,7 +13,8 @@ const MAX_CELLS = 600;
 /**
  * Site-wide pixel trail: grid cells under the mouse light up in the frame's
  * off-white with a soft gold glow (so they still read on light sections) and
- * fade out in steps. Mouse only; off for reduced motion.
+ * fade out in steps. Mouse only; off for reduced motion. Not over the home
+ * hero, whose pixel frame leaves a trail of blurred tiles there instead.
  */
 export default function PixelCursor() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -81,6 +82,11 @@ export default function PixelCursor() {
       if (e.pointerType !== "mouse") return;
       const x = e.clientX;
       const y = e.clientY;
+      const hero = document.querySelector("[data-pixel-frame]")?.getBoundingClientRect();
+      if (hero && x >= hero.left && x < hero.right && y >= hero.top && y < hero.bottom) {
+        prev = null;
+        return;
+      }
       // Fill in the path between events so fast moves leave a continuous trail.
       const from = prev ?? { x, y };
       const steps = Math.max(1, Math.ceil(Math.hypot(x - from.x, y - from.y) / GRID));
@@ -129,7 +135,9 @@ export default function PixelCursor() {
       ref={canvasRef}
       aria-hidden="true"
       // z-[5]: above section backgrounds and the pixel frame, below content
-      // layers (z-10+) such as hero text and buttons, so it never covers text.
+      // layers such as text and buttons, so it never covers them. Content has
+      // to be stacked at z-10 or higher for that; anything unstacked sits under
+      // the trail.
       className="pointer-events-none fixed inset-0 z-[5] h-full w-full [filter:blur(0.4px)_drop-shadow(0_0_5px_rgba(203,148,55,0.85))]"
     />
   );

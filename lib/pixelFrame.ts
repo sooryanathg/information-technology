@@ -12,6 +12,15 @@ export function frameGeometry(width: number, height: number): FrameGeometry {
   return { size, cols: Math.ceil(width / size), rows: Math.ceil(height / size), width, height };
 }
 
+/**
+ * Tile size shared by the pixel effects of a page: that of the pixel frame on
+ * it (the home hero's), or what a frame over the viewport would use. Browser only.
+ */
+export function pageTileSize() {
+  const frame = document.querySelector("[data-pixel-frame]")?.getBoundingClientRect();
+  return frameGeometry(frame?.width || window.innerWidth, frame?.height || window.innerHeight).size;
+}
+
 /** Top-left position of tile (c, r); rows are laid out upwards from the bottom edge. */
 export function tilePosition(g: FrameGeometry, c: number, r: number) {
   return { x: c * g.size, y: g.height - (g.rows - r) * g.size };
@@ -92,7 +101,7 @@ export function frameLayout(g: FrameGeometry) {
   return { tiles, dither, sparks };
 }
 
-const RISE_EDGE = 10; // rows of dither leading the rising band
+const RISE_EDGE = 16; // rows of dither leading the rising band
 
 /**
  * Whether the tile in column `c`, `k` rows above the bottom edge, is filled
@@ -106,19 +115,35 @@ export function risen(g: FrameGeometry, c: number, k: number, front: number) {
   return depth >= 1 || hash(c * 37 + k * 859 + 5) < Math.pow(depth, 1.6);
 }
 
-const PAGE_BASE = 3; // rows of page-coloured dither along the bottom edge at rest
+/**
+ * How close to the running front of the risen band the tile in column `c`,
+ * `k` rows above the bottom edge, sits: 1 for a tile that has only just
+ * switched on, falling to 0 where the band is solid, and 0 for tiles that are
+ * not filled at all.
+ */
+export function risenLead(g: FrameGeometry, c: number, k: number, front: number) {
+  const depth = (bandHeight(g, c) + front - k) / RISE_EDGE;
+  if (depth <= 0 || depth >= 1 || hash(c * 37 + k * 859 + 5) >= Math.pow(depth, 1.6)) return 0;
+  return 1 - depth;
+}
+
+const PAGE_BASE = 3; // rows of page-coloured dither along the bottom edge once it has come in
+const PAGE_IN = 3; // rows the band has to rise for that dither to come in fully; there is none at rest
 const PAGE_EDGE = 5; // rows over which that dither thins out
-const PAGE_RATE = 0.6; // how fast it follows the rising band
+const PAGE_RATE = 0.12; // how fast it follows the rising band; higher leaves a taller empty strip
 
 /**
  * Whether the tile in column `c`, `k` rows above the bottom edge, has gone all
  * the way to the page colour. This is a dithered edge along the very bottom
  * that follows the rising band at a slower pace, so the hero ends as sharp
  * photo, then blurred tiles, then the page, instead of on a straight line.
+ * At rest (`front` 0) there is none of it, only the blurred tiles; it comes in
+ * over the first rows of the rise and goes again on the way back.
  */
 export function paged(g: FrameGeometry, c: number, k: number, front: number) {
   if (tooSmall(g)) return false;
-  const depth = (PAGE_BASE + (hash(c * 11 + 3) - 0.5) * 2 + front * PAGE_RATE - k) / PAGE_EDGE;
+  const grown = Math.min(1, front / PAGE_IN);
+  const depth = ((PAGE_BASE + (hash(c * 11 + 3) - 0.5) * 2) * grown + front * PAGE_RATE - k) / PAGE_EDGE;
   if (depth <= 0) return false;
   return depth >= 1 || hash(c * 41 + k * 733 + 9) < Math.pow(depth, 1.6);
 }

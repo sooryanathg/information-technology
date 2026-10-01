@@ -17,7 +17,8 @@ const REACH = 24; // px around the text where the cursor still counts as on it
 const GLOW_COLOR = "#e3ae55";
 
 type Props = {
-  as?: "h1" | "p";
+  as?: "h1" | "h2" | "p";
+  id?: string;
   /** What is actually shown and read (e.g. the decoding heading). */
   children: ReactNode;
   /** The same text with the same line breaks, used for the effect layers. */
@@ -37,6 +38,7 @@ type Props = {
  */
 export default function PixelText({
   as: Tag = "p",
+  id,
   children,
   layout,
   play,
@@ -190,6 +192,7 @@ export default function PixelText({
 
   return (
     <Tag
+      id={id}
       ref={rootRef as React.Ref<HTMLHeadingElement & HTMLParagraphElement>}
       onPointerEnter={onPointerEnter}
       className={`relative ${className}`}

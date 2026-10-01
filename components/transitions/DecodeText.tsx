@@ -15,6 +15,8 @@ type Props = {
   delay?: number;
   /** character index offset, so consecutive lines continue the sweep */
   offset?: number;
+  /** ms between each character starting; lower for long texts */
+  stagger?: number;
   className?: string;
 };
 
@@ -23,11 +25,18 @@ type Props = {
  * character cycling through code glyphs before locking in. Screen readers get
  * the plain text; layout never shifts because the real glyph reserves space.
  */
-export default function DecodeText({ text, play, delay = 0, offset = 0, className }: Props) {
+export default function DecodeText({ text, play, delay = 0, offset = 0, stagger = STAGGER, className }: Props) {
   const reduced = usePrefersReducedMotion();
   const [t, setT] = useState<number | null>(null);
+
+  // Start over whenever `play` changes, so the decode can replay.
+  const [prevPlay, setPrevPlay] = useState(play);
+  if (prevPlay !== play) {
+    setPrevPlay(play);
+    setT(null);
+  }
   const chars = [...text];
-  const total = delay + (offset + chars.length) * STAGGER + SCRAMBLE;
+  const total = delay + (offset + chars.length) * stagger + SCRAMBLE;
 
   useEffect(() => {
     if (!play || reduced) return;
@@ -68,7 +77,7 @@ export default function DecodeText({ text, play, delay = 0, offset = 0, classNam
               {[...word].map((ch, c) => {
                 const i = offset + index++;
                 if (!animating) return <span key={c}>{ch}</span>;
-                const startAt = delay + i * STAGGER;
+                const startAt = delay + i * stagger;
                 if (now < startAt) {
                   return (
                     <span key={c} className="invisible">

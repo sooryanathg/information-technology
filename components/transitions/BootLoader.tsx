@@ -2,8 +2,9 @@
 
 import { useEffect, useRef, useState } from "react";
 import { drawPixelated } from "@/lib/pixelate";
-import { BOOT_DONE_EVENT, BOOT_EVENT, BOOT_SEEN_KEY, hash } from "@/lib/intro";
-import { FRAME_COLOR, frameGeometry } from "@/lib/pixelFrame";
+import { BOOT_DONE_EVENT, BOOT_EVENT, BOOT_SEEN_KEY } from "@/lib/intro";
+import { TRANSITION } from "@/lib/pageTransition";
+import { FRAME_COLOR } from "@/lib/pixelFrame";
 
 const MIN_DURATION = 2600; // ms the counter takes to reach 100
 const MAX_WAIT = 5000; // stop waiting for window "load" after this
@@ -11,14 +12,12 @@ const HOLD_AT_100 = 450; // pause on 100 before dissolving
 const SEGMENTS = 20;
 const LOGO_SIZE = 94; // 2x the 47px logo so final pixels stay crisp
 const LOGO_BLOCKS = [24, 16, 12, 8, 5, 3, 2]; // coarse -> sharp
-const TILE_SPREAD = 650; // ms from the first to the last tile vanishing
-const TILE_JITTER = 220;
-const TILE_OUT_MS = 160; // must match .boot-tile in globals.css
+// The loader clears through the site's pixel transition (PageTransition picks
+// up BOOT_EVENT); this is how long the loader stays mounted for it.
+const EXIT_MS = TRANSITION.bootRevealMs + 60;
 
 const INK = "#2f2925";
 const GOLD = "#b8822a";
-
-type Tile = { x: number; y: number; size: number; delay: number };
 
 const STATUS = [
   [25, "loading modules"],
@@ -32,37 +31,9 @@ function statusFor(p: number) {
   return STATUS.find(([max]) => p < max)?.[1] ?? "ready";
 }
 
-/**
- * Tiles covering the viewport, anchored to the bottom-left like the hero's
- * pixel frame but twice its tile size, which keeps the number of animated
- * elements down.
- */
-function buildTiles(): { tiles: Tile[]; total: number } {
-  const vw = window.innerWidth;
-  const vh = window.innerHeight;
-  const size = frameGeometry(vw, vh).size * 2;
-  const cols = Math.ceil(vw / size);
-  const rows = Math.ceil(vh / size);
-
-  const tiles: Tile[] = [];
-  for (let r = 0; r < rows; r++) {
-    for (let c = 0; c < cols; c++) {
-      tiles.push({
-        x: c * size,
-        y: vh - (rows - r) * size,
-        size,
-        // Clears top to bottom.
-        delay: Math.round((r / Math.max(1, rows - 1)) * TILE_SPREAD + hash(r * cols + c) * TILE_JITTER),
-      });
-    }
-  }
-  return { tiles, total: TILE_SPREAD + TILE_JITTER + TILE_OUT_MS + 60 };
-}
-
 export default function BootLoader() {
   const [phase, setPhase] = useState<"boot" | "exit" | "done">("boot");
   const [progress, setProgress] = useState(0);
-  const [tiles, setTiles] = useState<Tile[]>([]);
   const logoRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -141,8 +112,6 @@ export default function BootLoader() {
       try {
         sessionStorage.setItem(BOOT_SEEN_KEY, "1");
       } catch {}
-      const { tiles, total } = buildTiles();
-      setTiles(tiles);
       setPhase("exit");
       root.dataset.boot = "exit";
       window.dispatchEvent(new Event(BOOT_EVENT));
@@ -152,7 +121,7 @@ export default function BootLoader() {
           unblockScroll();
           window.dispatchEvent(new Event(BOOT_DONE_EVENT));
           setPhase("done");
-        }, total)
+        }, EXIT_MS)
       );
     };
 
@@ -173,25 +142,10 @@ export default function BootLoader() {
   return (
     <div
       aria-hidden="true"
+      data-transition-ignore // the transition reads the page under the loader, not the loader
       className="boot-loader fixed inset-0 z-[100] flex items-center justify-center"
       style={{ background: exiting ? "transparent" : FRAME_COLOR }}
     >
-      {exiting &&
-        tiles.map((t, i) => (
-          <span
-            key={i}
-            className="boot-tile absolute"
-            style={{
-              left: t.x,
-              top: t.y,
-              width: t.size + 1,
-              height: t.size + 1,
-              background: FRAME_COLOR,
-              animationDelay: `${t.delay}ms`,
-            }}
-          />
-        ))}
-
       <div
         className={`relative flex w-[260px] flex-col items-center gap-7 font-mono ${
           exiting ? "boot-content-out" : ""

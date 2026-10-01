@@ -3,8 +3,9 @@ import { Inter, Poppins } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/app/components/Navbar/Navbar";
 import Footer from "@/app/components/Footer/Footer";
-import BootLoader from "@/app/components/BootLoader/BootLoader";
-import PixelCursor from "@/app/components/PixelCursor/PixelCursor";
+import BootLoader from "@/components/transitions/BootLoader";
+import PixelCursor from "@/components/transitions/PixelCursor";
+import PageTransition from "@/components/transitions/PageTransition";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -55,6 +56,7 @@ export default function RootLayout({
         {children}
         <Footer />
         <PixelCursor />
+        <PageTransition />
       </body>
     </html>
   );
