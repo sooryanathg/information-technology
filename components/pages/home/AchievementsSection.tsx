@@ -105,9 +105,9 @@ export default function AchievementsSection() {
             type="button"
             aria-label="Previous achievement poster"
             onClick={goToPrevious}
-            className="absolute left-0 top-1/2 z-20 hidden -translate-y-1/2 items-center justify-center rounded-full border border-[#c9b497] bg-white/90 p-2 text-[#5f3b1d] shadow-[0_8px_18px_rgba(44,34,25,0.12)] transition hover:scale-105 hover:bg-white sm:flex"
+            className="absolute -left-1 top-1/2 z-20 flex -translate-y-1/2 items-center justify-center rounded-full border border-[#c9b497] bg-white/90 p-1.5 text-[#5f3b1d] shadow-[0_8px_18px_rgba(44,34,25,0.12)] transition hover:scale-105 hover:bg-white sm:-left-2 sm:p-2"
           >
-            <ChevronLeft className="h-5 w-5 sm:h-6 sm:w-6" />
+            <ChevronLeft className="h-4 w-4 sm:h-6 sm:w-6" />
           </button>
 
           <div
@@ -145,9 +145,9 @@ export default function AchievementsSection() {
             type="button"
             aria-label="Next achievement poster"
             onClick={goToNext}
-            className="absolute right-0 top-1/2 z-20 hidden -translate-y-1/2 items-center justify-center rounded-full border border-[#c9b497] bg-white/90 p-2 text-[#5f3b1d] shadow-[0_8px_18px_rgba(44,34,25,0.12)] transition hover:scale-105 hover:bg-white sm:flex"
+            className="absolute -right-1 top-1/2 z-20 flex -translate-y-1/2 items-center justify-center rounded-full border border-[#c9b497] bg-white/90 p-1.5 text-[#5f3b1d] shadow-[0_8px_18px_rgba(44,34,25,0.12)] transition hover:scale-105 hover:bg-white sm:-right-2 sm:p-2"
           >
-            <ChevronRight className="h-5 w-5 sm:h-6 sm:w-6" />
+            <ChevronRight className="h-4 w-4 sm:h-6 sm:w-6" />
           </button>
         </div>
 

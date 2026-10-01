@@ -46,7 +46,7 @@ export default function ResourcesSection() {
             key={program}
             type="button"
             onClick={() => handleProgramChange(program)}
-            className={`rounded-[9px] border px-4 py-1.5 text-[0.65rem] font-medium transition-colors ${selectedProgram === program ? "border-[#65472d] bg-[#65472d] text-white" : "border-[#d9c2a2] bg-transparent text-[#594430] hover:bg-[#e7d6be]"}`}
+            className={`rounded-[9px] border px-3 py-1.5 text-[0.6rem] font-medium transition-colors sm:px-4 sm:text-[0.65rem] ${selectedProgram === program ? "border-[#65472d] bg-[#65472d] text-white" : "border-[#d9c2a2] bg-transparent text-[#594430] hover:bg-[#e7d6be]"}`}
           >
             {program}
           </button>
@@ -60,7 +60,7 @@ export default function ResourcesSection() {
             type="button"
             onClick={() => setSelectedSemester(semester)}
             aria-pressed={selectedSemester === semester}
-            className={`min-w-8 rounded-[3px] px-2 py-1.5 text-[0.65rem] transition-colors ${selectedSemester === semester ? "bg-[#806d5d] text-white" : "bg-[#f8efe3] text-[#34281e] hover:bg-[#e6d4bb]"}`}
+            className={`min-w-8 rounded-[3px] px-2 py-1.5 text-[0.6rem] transition-colors sm:text-[0.65rem] ${selectedSemester === semester ? "bg-[#806d5d] text-white" : "bg-[#f8efe3] text-[#34281e] hover:bg-[#e6d4bb]"}`}
           >
             {semester}
           </button>
