@@ -15,7 +15,7 @@ const highlights: HighlightItem[] = [
       <svg
         viewBox="0 0 24 24"
         fill="none"
-        stroke="#F4B942"
+        stroke="#C89B3C"
         strokeWidth="1.8"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -37,7 +37,7 @@ const highlights: HighlightItem[] = [
       <svg
         viewBox="0 0 24 24"
         fill="none"
-        stroke="#F4B942"
+        stroke="#C89B3C"
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -56,7 +56,7 @@ const highlights: HighlightItem[] = [
       <svg
         viewBox="0 0 24 24"
         fill="none"
-        stroke="#F4B942"
+        stroke="#C89B3C"
         strokeWidth="1.8"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -75,7 +75,7 @@ const highlights: HighlightItem[] = [
       <svg
         viewBox="0 0 24 24"
         fill="none"
-        stroke="#F4B942"
+        stroke="#C89B3C"
         strokeWidth="1.8"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -95,7 +95,7 @@ const highlights: HighlightItem[] = [
       <svg
         viewBox="0 0 24 24"
         fill="none"
-        stroke="#F4B942"
+        stroke="#C89B3C"
         strokeWidth="1.8"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -115,7 +115,7 @@ const highlights: HighlightItem[] = [
       <svg
         viewBox="0 0 24 24"
         fill="none"
-        stroke="#F4B942"
+        stroke="#C89B3C"
         strokeWidth="1.8"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -166,7 +166,7 @@ export default function Highlights() {
             leading-[100%]
             tracking-[0%]
             uppercase
-            text-[#1A2332]
+            text-[#3D2B1F]
           "
         >
           PLACEMENT HIGHLIGHTS
@@ -206,7 +206,7 @@ export default function Highlights() {
           <div
             key={item.id}
             className="
-              bg-white
+              bg-[#FFFCF8]
               rounded-2xl
 
               flex
@@ -215,9 +215,9 @@ export default function Highlights() {
               text-center
 
               border
-              border-gray-100/80
+              border-[#E8DCCB]
 
-              shadow-[0_4px_20px_rgba(0,0,0,0.04)]
+              shadow-[0_8px_24px_rgba(61,43,31,0.06)]
 
               hover:shadow-xl
               hover:-translate-y-1.5
@@ -287,7 +287,7 @@ export default function Highlights() {
                 leading-[100%]
                 tracking-[0%]
 
-                text-[#000000]
+                text-[#3D2B1F]
                 text-center
 
                 whitespace-nowrap
@@ -299,24 +299,11 @@ export default function Highlights() {
 
             {/* ================================
                 LABEL
-                ================================
-
-                Figma properties:
-
-                Width:       119px
-                Height:      19px
-                Font:        Inter
-                Weight:      400
-                Size:        16px
-                Line height: 100%
-                Alignment:   Center
-                Color:       #000000
-            */}
+                ================================ */}
             <div
               className="
-                w-[119px]
-                h-[19px]
-
+                w-full
+                px-2
                 flex
                 items-center
                 justify-center
@@ -324,14 +311,12 @@ export default function Highlights() {
                 font-inter
                 font-normal
 
-                text-[16px]
-                leading-[100%]
+                text-[15px]
+                leading-tight
                 tracking-[0%]
 
-                text-[#000000]
+                text-[#7A6758]
                 text-center
-
-                whitespace-nowrap
 
                 mt-[16px]
               "

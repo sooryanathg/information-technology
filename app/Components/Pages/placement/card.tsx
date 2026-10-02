@@ -8,7 +8,7 @@ interface PlacementCardProps {
 export default function PlacementCard({ children, className = '' }: PlacementCardProps) {
   return (
     <div
-      className={`bg-white rounded-2xl p-6 shadow-[0_4px_20px_rgba(0,0,0,0.04)] border border-gray-100/80 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 ${className}`}
+      className={`bg-[#FFFCF8] rounded-2xl p-6 shadow-[0_8px_24px_rgba(61,43,31,0.06)] border border-[#E8DCCB] hover:shadow-xl hover:-translate-y-1 transition-all duration-300 ${className}`}
     >
       {children}
     </div>
