@@ -1,32 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
-
-function PenIcon() {
-  return (
-    <svg
-      viewBox="0 0 200 200"
-      width="32"
-      height="32"
-      fill="none"
-    >
-      {/* Pen body - blue */}
-      <path
-        d="M80 160 L100 40 L120 50 L100 170 Z"
-        fill="#0066CC"
-      />
-      {/* Pen tip - dark */}
-      <circle cx="100" cy="172" r="6" fill="#1a1a1a" />
-      {/* Gold band 1 (middle) */}
-      <rect x="70" y="110" width="60" height="16" fill="#F4B942" rx="2" />
-      {/* Gold band 2 (top) */}
-      <rect x="75" y="45" width="50" height="14" fill="#F4B942" rx="2" />
-      {/* Pen cap circle */}
-      <circle cx="100" cy="35" r="12" fill="#0066CC" />
-      <circle cx="100" cy="35" r="8" fill="#F4B942" />
-    </svg>
-  );
-}
+import React, { useState, useRef } from 'react';
+import Image from 'next/image';
+import StarDivider from '@/app/Components/StarDivider';
 
 interface SuccessStory {
   id: string;
@@ -35,110 +11,173 @@ interface SuccessStory {
   batch: string;
 }
 
-function StarDivider() {
-  return (
-    <div className="flex items-center justify-center gap-5 mt-3">
-      <div className="w-[80px] h-[4px] bg-[#F4B942]" />
-      <div className="w-[40px] h-[40px] flex items-center justify-center">
-        <span className="text-[#F4B942] text-4xl leading-none">
-          ★
-        </span>
-      </div>
-      <div className="w-[80px] h-[4px] bg-[#F4B942]" />
-    </div>
-  );
-}
-
 const successStories: SuccessStory[] = [
   {
     id: '1',
     testimonial: 'This department provided me with the perfect blend of knowledge, exposure and opportunities to grow.',
     name: 'Alumni name',
-    batch: 'Batch(Year)',
+    batch: 'Batch(2024)',
   },
   {
     id: '2',
-    testimonial: 'This department provided me with the perfect blend of knowledge, exposure and opportunities to grow.',
+    testimonial: 'The rigorous curriculum and industry mentorship helped me secure my dream software role smoothly.',
     name: 'Alumni name',
-    batch: 'Batch(Year)',
+    batch: 'Batch(2023)',
   },
   {
     id: '3',
-    testimonial: 'This department provided me with the perfect blend of knowledge, exposure and opportunities to grow.',
+    testimonial: 'Hands-on projects and faculty guidance laid a rock-solid foundation for my engineering career.',
     name: 'Alumni name',
-    batch: 'Batch(Year)',
+    batch: 'Batch(2023)',
   },
   {
     id: '4',
+    testimonial: 'The placement cell and departmental coding bootcamps prepared us thoroughly for top product companies.',
+    name: 'Alumni name',
+    batch: 'Batch(2022)',
+  },
+  {
+    id: '5',
+    testimonial: 'Outstanding lab facilities and competitive peer environment motivated me to excel beyond boundaries.',
+    name: 'Alumni name',
+    batch: 'Batch(2022)',
+  },
+  {
+    id: '6',
     testimonial: 'This department provided me with the perfect blend of knowledge, exposure and opportunities to grow.',
     name: 'Alumni name',
-    batch: 'Batch(Year)',
+    batch: 'Batch(2021)',
+  },
+  {
+    id: '7',
+    testimonial: 'The alumni network and placement training gave me the exact confidence needed during technical rounds.',
+    name: 'Alumni name',
+    batch: 'Batch(2021)',
+  },
+  {
+    id: '8',
+    testimonial: 'Grateful for the dedicated faculty whose continual support turned my potential into corporate success.',
+    name: 'Alumni name',
+    batch: 'Batch(2020)',
   },
 ];
 
+// Exact brown pen icon provided by user (embedded as data URI to guarantee instant cache-busting)
+const PEN_ICON_BASE64 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAjCAYAAAD8BaggAAADtklEQVR4AbyYy08TQRjAZxZa+sI0+g/UiyTGA70Zw6MNguHAK4gUgaQbo8UT602LSctF0AtwE4gpHgzVGC0xxhhNiho1xijejLcevEhEKhGrpO34fSvbtHS2u6WPzXzZ7uzMN7/9XjtbgVT5kKRe+xXf4MzEhaFNv8/DJnye6OUxj0PBqCrQ57fLjoHW9rU6o0FilNkRghHiEtJsTYGqGpD//NnGlQfPoyaT0XGq/QQxGmuR579QahcYCRA4BJCKN/+Yx0spi25tbTuePntDjAYDyYMCSyFIxYH8vqFZwkhIcdGv7QThQYHrYhUFkiB4MWAJYeO4ULZwoRhdwjEVsRDGiyVhWoOnduEiPMmG6upsjZ8Z6ljBcWUHUuIFlDtACjaEiq6+j9hslri1tu4hDi4r0N54wQUKCVgw9vXvuigINMIYkx+gLEBYQ9TiRRWI0TijxH2xf0BiaealKdKHY0sGwniBGhJlhKjGC+EcSZISxeEuL2VknKSI+4h7+BMOKwkIyr+E9QUUOUB0tzQjwXOjPY17YVDBvoE+PFkMWuvNM0p9QWW6hNGIONoFz5FrGWXuvoC+vLoThMwIYLWFs6JL8wxujQ32n4zxLKNMLhoIYWByAITYrGb5FaALCoK4u7N11Ww2ebNjBvVkS1FAUGOCjx6/DOzsJDM69EJhEB88dKCxEAwq1Q2EqU3gjfxj86f8LioGCoP4xsK9SEPzsFPJJlycJ7qBMLUVBUVBQRBPL4QnlblaZ11A6CpQlJPaeqAwiNMCuwRzdTdNoKtjHhe6iqexIJTVIlfi6ZtheVvBm8/rKwgkwRYC/B/iTVT61KB6e91isTCosyCQJWEOwqAcV8F1XsuDosx7tGU0kjdQR4cqkOwqzuZKTacCRQCmoWnktto4rX4uEKa4lqv2KsYA3tjYcpUCgzq5QJDiWIk1XYUKUNKELCXMf5xTi8sv8LoUyQOCFPeCQhQ4aTR4HSRZum96PizOzkbiGqN13c4BQleppXieNkYjvy2Jw1iB8+6V0JEDpMtVu1a5trDcVy6rZPNngAq4KjMeAncVKq+z3FbJLAA/ZCD85u7vbpux2SzQxWlglRRh0tR82L2fYsfRqNolA9UkWchWb7HzNlyKVa7P351T1VLGGzIQJUzOkJy9TRWtkv08MtDrdx8zfQjV0XY8hrFSLatkFocfQssxR/BW6L5r/dt3Cco+fl8Ha8wGZ6VjBdbmNviviPWkGHU3nx6fa2gaEWFXN+l0i7ILuTMq3PkPAAD//4GXky8AAAAGSURBVAMAodGmX8x3HQMAAAAASUVORK5CYII=';
+
 export default function SuccessStories() {
+  const scrollRef = useRef<HTMLDivElement>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
+
+  const handleScroll = () => {
+    if (scrollRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
+      const maxScroll = scrollWidth - clientWidth;
+      if (maxScroll > 0) {
+        const ratio = scrollLeft / maxScroll;
+        const newIndex = Math.min(3, Math.max(0, Math.round(ratio * 3)));
+        setCurrentIndex(newIndex);
+      }
+    }
+  };
 
   const goToSlide = (index: number) => {
     setCurrentIndex(index);
+    if (scrollRef.current) {
+      const { scrollWidth, clientWidth } = scrollRef.current;
+      const maxScroll = scrollWidth - clientWidth;
+      if (maxScroll > 0) {
+        const targetLeft = (index / 3) * maxScroll;
+        scrollRef.current.scrollTo({
+          left: targetLeft,
+          behavior: 'smooth',
+        });
+      }
+    }
   };
 
   return (
-    <section className="relative w-full overflow-hidden bg-[#0F1C3A] py-16 lg:py-20">
+    <section className="relative w-full overflow-hidden bg-[#3D2B1F] rounded-t-[48px] py-16 lg:py-20 font-poppins">
       {/* Title and Divider */}
       <div className="w-full flex flex-col items-center justify-center mb-16">
-        <h2 className="text-4xl lg:text-5xl font-bold uppercase tracking-wide text-white text-center">
+        <h2 className="text-4xl lg:text-5xl font-bold uppercase tracking-wide text-white text-center font-poppins">
           Placement Success Stories
         </h2>
         <StarDivider />
       </div>
 
       {/* Cards Container */}
-      <div className="w-full flex justify-center px-4 sm:px-6 lg:px-8 mb-16">
+      <div className="w-full flex justify-center px-4 sm:px-6 lg:px-8 mb-12 sm:mb-16">
         <div className="w-full max-w-7xl">
-          {/* Carousel Cards */}
-          <div className="flex justify-center gap-6 overflow-hidden">
-            {successStories.slice(currentIndex, currentIndex + 4).map((story) => (
-              <div
-                key={story.id}
-                className="flex-shrink-0 w-64 bg-white rounded-3xl p-8 shadow-lg hover:shadow-xl transition-shadow"
-              >
-                {/* Icon */}
-                <div className="mb-6">
-                  <PenIcon />
-                </div>
+          {/* Carousel Cards Track */}
+          <div 
+            ref={scrollRef}
+            onScroll={handleScroll}
+            className="flex items-center justify-start gap-6 overflow-x-auto pb-4 scroll-smooth scrollbar-none"
+          >
+            {successStories.map((story) => (
+                <div
+                  key={story.id}
+                  className="w-[297px] h-[224px] rounded-[20px] p-[20px] bg-[#FFFCF8] flex-shrink-0 flex flex-col justify-between shadow-[0px_4px_16px_rgba(0,0,0,0.12)] hover:shadow-xl hover:-translate-y-1 transition-all duration-300 select-none"
+                >
+                  {/* Top Section with Pen Icon & Testimonial */}
+                  <div>
+                    {/* Pen Icon (Figma exact: w: 35.01px, h: 34.86px, top: 2.99px, left: 2.15px) */}
+                    <div
+                      className="relative shrink-0 select-none pointer-events-none"
+                      style={{
+                        width: '35px',
+                        height: '35px',
+                        top: '2.99px',
+                        left: '2.15px',
+                        opacity: 1,
+                      }}
+                    >
+                      <Image
+                        src={PEN_ICON_BASE64}
+                        alt="Pen icon"
+                        width={35}
+                        height={35}
+                        unoptimized
+                        priority
+                        className="w-[35px] h-[35px] object-contain"
+                      />
+                    </div>
 
-                {/* Testimonial */}
-                <p className="text-gray-700 text-sm mb-6 leading-relaxed font-poppins">
-                  {story.testimonial}
-                </p>
+                    {/* Testimonial Text (3-line layout matching Frame 165) */}
+                    <div className="ml-auto w-[196px] mt-2">
+                      <p className="text-[#3D2B1F] text-[11px] leading-[18px] font-poppins font-normal">
+                        {story.testimonial}
+                      </p>
+                    </div>
+                  </div>
 
-                {/* Alumni Info */}
-                <div className="border-t border-gray-200 pt-4">
-                  <p className="font-bold text-gray-900 text-sm font-poppins">
-                    {story.name}
-                  </p>
-                  <p className="text-gray-600 text-xs font-poppins">
-                    {story.batch}
-                  </p>
+                  {/* Bottom Section - Alumni details */}
+                  <div className="pt-2">
+                    <h4 className="font-bold text-[#3D2B1F] text-[15px] leading-tight font-poppins">
+                      {story.name}
+                    </h4>
+                    <p className="text-[#3D2B1F] text-[12px] font-poppins mt-1">
+                      {story.batch}
+                    </p>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
           </div>
         </div>
       </div>
 
       {/* Carousel Indicator */}
       <div className="w-full flex justify-center pb-8">
-        <div className="w-[329px] h-[38px] rounded-[20px] bg-gray-500/60 backdrop-blur-sm shadow-[0px_4px_4px_0px_#0000001A] flex items-center justify-between px-3 gap-2">
+        <div className="w-[329px] h-[38px] rounded-[20px] bg-[#D9D9D966] backdrop-blur-sm shadow-[0px_4px_4px_0px_#0000001A] flex items-center justify-between px-3 gap-2">
           {[0, 1, 2, 3].map((index) => (
             <button
               key={index}
               onClick={() => goToSlide(index)}
               className={`transition-all rounded-full hover:opacity-80 cursor-pointer h-3 border-0 ${
                 index === currentIndex % 4
-                  ? 'w-[60px] bg-[#F4B942]'
-                  : 'w-[44px] bg-[#BFA876]'
+                  ? 'w-[60px] bg-[#C89B3C]'
+                  : 'w-[44px] bg-[#D9D9D9]'
               }`}
               aria-label={`Go to slide ${index + 1}`}
             />

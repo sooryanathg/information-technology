@@ -33,7 +33,10 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} ${poppins.variable} h-full antialiased scroll-smooth`}
     >
-      <body className="min-h-full flex flex-col font-sans bg-[#F3F4F6] text-gray-900 selection:bg-[#F4B942] selection:text-black">
+      <body 
+        className="min-h-full flex flex-col font-sans text-[#3D2B1F] selection:bg-[#C89B3C] selection:text-white"
+        style={{ background: 'linear-gradient(180deg, #FFFCF8 0%, #B88A5A 100%)' }}
+      >
         {children}
       </body>
     </html>

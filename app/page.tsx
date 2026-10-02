@@ -9,7 +9,7 @@ export default function Home() {
   return (
     <div
       className="min-h-screen flex flex-col"
-      style={{ background: 'linear-gradient(180deg, #FFFFFF 0%, #999999 100%)' }}
+      style={{ background: 'linear-gradient(180deg, #FFFCF8 0%, #B88A5A 100%)' }}
     >
       {/* Main Content Area */}
       <main className="flex-1 w-full flex flex-col">
