@@ -2,66 +2,8 @@
 
 import React from 'react';
 import { MapPin } from 'lucide-react';
-import StarDivider from '@/app/Components/StarDivider';
-
-const alumniList = [
-  {
-    id: 'alumni-1',
-    name: 'Alumni Name',
-    designation: 'Software Engineer',
-    company: 'Google',
-    location: 'Bangalore',
-  },
-  {
-    id: 'alumni-2',
-    name: 'Alumni Name',
-    designation: 'Product Manager',
-    company: 'Microsoft',
-    location: 'Hyderabad',
-  },
-  {
-    id: 'alumni-3',
-    name: 'Alumni Name',
-    designation: 'Frontend Lead',
-    company: 'Amazon',
-    location: 'Chennai',
-  },
-  {
-    id: 'alumni-4',
-    name: 'Alumni Name',
-    designation: 'Data Scientist',
-    company: 'IBM',
-    location: 'Kochi',
-  },
-  {
-    id: 'alumni-5',
-    name: 'Alumni Name',
-    designation: 'DevOps Engineer',
-    company: 'Oracle',
-    location: 'Pune',
-  },
-  {
-    id: 'alumni-6',
-    name: 'Alumni Name',
-    designation: 'Systems Architect',
-    company: 'Cisco',
-    location: 'Bangalore',
-  },
-  {
-    id: 'alumni-7',
-    name: 'Alumni Name',
-    designation: 'Cloud Engineer',
-    company: 'Adobe',
-    location: 'Noida',
-  },
-  {
-    id: 'alumni-8',
-    name: 'Alumni Name',
-    designation: 'Security Analyst',
-    company: 'Intel',
-    location: 'Bangalore',
-  },
-];
+import StarDivider from '@/components/StarDivider';
+import { alumniList } from '@/data/placement/alumni';
 
 export default function AlumniSection() {
   return (
@@ -85,7 +27,7 @@ export default function AlumniSection() {
               className="w-[220px] h-[320px] rounded-[12px] p-[10px] bg-[#FFFCF8] border border-[#7A6758] flex-shrink-0 flex flex-col items-center justify-between text-center shadow-[0_4px_16px_rgba(61,43,31,0.06)] hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group select-none"
             >
               <div className="w-full flex flex-col items-center pt-2">
-                {/* Exact Golden Avatar SVG */}
+                {/* Golden Avatar SVG */}
                 <div className="w-[84px] h-[84px] rounded-full flex items-center justify-center text-[#C89B3C] mb-3 group-hover:scale-105 transition-transform">
                   <svg viewBox="0 0 48 48" fill="none" className="w-full h-full">
                     <circle cx="24" cy="24" r="22" stroke="#C89B3C" strokeWidth="2" />

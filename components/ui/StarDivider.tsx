@@ -1,9 +1,12 @@
 import React from 'react';
 
-interface StarDividerProps {
+export interface StarDividerProps {
   className?: string;
 }
 
+/**
+ * Reusable decorative star divider with gold lines and central star icon.
+ */
 export default function StarDivider({ className = '' }: StarDividerProps) {
   return (
     <div className={`flex items-center justify-center gap-3.5 my-3.5 ${className}`}>

@@ -2,50 +2,17 @@
 
 import React from 'react';
 import Link from 'next/link';
-
-const recruiterCompanies = [
-  'Company Logo',
-  'Company Logo',
-  'Company Logo',
-  'Company Logo',
-  'Company Logo',
-  'Company Logo',
-  'Company Logo',
-  'Company Logo',
-];
-
-const internshipList = [
-  {
-    id: 'uiux',
-    role: 'UI/UX Design Internship',
-    company: 'ABC Technologies',
-    mode: 'Remote',
-    duration: '2 Months',
-    deadline: 'Apply Before 15 July',
-  },
-  {
-    id: 'webdev',
-    role: 'Web Development Internship',
-    company: 'ABC Technologies',
-    mode: 'On-Site',
-    duration: '6 Weeks',
-    deadline: 'Apply Before 15 July',
-  },
-  {
-    id: 'data',
-    role: 'Data Analytics Internship',
-    company: 'ABC Technologies',
-    mode: 'Hybrid',
-    duration: '8 Weeks',
-    deadline: 'Apply Before 15 July',
-  },
-];
+import Image from 'next/image';
+import { topRecruiters, internshipNotices } from '@/data/placement/recruiters';
 
 export default function RecruitersAndInternships() {
   return (
     <section className="w-full py-8 sm:py-12 px-4 sm:px-6 lg:px-8 max-w-[1512px] min-h-[582px] mx-auto font-poppins flex items-center justify-center">
       <div className="flex flex-col xl:flex-row items-center justify-center gap-8 xl:gap-10 w-full">
-        {/* LEFT BOX: TOP RECRUITERS */}
+        {/* ================================================================= */}
+        {/* LEFT BOX: TOP RECRUITERS                                          */}
+        {/* Data source: @/data/placement/recruiters.ts                       */}
+        {/* ================================================================= */}
         <div 
           className="w-full lg:w-[692px] h-[476px] rounded-[20px] bg-[#E8DCCB] pt-[40px] pb-[20px] px-[10px] sm:px-[14px] flex flex-col justify-between shrink-0"
           style={{
@@ -69,22 +36,55 @@ export default function RecruitersAndInternships() {
             </Link>
           </div>
 
-          {/* Recruiter Logos Grid: w: 690, h: 300, py: 10, gap: 20 */}
+          {/* Recruiter Logos Grid: easily updated in @/data/placement/recruiters.ts */}
           <div className="w-full max-w-[690px] h-[300px] py-[10px] px-[6px] grid grid-cols-2 sm:grid-cols-4 gap-[20px]">
-            {recruiterCompanies.map((name, index) => (
-              <div
-                key={index}
-                className="bg-[#FFFCF8] rounded-[20px] p-4 flex items-center justify-center text-center shadow-[0px_2px_8px_rgba(61,43,31,0.04)] hover:shadow-md hover:-translate-y-1 transition-all duration-200 h-[125px]"
-              >
-                <span className="text-sm sm:text-[15px] font-normal text-[#3D2B1F] font-poppins tracking-normal">
-                  {name}
-                </span>
-              </div>
-            ))}
+            {topRecruiters.map((recruiter, index) => {
+              const name = typeof recruiter === 'string' ? recruiter : recruiter.name;
+              const logoUrl = typeof recruiter === 'object' ? recruiter.logoUrl : undefined;
+              const websiteUrl = typeof recruiter === 'object' ? recruiter.websiteUrl : undefined;
+
+              const content = (
+                <div
+                  key={index}
+                  className="bg-[#FFFCF8] rounded-[20px] p-4 flex items-center justify-center text-center shadow-[0px_2px_8px_rgba(61,43,31,0.04)] hover:shadow-md hover:-translate-y-1 transition-all duration-200 h-[125px]"
+                >
+                  {logoUrl ? (
+                    <Image
+                      src={logoUrl}
+                      alt={name}
+                      width={120}
+                      height={60}
+                      className="max-h-[60px] w-auto object-contain"
+                    />
+                  ) : (
+                    <span className="text-sm sm:text-[15px] font-normal text-[#3D2B1F] font-poppins tracking-normal">
+                      {name}
+                    </span>
+                  )}
+                </div>
+              );
+
+              return websiteUrl ? (
+                <a
+                  key={index}
+                  href={websiteUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block focus:outline-none"
+                >
+                  {content}
+                </a>
+              ) : (
+                content
+              );
+            })}
           </div>
         </div>
 
-        {/* RIGHT BOX: INTERNSHIP NOTICE BOARD */}
+        {/* ================================================================= */}
+        {/* RIGHT BOX: INTERNSHIP NOTICE BOARD                                */}
+        {/* Data source: @/data/placement/recruiters.ts                       */}
+        {/* ================================================================= */}
         <div 
           className="w-full lg:w-[692px] h-[476px] rounded-[20px] bg-[#FFFCF8] pt-[36px] pb-[20px] px-5 sm:px-7 flex flex-col justify-between shrink-0"
           style={{
@@ -104,9 +104,9 @@ export default function RecruitersAndInternships() {
             </p>
           </div>
 
-          {/* Internship List Items (3 cards) */}
+          {/* Internship List Items */}
           <div className="space-y-3">
-            {internshipList.map((item) => (
+            {internshipNotices.map((item) => (
               <div
                 key={item.id}
                 className="border border-[#7A6758] bg-[#FFFCF8] rounded-[16px] px-4 py-2.5 sm:px-5 sm:py-3 transition-all duration-200 flex items-center justify-between gap-3"
@@ -114,7 +114,7 @@ export default function RecruitersAndInternships() {
                 {/* Left Detail */}
                 <div className="space-y-0.5 min-w-0">
                   <div className="flex items-center gap-2">
-                    {/* Exact Slanted Pushpin SVG in #3D2B1F */}
+                    {/* Pushpin SVG in #3D2B1F */}
                     <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4 text-[#3D2B1F] shrink-0">
                       <path d="M16 4a1 1 0 0 1 1 1v1.586a1 1 0 0 0 .293.707l1.414 1.414a1 1 0 0 1 .293.707V11a1 1 0 0 1-1 1h-4v8a1 1 0 0 1-2 0v-8H8a1 1 0 0 1-1-1V9.414a1 1 0 0 1 .293-.707l1.414-1.414A1 1 0 0 0 10 6.586V5a1 1 0 0 1 1-1h5z"/>
                     </svg>
@@ -127,7 +127,7 @@ export default function RecruitersAndInternships() {
                   </p>
                   <div className="flex items-center gap-2.5 text-[13px] text-[#3D2B1F] pl-6 pt-1 font-poppins">
                     <span className="font-normal">{item.mode}</span>
-                    {/* Bullseye / circle dot glyph */}
+                    {/* Dot glyph */}
                     <span className="inline-flex items-center justify-center w-2.5 h-2.5 rounded-full border border-[#3D2B1F] shrink-0">
                       <span className="w-1 h-1 rounded-full bg-[#3D2B1F]" />
                     </span>
@@ -137,15 +137,16 @@ export default function RecruitersAndInternships() {
 
                 {/* Apply Button */}
                 <div className="shrink-0">
-                  <button 
+                  <a
+                    href={item.applyUrl || '#'}
                     className="w-[120px] h-[60px] bg-[#7A6758] hover:bg-[#6c5a4d] active:scale-95 text-white font-poppins font-normal text-[13px] leading-tight rounded-[12px] transition-all duration-200 cursor-pointer flex flex-col items-center justify-center text-center shrink-0"
                     style={{
                       boxShadow: '4px 4px 8px 2px #BB8B5A',
                     }}
                   >
-                    <span>Apply Before</span>
-                    <span>15 July</span>
-                  </button>
+                    <span>{item.deadline.includes('Before') ? 'Apply Before' : 'Apply'}</span>
+                    <span>{item.deadline.replace(/^Apply\s+Before\s+/i, '')}</span>
+                  </a>
                 </div>
               </div>
             ))}

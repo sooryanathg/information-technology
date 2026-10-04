@@ -2,67 +2,10 @@
 
 import React, { useState, useRef } from 'react';
 import Image from 'next/image';
-import StarDivider from '@/app/Components/StarDivider';
+import StarDivider from '@/components/StarDivider';
+import { successStories } from '@/data/placement/stories';
 
-interface SuccessStory {
-  id: string;
-  testimonial: string;
-  name: string;
-  batch: string;
-}
-
-const successStories: SuccessStory[] = [
-  {
-    id: '1',
-    testimonial: 'This department provided me with the perfect blend of knowledge, exposure and opportunities to grow.',
-    name: 'Alumni name',
-    batch: 'Batch(2024)',
-  },
-  {
-    id: '2',
-    testimonial: 'The rigorous curriculum and industry mentorship helped me secure my dream software role smoothly.',
-    name: 'Alumni name',
-    batch: 'Batch(2023)',
-  },
-  {
-    id: '3',
-    testimonial: 'Hands-on projects and faculty guidance laid a rock-solid foundation for my engineering career.',
-    name: 'Alumni name',
-    batch: 'Batch(2023)',
-  },
-  {
-    id: '4',
-    testimonial: 'The placement cell and departmental coding bootcamps prepared us thoroughly for top product companies.',
-    name: 'Alumni name',
-    batch: 'Batch(2022)',
-  },
-  {
-    id: '5',
-    testimonial: 'Outstanding lab facilities and competitive peer environment motivated me to excel beyond boundaries.',
-    name: 'Alumni name',
-    batch: 'Batch(2022)',
-  },
-  {
-    id: '6',
-    testimonial: 'This department provided me with the perfect blend of knowledge, exposure and opportunities to grow.',
-    name: 'Alumni name',
-    batch: 'Batch(2021)',
-  },
-  {
-    id: '7',
-    testimonial: 'The alumni network and placement training gave me the exact confidence needed during technical rounds.',
-    name: 'Alumni name',
-    batch: 'Batch(2021)',
-  },
-  {
-    id: '8',
-    testimonial: 'Grateful for the dedicated faculty whose continual support turned my potential into corporate success.',
-    name: 'Alumni name',
-    batch: 'Batch(2020)',
-  },
-];
-
-// Exact brown pen icon provided by user (embedded as data URI to guarantee instant cache-busting)
+// Brown pen icon provided in public asset / data URI
 const PEN_ICON_BASE64 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAjCAYAAAD8BaggAAADtklEQVR4AbyYy08TQRjAZxZa+sI0+g/UiyTGA70Zw6MNguHAK4gUgaQbo8UT602LSctF0AtwE4gpHgzVGC0xxhhNiho1xijejLcevEhEKhGrpO34fSvbtHS2u6WPzXzZ7uzMN7/9XjtbgVT5kKRe+xXf4MzEhaFNv8/DJnye6OUxj0PBqCrQ57fLjoHW9rU6o0FilNkRghHiEtJsTYGqGpD//NnGlQfPoyaT0XGq/QQxGmuR579QahcYCRA4BJCKN/+Yx0spi25tbTuePntDjAYDyYMCSyFIxYH8vqFZwkhIcdGv7QThQYHrYhUFkiB4MWAJYeO4ULZwoRhdwjEVsRDGiyVhWoOnduEiPMmG6upsjZ8Z6ljBcWUHUuIFlDtACjaEiq6+j9hslri1tu4hDi4r0N54wQUKCVgw9vXvuigINMIYkx+gLEBYQ9TiRRWI0TijxH2xf0BiaealKdKHY0sGwniBGhJlhKjGC+EcSZISxeEuL2VknKSI+4h7+BMOKwkIyr+E9QUUOUB0tzQjwXOjPY17YVDBvoE+PFkMWuvNM0p9QWW6hNGIONoFz5FrGWXuvoC+vLoThMwIYLWFs6JL8wxujQ32n4zxLKNMLhoIYWByAITYrGb5FaALCoK4u7N11Ww2ebNjBvVkS1FAUGOCjx6/DOzsJDM69EJhEB88dKCxEAwq1Q2EqU3gjfxj86f8LioGCoP4xsK9SEPzsFPJJlycJ7qBMLUVBUVBQRBPL4QnlblaZ11A6CpQlJPaeqAwiNMCuwRzdTdNoKtjHhe6iqexIJTVIlfi6ZtheVvBm8/rKwgkwRYC/B/iTVT61KB6e91isTCosyCQJWEOwqAcV8F1XsuDosx7tGU0kjdQR4cqkOwqzuZKTacCRQCmoWnktto4rX4uEKa4lqv2KsYA3tjYcpUCgzq5QJDiWIk1XYUKUNKELCXMf5xTi8sv8LoUyQOCFPeCQhQ4aTR4HSRZum96PizOzkbiGqN13c4BQleppXieNkYjvy2Jw1iB8+6V0JEDpMtVu1a5trDcVy6rZPNngAq4KjMeAncVKq+z3FbJLAA/ZCD85u7vbpux2SzQxWlglRRh0tR82L2fYsfRqNolA9UkWchWb7HzNlyKVa7P351T1VLGGzIQJUzOkJy9TRWtkv08MtDrdx8zfQjV0XY8hrFSLatkFocfQssxR/BW6L5r/dt3Cco+fl8Ha8wGZ6VjBdbmNviviPWkGHU3nx6fa2gaEWFXN+l0i7ILuTMq3PkPAAD//4GXky8AAAAGSURBVAMAodGmX8x3HQMAAAAASUVORK5CYII=';
 
 export default function SuccessStories() {
@@ -116,53 +59,53 @@ export default function SuccessStories() {
             className="flex items-center justify-start gap-6 overflow-x-auto pb-4 scroll-smooth scrollbar-none"
           >
             {successStories.map((story) => (
-                <div
-                  key={story.id}
-                  className="w-[297px] h-[224px] rounded-[20px] p-[20px] bg-[#FFFCF8] flex-shrink-0 flex flex-col justify-between shadow-[0px_4px_16px_rgba(0,0,0,0.12)] hover:shadow-xl hover:-translate-y-1 transition-all duration-300 select-none"
-                >
-                  {/* Top Section with Pen Icon & Testimonial */}
-                  <div>
-                    {/* Pen Icon (Figma exact: w: 35.01px, h: 34.86px, top: 2.99px, left: 2.15px) */}
-                    <div
-                      className="relative shrink-0 select-none pointer-events-none"
-                      style={{
-                        width: '35px',
-                        height: '35px',
-                        top: '2.99px',
-                        left: '2.15px',
-                        opacity: 1,
-                      }}
-                    >
-                      <Image
-                        src={PEN_ICON_BASE64}
-                        alt="Pen icon"
-                        width={35}
-                        height={35}
-                        unoptimized
-                        priority
-                        className="w-[35px] h-[35px] object-contain"
-                      />
-                    </div>
-
-                    {/* Testimonial Text (3-line layout matching Frame 165) */}
-                    <div className="ml-auto w-[196px] mt-2">
-                      <p className="text-[#3D2B1F] text-[11px] leading-[18px] font-poppins font-normal">
-                        {story.testimonial}
-                      </p>
-                    </div>
+              <div
+                key={story.id}
+                className="w-[297px] h-[224px] rounded-[20px] p-[20px] bg-[#FFFCF8] flex-shrink-0 flex flex-col justify-between shadow-[0px_4px_16px_rgba(0,0,0,0.12)] hover:shadow-xl hover:-translate-y-1 transition-all duration-300 select-none"
+              >
+                {/* Top Section with Pen Icon & Testimonial */}
+                <div>
+                  {/* Pen Icon */}
+                  <div
+                    className="relative shrink-0 select-none pointer-events-none"
+                    style={{
+                      width: '35px',
+                      height: '35px',
+                      top: '2.99px',
+                      left: '2.15px',
+                      opacity: 1,
+                    }}
+                  >
+                    <Image
+                      src={PEN_ICON_BASE64}
+                      alt="Pen icon"
+                      width={35}
+                      height={35}
+                      unoptimized
+                      priority
+                      className="w-[35px] h-[35px] object-contain"
+                    />
                   </div>
 
-                  {/* Bottom Section - Alumni details */}
-                  <div className="pt-2">
-                    <h4 className="font-bold text-[#3D2B1F] text-[15px] leading-tight font-poppins">
-                      {story.name}
-                    </h4>
-                    <p className="text-[#3D2B1F] text-[12px] font-poppins mt-1">
-                      {story.batch}
+                  {/* Testimonial Text */}
+                  <div className="ml-auto w-[196px] mt-2">
+                    <p className="text-[#3D2B1F] text-[11px] leading-[18px] font-poppins font-normal">
+                      {story.testimonial}
                     </p>
                   </div>
                 </div>
-              ))}
+
+                {/* Bottom Section - Alumni details */}
+                <div className="pt-2">
+                  <h4 className="font-bold text-[#3D2B1F] text-[15px] leading-tight font-poppins">
+                    {story.name}
+                  </h4>
+                  <p className="text-[#3D2B1F] text-[12px] font-poppins mt-1">
+                    {story.batch}
+                  </p>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>

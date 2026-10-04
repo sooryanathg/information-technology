@@ -1,9 +1,8 @@
-import Hero from '@/app/Components/Pages/placement/hero';
-import Highlights from '@/app/Components/Pages/placement/Highlights';
-import RecruitersAndInternships from '@/app/Components/Pages/placement/RecruitersAndInternships';
-import AlumniSection from '@/app/Components/Pages/placement/AlumniSection';
-import SuccessStories from '@/app/Components/Pages/placement/SuccessStories';
-// import Footer from '@/app/Components/Pages/placement/Footer';
+import Hero from '@/components/placement/Hero';
+import Highlights from '@/components/placement/Highlights';
+import RecruitersAndInternships from '@/components/placement/RecruitersAndInternships';
+import AlumniSection from '@/components/placement/AlumniSection';
+import SuccessStories from '@/components/placement/SuccessStories';
 
 export default function Home() {
   return (
@@ -27,12 +26,7 @@ export default function Home() {
 
         {/* 5. Placement Success Stories Testimonials */}
         <SuccessStories />
-
-        {/* 6. Footer */}
-        {/* <Footer /> */}
       </main>
     </div>
   );
 }
-
-
