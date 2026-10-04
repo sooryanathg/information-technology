@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Poppins } from "next/font/google";
+import { Geist, Geist_Mono, Poppins, Inter } from "next/font/google";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -18,6 +18,12 @@ const poppins = Poppins({
   weight: ["300", "400", "500", "600", "700", "800"],
 });
 
+const inter = Inter({
+  variable: "--font-inter",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+});
+
 export const metadata: Metadata = {
   title: "Placement Statistics | Department of Information Technology",
   description: "Placement statistics, highlights, recruiters, alumni connections and success stories for Department of IT, GEC Sreekrishnapuram.",
@@ -31,7 +37,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} ${poppins.variable} h-full antialiased scroll-smooth`}
+      className={`${geistSans.variable} ${geistMono.variable} ${poppins.variable} ${inter.variable} h-full antialiased scroll-smooth`}
     >
       <body 
         className="min-h-full flex flex-col font-sans text-[#3D2B1F] selection:bg-[#C89B3C] selection:text-white"
