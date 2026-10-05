@@ -1,9 +1,10 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import Image from "next/image";
 import { useInView, useIntroReady } from "@/lib/intro";
 import type { EventItem } from "./data/dataset";
+import EventImageTransition from "./EventImageTransition";
 
 type Props = {
   event: EventItem;
@@ -12,32 +13,42 @@ type Props = {
 };
 
 export default function EventCard({ event, index }: Props) {
-  // Every time the card scrolls into view it crawls into place, like the
-  // posters on the home page.
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { threshold: 0.15, once: false });
   const ready = useIntroReady();
+  const [isHovered, setIsHovered] = useState(false);
+
+  const imageList =
+    event.images && event.images.length > 0
+      ? event.images
+      : event.image
+        ? [event.image]
+        : [];
+
+  // Stagger calculation: 90ms offset per card index in the grid
+  const staggerDelay = `${(index % 6) * 90}ms`;
 
   return (
-    <div ref={ref} data-intro={inView && ready ? "play" : "pending"} className="flex">
+    <div
+      ref={ref}
+      data-intro={inView && ready ? "play" : "pending"}
+      style={{ "--stagger-delay": staggerDelay } as React.CSSProperties}
+      className="card-fade-up flex h-full"
+    >
       <article
-        style={{ "--poster-from": "64px", "--intro-delay": `${(index % 3) * 120}ms` } as React.CSSProperties}
-        className="intro-item poster-crawl flex w-full flex-col overflow-hidden rounded-[32px] bg-card-cream shadow-card"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        className="group flex w-full flex-col overflow-hidden rounded-[32px] bg-card-cream shadow-card transition-all duration-300 ease-out hover:-translate-y-2 hover:shadow-[0_20px_35px_rgb(90_55_25_/_0.22)]"
       >
-        <div className="relative h-72 bg-photo-placeholder">
-          {event.image && (
-            <Image
-              src={event.image}
-              alt=""
-              fill
-              sizes="(min-width: 1024px) 33vw, 100vw"
-              className="object-cover sepia-[0.35]"
-            />
-          )}
-          <span className="absolute left-6 top-6 rounded-full bg-white/70 px-4 py-1 text-sm font-medium text-cocoa backdrop-blur-md">
-            {event.mode}
-          </span>
-        </div>
+        <EventImageTransition
+          images={imageList}
+          title={event.title}
+          mode={event.mode}
+          priority={index < 3}
+          inView={inView}
+          cardIndex={index}
+          isParentHovered={isHovered}
+        />
 
         <div className="flex grow flex-col px-7 pb-6 pt-7">
           <h3 className="mb-2 text-2xl font-extrabold leading-tight">{event.title}</h3>
@@ -63,7 +74,7 @@ export default function EventCard({ event, index }: Props) {
               type="button"
               className="pixel-glitch rounded-full border border-clay px-5 py-1.5 text-xs font-bold uppercase tracking-[0.08em] text-clay transition-colors hover:bg-clay hover:text-white"
             >
-              Register
+              {event.status === "past" ? "Recap" : "Register"}
             </button>
           </div>
         </div>

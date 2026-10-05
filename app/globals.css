@@ -352,9 +352,29 @@ html:not([data-boot="run"]):not([data-boot="exit"]) .boot-loader {
   }
 }
 
+/* Event cards: fade-up + stagger entrance */
+[data-intro="play"].card-fade-up,
+[data-intro="play"] .card-fade-up {
+  animation: card-fade-up 650ms cubic-bezier(0.16, 1, 0.3, 1) var(--stagger-delay, 0ms) backwards;
+}
+
+@keyframes card-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(32px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
-  [data-intro] .intro-item {
+  [data-intro] .intro-item,
+  [data-intro].card-fade-up,
+  [data-intro] .card-fade-up {
     opacity: 1 !important;
+    transform: none !important;
     animation: none !important;
   }
 
