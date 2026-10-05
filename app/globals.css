@@ -56,11 +56,309 @@
   background-image: linear-gradient(135deg, #a98463 0%, #d9b48c 55%, #8c6a4f 100%);
 }
 
+/* The cream page background as a faint pixel mosaic: three checkerboards of
+   different sizes overlap into irregular tints, under a grid of soft lines
+   lighter than the cream. One cell is --check wide, which PixelChecks sets to
+   the size of the hero's pixel-frame tiles and animates. The first layer
+   fades the texture in from plain cream at the top, where the hero's cream
+   pixel edge ends. */
+@utility bg-pixel-cream {
+  --cell: var(--check, 32px);
+  --line: calc(var(--cell) * 0.125);
+  background-color: #fbf7ef;
+  background-image:
+    linear-gradient(180deg, #fbf7ef, rgb(251 247 239 / 0)),
+    linear-gradient(
+      90deg,
+      rgb(255 255 255 / 0.8),
+      transparent var(--line),
+      transparent calc(var(--cell) - var(--line)),
+      rgb(255 255 255 / 0.8)
+    ),
+    linear-gradient(
+      180deg,
+      rgb(255 255 255 / 0.8),
+      transparent var(--line),
+      transparent calc(var(--cell) - var(--line)),
+      rgb(255 255 255 / 0.8)
+    ),
+    conic-gradient(rgb(93 68 47 / 0.016) 25%, transparent 0 50%, rgb(93 68 47 / 0.016) 0 75%, transparent 0),
+    conic-gradient(rgb(203 148 55 / 0.03) 25%, transparent 0 50%, rgb(203 148 55 / 0.03) 0 75%, transparent 0),
+    conic-gradient(rgb(93 68 47 / 0.02) 25%, transparent 0 50%, rgb(93 68 47 / 0.02) 0 75%, transparent 0);
+  background-repeat: no-repeat, repeat, repeat, repeat, repeat, repeat;
+  background-size:
+    100% 96px,
+    var(--cell) var(--cell),
+    var(--cell) var(--cell),
+    calc(var(--cell) * 2) calc(var(--cell) * 2),
+    calc(var(--cell) * 6) calc(var(--cell) * 6),
+    calc(var(--cell) * 10) calc(var(--cell) * 10);
+  background-position:
+    0 0,
+    0 0,
+    0 0,
+    0 0,
+    var(--cell) calc(var(--cell) * 2),
+    calc(var(--cell) * 3) var(--cell);
+}
+
 body {
   min-width: 320px;
   background: var(--color-umber);
   color: var(--color-espresso);
 }
 
+/* ------------------------------------------------------------------ */
+/* Pixel intro: boot loader + home hero entrance                       */
+/* <html data-boot> is set by the inline script in app/layout.tsx.     */
+/* ------------------------------------------------------------------ */
 
+html:not([data-boot="run"]):not([data-boot="exit"]) .boot-loader {
+  display: none;
+}
 
+/* Scrolling is blocked while the loader shows by BootLoader's input listeners,
+   not overflow:hidden, so the scrollbar never appears or disappears and the
+   page width stays constant while the loader clears. */
+
+/* Hero pixel frame: every tile is a window onto the blurred copy of the photo
+   that PixelFrame sets on the frame as --glass. */
+.pixel-glass {
+  background-image: var(--glass);
+  background-size: var(--glass-size);
+  background-repeat: no-repeat;
+}
+
+/* The tiles stepping in. */
+.pixel-tile-in {
+  animation: pixel-tile-in 160ms steps(2, end) var(--tile-delay, 0ms) backwards;
+}
+
+@keyframes pixel-tile-in {
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+}
+
+/* Hero pixel frame at rest: tiles in the dithered edge drop out now and then
+   and fall back into place a tile at a time, trailing a fading ghost; a few
+   more fall into empty cells and stay a while. Every tile runs its own cycle
+   (set inline by PixelFrame, with --tile on the frame), and `visibility`
+   leaves opacity free for the step-in above. */
+.pixel-shimmer {
+  animation: pixel-shimmer var(--shimmer-duration, 10s) step-end var(--shimmer-delay, 0ms) infinite;
+}
+
+.pixel-tile-in.pixel-shimmer {
+  animation:
+    pixel-tile-in 160ms steps(2, end) var(--tile-delay, 0ms) backwards,
+    pixel-shimmer var(--shimmer-duration, 10s) step-end var(--shimmer-delay, 0ms) infinite;
+}
+
+@keyframes pixel-shimmer {
+  80% {
+    visibility: hidden;
+    transform: translateY(calc(var(--tile) * -8));
+    box-shadow: var(--pixel-trail);
+  }
+  90% {
+    visibility: visible;
+    transform: translateY(calc(var(--tile) * -8));
+    box-shadow: var(--pixel-trail);
+    animation-timing-function: steps(8, end);
+  }
+  96% {
+    visibility: visible;
+    transform: none;
+    box-shadow: 0 0 0 transparent, 0 0 0 transparent;
+  }
+}
+
+.pixel-spark {
+  visibility: hidden;
+  animation: pixel-spark var(--shimmer-duration, 10s) step-end var(--shimmer-delay, 0ms) infinite;
+}
+
+@keyframes pixel-spark {
+  70% {
+    visibility: visible;
+    transform: translateY(calc(var(--tile) * -8));
+    box-shadow: var(--pixel-trail);
+    animation-timing-function: steps(8, end);
+  }
+  76% {
+    visibility: visible;
+    transform: none;
+    box-shadow: 0 0 0 transparent, 0 0 0 transparent;
+  }
+  96% {
+    visibility: hidden;
+  }
+}
+
+/* Ghost of the tile's last two positions while it falls. */
+[data-pixel-frame] {
+  --pixel-trail:
+    0 calc(var(--tile) * -1) 0 color-mix(in srgb, currentColor 28%, transparent),
+    0 calc(var(--tile) * -2) 0 color-mix(in srgb, currentColor 10%, transparent);
+}
+
+.boot-content-out {
+  animation: pixel-fade-out 180ms steps(3, end) forwards;
+}
+
+.boot-caret {
+  animation: boot-blink 900ms steps(1, end) infinite;
+}
+
+/* TypeText: the caret behind the character being typed. */
+.type-caret {
+  animation: boot-blink 700ms steps(1, end) infinite;
+}
+
+@keyframes boot-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+/* Hero: pixelated copy of the photo that sharpens, then steps out. */
+.hero-pixel-canvas.is-fading {
+  animation: pixel-fade-out 280ms steps(4, end) forwards;
+}
+
+@keyframes pixel-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+/* Hero: elements wait hidden until the loader is out of the way. */
+[data-intro="pending"] .intro-item {
+  opacity: 0;
+}
+
+/* Stepped left-to-right reveal. `backwards` fill so no clip-path lingers
+   afterwards to cut off focus rings or hover lifts. */
+[data-intro="play"] .intro-wipe {
+  animation: pixel-wipe var(--intro-duration, 420ms) steps(var(--intro-steps, 12), end)
+    var(--intro-delay, 0ms) backwards;
+}
+
+@keyframes pixel-wipe {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+/* Stepped fade and rise. --intro-fade-duration and --intro-fade-steps slow it
+   down where it should crawl in (the posters, the footer). */
+[data-intro="play"] .intro-fade {
+  animation: pixel-fade-in var(--intro-fade-duration, 450ms) steps(var(--intro-fade-steps, 5), end)
+    var(--intro-delay, 0ms) backwards;
+}
+
+@keyframes pixel-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+/* Buttons: a band of small gold pixels sweeps across on hover / focus. */
+.pixel-glitch {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.pixel-glitch::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0;
+  background-image: conic-gradient(
+    from 90deg,
+    #cb9437 25%,
+    transparent 0 50%,
+    #cb9437 0 75%,
+    transparent 0
+  );
+  background-size: 6px 6px;
+  -webkit-mask-image: linear-gradient(90deg, transparent 38%, #000 50%, transparent 62%);
+  mask-image: linear-gradient(90deg, transparent 38%, #000 50%, transparent 62%);
+  -webkit-mask-size: 300% 100%;
+  mask-size: 300% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: 100% 0;
+  mask-position: 100% 0;
+}
+
+.pixel-glitch:hover::after,
+.pixel-glitch:focus-visible::after {
+  opacity: 0.35;
+  animation: pixel-sweep 620ms steps(14, end) forwards;
+}
+
+@keyframes pixel-sweep {
+  to {
+    -webkit-mask-position: 0 0;
+    mask-position: 0 0;
+  }
+}
+
+/* Hero heading: the buttons' gold pixel band, clipped to the letter shapes.
+   PixelText re-mounts this layer to replay it. */
+.heading-sweep {
+  color: transparent;
+  background-image: conic-gradient(
+    from 90deg,
+    #e0a94a 25%,
+    transparent 0 50%,
+    #e0a94a 0 75%,
+    transparent 0
+  );
+  background-size: 8px 8px;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-mask-image: linear-gradient(90deg, transparent 38%, #000 50%, transparent 62%);
+  mask-image: linear-gradient(90deg, transparent 38%, #000 50%, transparent 62%);
+  -webkit-mask-size: 300% 100%;
+  mask-size: 300% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: 100% 0;
+  mask-position: 100% 0;
+  animation: pixel-sweep 3000ms steps(60, end) forwards;
+}
+
+/* Achievement posters: each crawls smoothly into place from --poster-from
+   (above for the outer two, below for the middle one). */
+[data-intro="play"] .poster-crawl {
+  animation: poster-crawl 1400ms cubic-bezier(0.22, 1, 0.36, 1) var(--intro-delay, 0ms) backwards;
+}
+
+@keyframes poster-crawl {
+  from {
+    opacity: 0;
+    transform: translateY(var(--poster-from, 64px));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-intro] .intro-item {
+    opacity: 1 !important;
+    animation: none !important;
+  }
+
+  .pixel-glitch::after {
+    display: none;
+  }
+}
