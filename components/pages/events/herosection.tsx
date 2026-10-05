@@ -42,7 +42,14 @@ export default function HeroSection() {
         style={{ opacity: HERO_ALPHA }}
       />
       <PixelatedBackground imgRef={imgRef} play={ready} background={HERO_BG} alpha={HERO_ALPHA} />
-      <PixelFrame imgRef={imgRef} background={HERO_BG} alpha={HERO_ALPHA} edge={NEXT_BG} />
+      <PixelFrame
+        imgRef={imgRef}
+        background={HERO_BG}
+        alpha={HERO_ALPHA}
+        edge={NEXT_BG}
+        // The content runs close to the bottom of this hero: keep the rising band beneath it.
+        overContent={false}
+      />
 
       <div className="relative z-10 flex h-full items-center justify-center px-6 pb-24">
         <div className="flex flex-col items-center gap-10">

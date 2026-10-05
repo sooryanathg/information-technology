@@ -44,7 +44,14 @@ export default function AboutHero() {
         style={{ opacity: HERO_ALPHA }}
       />
       <PixelatedBackground imgRef={imgRef} play={ready} background={HERO_BG} alpha={HERO_ALPHA} />
-      <PixelFrame imgRef={imgRef} background={HERO_BG} alpha={HERO_ALPHA} edge={NEXT_BG} />
+      <PixelFrame
+        imgRef={imgRef}
+        background={HERO_BG}
+        alpha={HERO_ALPHA}
+        edge={NEXT_BG}
+        // The content runs close to the bottom of this hero: keep the rising band beneath it.
+        overContent={false}
+      />
 
       <div className="relative z-10 flex min-h-screen flex-col px-6 pb-16 pt-20 md:px-12 lg:px-24">
         <div className="mt-24 max-w-3xl lg:mt-36">

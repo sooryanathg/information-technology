@@ -56,6 +56,12 @@ type Props = {
   alpha?: number;
   /** Background of the section below, which the bottom edge blends into. */
   edge?: string;
+  /**
+   * Whether the band that rises on scroll climbs over the hero's content too.
+   * Turn it off where the content runs down to the bottom of the hero, so the
+   * band never hides it.
+   */
+  overContent?: boolean;
 };
 
 /**
@@ -76,7 +82,13 @@ type Props = {
  * focus behind it. This replaces the site's off-white cursor trail over the
  * hero: PixelCursor leaves out whatever lies under `[data-pixel-frame]`.
  */
-export default function PixelFrame({ imgRef, background, alpha = 1, edge = FRAME_COLOR }: Props) {
+export default function PixelFrame({
+  imgRef,
+  background,
+  alpha = 1,
+  edge = FRAME_COLOR,
+  overContent = true,
+}: Props) {
   const ref = useRef<HTMLDivElement>(null);
   const riseRef = useRef<HTMLCanvasElement>(null);
   const trailRef = useRef<HTMLCanvasElement>(null);
@@ -359,8 +371,12 @@ export default function PixelFrame({ imgRef, background, alpha = 1, edge = FRAME
         />
       </div>
 
-      {/* z-20: above the hero content, which the rising band covers too. */}
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-20 overflow-hidden">
+      {/* z-20: above the hero content, which the rising band covers too; or, with
+          overContent off, z-[5] like the trail, beneath it. */}
+      <div
+        aria-hidden="true"
+        className={`pointer-events-none absolute inset-0 overflow-hidden ${overContent ? "z-20" : "z-[5]"}`}
+      >
         <canvas
           ref={riseRef}
           className={`absolute bottom-0 left-0 max-w-none [image-rendering:pixelated] ${SHADOW}`}
