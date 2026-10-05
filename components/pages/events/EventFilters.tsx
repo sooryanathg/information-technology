@@ -17,6 +17,9 @@ const STATUS_OPTIONS: { value: StatusFilter; label: string }[] = [
   { value: "all", label: "All" },
 ];
 
+// The filters step in one after another.
+const stepIn = (i: number) => ({ "--intro-delay": `${i * 110}ms` }) as React.CSSProperties;
+
 const inputClass =
   "h-[42px] w-full rounded-md border border-cocoa/12 bg-white px-3 text-sm text-cocoa shadow-soft outline-none placeholder:text-cocoa/75 focus-visible:border-tan focus-visible:ring-3 focus-visible:ring-tan/30";
 
@@ -31,7 +34,7 @@ export default function EventFilters({ value, onChange }: Props) {
       id={PAST_EVENTS_ANCHOR}
       className="mx-auto grid max-w-[1070px] scroll-mt-24 grid-cols-2 gap-4 md:grid-cols-4 md:gap-[60px]"
     >
-      <div className="relative">
+      <div className="intro-item intro-fade relative" style={stepIn(0)}>
         <select
           aria-label="Category"
           value={value.category}
@@ -53,10 +56,11 @@ export default function EventFilters({ value, onChange }: Props) {
         aria-label="Select date"
         value={value.date}
         onChange={(e) => onChange({ date: e.target.value })}
-        className={inputClass}
+        className={`intro-item intro-fade ${inputClass}`}
+        style={stepIn(1)}
       />
 
-      <div className="relative">
+      <div className="intro-item intro-fade relative" style={stepIn(2)}>
         <select
           aria-label="Status"
           value={value.status}
@@ -78,7 +82,8 @@ export default function EventFilters({ value, onChange }: Props) {
         placeholder="Search Events"
         value={value.query}
         onChange={(e) => onChange({ query: e.target.value })}
-        className={inputClass}
+        className={`intro-item intro-fade ${inputClass}`}
+        style={stepIn(3)}
       />
     </div>
   );

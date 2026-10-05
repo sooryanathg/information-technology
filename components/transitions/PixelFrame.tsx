@@ -54,6 +54,8 @@ type Props = {
   /** Colour behind the photo and the photo's opacity, to blur the same picture the hero shows. */
   background: string;
   alpha?: number;
+  /** Background of the section below, which the bottom edge blends into. */
+  edge?: string;
 };
 
 /**
@@ -74,7 +76,7 @@ type Props = {
  * focus behind it. This replaces the site's off-white cursor trail over the
  * hero: PixelCursor leaves out whatever lies under `[data-pixel-frame]`.
  */
-export default function PixelFrame({ imgRef, background, alpha = 1 }: Props) {
+export default function PixelFrame({ imgRef, background, alpha = 1, edge = FRAME_COLOR }: Props) {
   const ref = useRef<HTMLDivElement>(null);
   const riseRef = useRef<HTMLCanvasElement>(null);
   const trailRef = useRef<HTMLCanvasElement>(null);
@@ -157,7 +159,7 @@ export default function PixelFrame({ imgRef, background, alpha = 1 }: Props) {
         ctx.globalCompositeOperation = "source-over";
         // The tiles running ahead of the band lean to the page colour, most
         // where they have only just switched on.
-        ctx.fillStyle = FRAME_COLOR;
+        ctx.fillStyle = edge;
         for (let c = 0; c < cols; c++) {
           for (let k = 0; k < rows; k++) {
             const lead = risenLead(geo, c, k, front);
@@ -168,7 +170,7 @@ export default function PixelFrame({ imgRef, background, alpha = 1 }: Props) {
         }
         ctx.globalAlpha = 1;
       }
-      ctx.fillStyle = FRAME_COLOR;
+      ctx.fillStyle = edge;
       fill(paged);
     };
     const onScroll = () => {
@@ -182,7 +184,7 @@ export default function PixelFrame({ imgRef, background, alpha = 1 }: Props) {
       cancelAnimationFrame(raf);
       window.removeEventListener("scroll", onScroll);
     };
-  }, [geo, glass, reduced]);
+  }, [geo, glass, reduced, edge]);
 
   // Cursor trail: the tiles the mouse passes over go out of focus, then step back.
   useEffect(() => {
