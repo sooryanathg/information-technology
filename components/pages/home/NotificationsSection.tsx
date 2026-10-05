@@ -1,56 +1,219 @@
 "use client";
 
-import { CalendarDays, ChevronRight, ClipboardCheck, FileText, GraduationCap, WalletCards } from "lucide-react";
-import { useState } from "react";
+import {
+  CalendarDays,
+  ChevronRight,
+  FileText,
+  GraduationCap,
+  WalletCards,
+} from "lucide-react";
+import { useEffect, useState } from "react";
 
-const notifications = [
-  { title: "Mid Semester Examination", category: "Exams", date: "May 10, 2025", Icon: FileText },
-  { title: "Project Submission Deadline", category: "Fees", date: "May 12, 2025", Icon: ClipboardCheck },
-  { title: "Guest Lecture on AI & ML", category: "Events", date: "May 15, 2025", Icon: GraduationCap },
-  { title: "Fee Payment Reminder", category: "Fees", date: "May 18, 2025", Icon: WalletCards },
-  { title: "Workshop On Web Development", category: "Events", date: "May 20, 2025", Icon: CalendarDays },
-];
+type Notification = {
+  title: string;
+  category: string;
+  date: string;
+};
+
 const categories = ["All", "Exams", "Fees", "Events"];
 
+const categoryIcons: Record<string, React.ElementType> = {
+  Exams: FileText,
+  Fees: WalletCards,
+  Events: GraduationCap,
+};
+
 export default function NotificationsSection() {
-  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [selectedCategory, setSelectedCategory] =
+    useState("All");
+
+  const [notifications, setNotifications] = useState<
+    Notification[]
+  >([]);
+
+  const [loading, setLoading] = useState(true);
+
+  // Controls View All / Show Less
+  const [showAll, setShowAll] = useState(false);
+
+  // --------------------------------------------------
+  // FETCH NOTIFICATIONS
+  // --------------------------------------------------
+
+  useEffect(() => {
+    const fetchNotifications = async () => {
+      try {
+        const response = await fetch(
+          "/api/notifications"
+        );
+
+        if (!response.ok) {
+          throw new Error(
+            "Failed to fetch notifications"
+          );
+        }
+
+        const data = await response.json();
+
+        setNotifications(data);
+      } catch (error) {
+        console.error(
+          "Error fetching notifications:",
+          error
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchNotifications();
+  }, []);
+
+  // --------------------------------------------------
+  // FILTER BY CATEGORY
+  // --------------------------------------------------
+
   const visibleNotifications = notifications.filter(
-    ({ category }) => selectedCategory === "All" || category === selectedCategory,
+    ({ category }) =>
+      selectedCategory === "All" ||
+      category === selectedCategory
   );
 
-  return (
-    <section aria-labelledby="notifications-heading" className="rounded-[19px] border border-[#d4cfc7] bg-[#fffaf3] p-4 shadow-[0_2px_5px_rgba(44,32,21,0.12)] sm:p-5">
-      <h2 id="notifications-heading" className="font-heading text-[1.35rem] font-bold uppercase text-[#30251c] sm:text-[1.5rem]">Notification</h2>
+  // --------------------------------------------------
+  // SHOW 3 OR ALL
+  // --------------------------------------------------
 
-      <div className="mt-3 flex flex-wrap gap-x-3 gap-y-1 border-b border-[#e7d8c5] pb-3 sm:gap-x-5">
+  const displayedNotifications = showAll
+    ? visibleNotifications
+    : visibleNotifications.slice(0, 3);
+
+  // --------------------------------------------------
+  // CATEGORY CHANGE
+  // --------------------------------------------------
+
+  const handleCategoryChange = (category: string) => {
+    setSelectedCategory(category);
+
+    // Return to compact 3-notification view
+    setShowAll(false);
+  };
+
+  return (
+    <section
+      aria-labelledby="notifications-heading"
+      className="rounded-[19px] border border-[#d4cfc7] bg-[#fffaf3] p-3 shadow-[0_2px_5px_rgba(44,32,21,0.12)] sm:p-5"
+    >
+      {/* ==================================================
+          TITLE
+      ================================================== */}
+
+      <h2
+        id="notifications-heading"
+        className="font-heading text-[1.1rem] font-bold uppercase text-[#30251c] sm:text-[1.5rem]"
+      >
+        Notification
+      </h2>
+
+      {/* ==================================================
+          CATEGORY FILTERS
+      ================================================== */}
+
+      <div className="mt-2 flex flex-wrap gap-x-2 gap-y-1 border-b border-[#e7d8c5] pb-3 sm:mt-3 sm:gap-x-5">
         {categories.map((category) => (
           <button
             key={category}
             type="button"
-            onClick={() => setSelectedCategory(category)}
-            className={` text-[0.65rem] transition-colors ${selectedCategory === category ? "rounded-[8px] bg-[#65472d] px-3 py-1.5 text-white" : "px-0 py-1.5 text-[#594430] hover:text-[#9a693d]"}`}
+            onClick={() =>
+              handleCategoryChange(category)
+            }
+            className={`text-[0.6rem] transition-colors sm:text-[0.65rem] ${
+              selectedCategory === category
+                ? "rounded-[8px] bg-[#65472d] px-2.5 py-1.5 text-white sm:px-3"
+                : "px-0 py-1.5 text-[#594430] hover:text-[#9a693d]"
+            }`}
           >
             {category}
           </button>
         ))}
       </div>
 
-      <ul className="mt-1 divide-y divide-[#eee4d8]">
-        {visibleNotifications.map(({ title, date, Icon }) => (
-          <li key={title} className="flex min-h-[46px] flex-wrap items-center gap-x-3 gap-y-1 py-2 sm:flex-nowrap">
-            <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-[4px] bg-[#f0dfc5] text-[#7c5633]">
-              <Icon aria-hidden="true" className="h-4 w-4" strokeWidth={1.7} />
-            </span>
-            <span className="min-w-0 flex-1 text-xs font-medium text-[#33271d] sm:text-[0.65rem]">{title}</span>
-            <time className="ml-10 shrink-0 font-mono text-[0.62rem] text-[#4d3929] sm:ml-0">{date}</time>
+      {/* ==================================================
+          NOTIFICATION LIST
+      ================================================== */}
+
+      <ul className="divide-y divide-[#eee4d8]">
+        {loading ? (
+          <li className="py-5 text-center text-xs text-[#594430]">
+            Loading notifications...
           </li>
-        ))}
+        ) : visibleNotifications.length === 0 ? (
+          <li className="py-5 text-center text-xs text-[#594430]">
+            No notifications available.
+          </li>
+        ) : (
+          displayedNotifications.map(
+            ({ title, category, date }) => {
+              const Icon =
+                categoryIcons[category] ||
+                CalendarDays;
+
+              return (
+                <li
+                  key={`${title}-${date}`}
+                  className="flex min-h-[46px] items-start gap-2 py-2 sm:items-center sm:gap-3"
+                >
+                  {/* ICON */}
+
+                  <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-[4px] bg-[#f0dfc5] text-[#7c5633] sm:mt-0">
+                    <Icon
+                      aria-hidden="true"
+                      className="h-4 w-4"
+                      strokeWidth={1.7}
+                    />
+                  </span>
+
+                  {/* TITLE */}
+
+                  <span className="min-w-0 flex-1 text-[0.68rem] font-medium leading-snug text-[#33271d] sm:text-[0.65rem]">
+                    {title}
+                  </span>
+
+                  {/* DATE */}
+
+                  <time className="ml-auto shrink-0 pt-0.5 font-mono text-[0.56rem] text-[#4d3929] sm:pt-0 sm:text-[0.62rem]">
+                    {date}
+                  </time>
+                </li>
+              );
+            }
+          )
+        )}
       </ul>
 
-      <button type="button" className="mt-2 flex w-full items-center justify-center gap-1 border-t border-[#e7d8c5] pt-3 text-[0.68rem] font-medium text-[#65472d] hover:text-[#9a693d]">
-        View All Notifications
-        <ChevronRight aria-hidden="true" className="h-3 w-3" strokeWidth={1.8} />
-      </button>
+      {/* ==================================================
+          VIEW ALL / SHOW LESS
+      ================================================== */}
+
+      {!loading &&
+        visibleNotifications.length > 3 && (
+          <button
+            type="button"
+            onClick={() => setShowAll((prev) => !prev)}
+            className="mt-2 flex w-full items-center justify-center gap-1 border-t border-[#e7d8c5] pt-3 text-[0.62rem] font-medium text-[#65472d] transition-colors hover:text-[#9a693d] sm:text-[0.68rem]"
+          >
+            {showAll
+              ? "Show Less"
+              : "View All Notifications"}
+
+            <ChevronRight
+              aria-hidden="true"
+              className={`h-3 w-3 transition-transform ${
+                showAll ? "-rotate-90" : ""
+              }`}
+              strokeWidth={1.8}
+            />
+          </button>
+        )}
     </section>
   );
 }
