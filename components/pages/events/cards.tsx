@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import CategoryBar from "./CategoryBar";
 import EventCard from "./EventCard";
 import EventFilters, { PAST_EVENTS_ANCHOR, type FilterState } from "./EventFilters";
 import { events } from "./data/dataset";
+import { useInView, useIntroReady } from "@/lib/intro";
 
 const INITIAL_VISIBLE = 6;
 const INITIAL_FILTERS: FilterState = { category: "all", status: "upcoming", date: "", query: "" };
@@ -14,6 +15,10 @@ export default function Cards() {
   const [filter, setFilter] = useState<FilterState>(INITIAL_FILTERS);
   const [showAll, setShowAll] = useState(false);
   const update = (patch: Partial<FilterState>) => setFilter((f) => ({ ...f, ...patch }));
+  // Every time the filters scroll into view they step in again.
+  const filtersRef = useRef<HTMLDivElement>(null);
+  const filtersInView = useInView(filtersRef, { threshold: 0.6, once: false });
+  const ready = useIntroReady();
 
   useEffect(() => {
     const syncWithHash = () => {
@@ -44,7 +49,7 @@ export default function Cards() {
     <section id="events" className="w-full scroll-mt-6 bg-cream-fade">
       <div className="relative z-20 mx-auto -mt-[72px] w-[90vw] max-w-[1190px] pb-16">
         <CategoryBar active={filter.category} onSelect={(category) => update({ category })} />
-        <div className="mt-12">
+        <div ref={filtersRef} data-intro={filtersInView && ready ? "play" : "pending"} className="mt-12">
           <EventFilters value={filter} onChange={update} />
         </div>
       </div>
@@ -52,8 +57,8 @@ export default function Cards() {
       <div className="mx-auto w-[90vw] max-w-[1344px] pb-20">
         {visible.length > 0 ? (
           <div className="grid grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-3">
-            {visible.map((event) => (
-              <EventCard key={event.id} event={event} />
+            {visible.map((event, i) => (
+              <EventCard key={event.id} event={event} index={i} />
             ))}
           </div>
         ) : (
@@ -68,7 +73,7 @@ export default function Cards() {
             setFilter(NO_FILTERS);
             setShowAll(true);
           }}
-          className="h-16 rounded-full bg-caramel px-[70px] font-heading text-[22px] font-semibold text-white shadow-raised transition hover:brightness-95"
+          className="pixel-glitch h-16 rounded-full bg-caramel px-[70px] font-heading text-[22px] font-semibold text-white shadow-raised transition hover:brightness-95"
         >
           Explore All
         </button>

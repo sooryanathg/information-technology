@@ -3,12 +3,24 @@
 import { useRef } from "react";
 import Image from "next/image";
 import { Poppins } from "next/font/google";
+import { useInView, useIntroReady } from "@/lib/intro";
+import SectionHeading from "./SectionHeading";
 import { infrastructureCards } from "./data/infrastructure";
+
+// The cards crawl into place one after another, rising and falling in turn
+// like the posters on the home page.
+const crawl = (i: number) =>
+  ({ "--poster-from": i % 2 ? "-64px" : "64px", "--intro-delay": `${200 + i * 110}ms` }) as React.CSSProperties;
 
 const poppins = Poppins({ subsets: ["latin"], weight: ["400", "500", "600", "700"] });
 
 export default function InfrastructureLabs() {
   const scrollRef = useRef<HTMLDivElement>(null);
+  // Every time the row scrolls into view its cards crawl in again.
+  const rowRef = useRef<HTMLDivElement>(null);
+  const inView = useInView(rowRef, { threshold: 0.15, once: false });
+  const ready = useIntroReady();
+  const play = inView && ready;
 
 
 
@@ -21,19 +33,20 @@ export default function InfrastructureLabs() {
   className={`${poppins.className}  pt-[27px] pb-[61px]`}
 >
       <div className="mx-auto w-full max-w-[1800px] px-4 sm:px-6 md:px-10 lg:px-16 xl:px-[78px]">
-        <h2 className="text-3xl font-bold uppercase text-[#2A2522] sm:text-4xl xl:text-[40px]">
-          Infrastructure / Labs
-        </h2>
-        <span className="mt-2 block h-[3px] w-[100px] rounded-full bg-[#C9963A]" />
+        <SectionHeading
+          text="Infrastructure / Labs"
+          className="text-3xl font-bold uppercase text-[#2A2522] sm:text-4xl xl:text-[40px]"
+          barClassName="mt-2 h-[3px] w-[100px] rounded-full bg-[#C9963A]"
+        />
 
-        <div className="relative mt-8 lg:mt-[41px]">
+        <div ref={rowRef} data-intro={play ? "play" : "pending"} className="relative mt-8 lg:mt-[41px]">
           <div
             ref={scrollRef}
            
             className="flex snap-x snap-proximity scroll-smooth gap-6 overflow-x-auto pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
           >
-            {infrastructureCards.map((item) => (
-                <div key={item.id} className="w-[360px] shrink-0 snap-start lg:w-[400px]">
+            {infrastructureCards.map((item, i) => (
+                <div key={item.id} style={crawl(i)} className="intro-item poster-crawl w-[360px] shrink-0 snap-start lg:w-[400px]">
                 <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl shadow-sm">
                     <Image
                     src={item.image}
