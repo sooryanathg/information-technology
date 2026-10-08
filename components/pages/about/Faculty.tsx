@@ -9,7 +9,7 @@ import SectionHeading from "./SectionHeading";
 
 const poppins = Poppins({ subsets: ["latin"], weight: ["400", "500", "600", "700"] });
 
-const TABS: FacultyCategory[] = ["Professors", "Assistant professors", "Lab staffs"];
+const TABS: FacultyCategory[] = ["Teaching staff", "Technical staff"];
 
 const MOBILE_PAGE_SIZE = 2;
 
@@ -20,7 +20,7 @@ const crawl = (i: number) =>
 const stepIn = (i: number) => ({ "--intro-delay": `${i * 110}ms` }) as React.CSSProperties;
 
 export default function Faculty() {
-  const [activeTab, setActiveTab] = useState<FacultyCategory>("Professors");
+  const [activeTab, setActiveTab] = useState<FacultyCategory>("Teaching staff");
   const [visibleCount, setVisibleCount] = useState(MOBILE_PAGE_SIZE);
   const scrollRef = useRef<HTMLDivElement>(null);
   const [activeDot, setActiveDot] = useState(0);
@@ -92,11 +92,7 @@ export default function Faculty() {
                       : "bg-[#E3B67C] text-[#2A2522] hover:bg-[#D9A567]"
                   }`}
                 >
-                  {tab === "Professors"
-                    ? "Professors"
-                    : tab === "Assistant professors"
-                    ? "Assistent professors"
-                    : "Lab staffs"}
+                  {tab}
                 </button>
               );
             })}
@@ -126,9 +122,7 @@ export default function Faculty() {
                       />
                     </div>
                     <div className="p-5">
-                      <p className="text-base font-bold text-[#2A2522]">
-                        prof : {member.name.replace(/^Prof\.\s*/, "")}
-                      </p>
+                    <p className="text-base font-bold text-[#2A2522]">{member.name}</p>
                       <p className="text-sm text-[#6B6560]">{member.designation}</p>
                     </div>
                   </div>

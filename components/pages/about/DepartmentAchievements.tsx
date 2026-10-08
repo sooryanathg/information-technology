@@ -53,7 +53,7 @@ export default function DepartmentAchievements() {
                     alt={item.alt}
                     fill
                     sizes="260px"
-                    className="object-cover"
+                    className="object-contain"
                   />
                 </div>
               </div>
