@@ -33,6 +33,8 @@ const LEAVES = [
 // Until an image loads we assume a portrait poster.
 const DEFAULT_RATIO = 4 / 5;
 
+const SWAP_INTERVAL_MS = 4000;
+
 export default function AchievementsSection() {
   const [posterImages, setPosterImages] = useState<AchievementImage[]>([]);
   const [ratios, setRatios] = useState<Record<string, number>>({});
@@ -103,6 +105,27 @@ export default function AchievementsSection() {
   const postersRef = useRef<HTMLDivElement>(null);
   const postersPlay =
     useInView(postersRef, { threshold: 0.15, once: false }) && ready;
+
+  // Every few seconds each poster moves one leaf along, so every poster
+  // takes a turn in the big centre spot. Paused while someone is looking
+  // closely (hover, keyboard focus, enlarged view) or the canopy is off screen.
+  const [rotation, setRotation] = useState(0);
+  const [hovered, setHovered] = useState(false);
+  const [focused, setFocused] = useState(false);
+  const total = posterImages.length;
+  const swapping =
+    total > 1 && postersPlay && !hovered && !focused && !openPoster;
+
+  useEffect(() => {
+    if (!swapping) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const timer = window.setInterval(() => {
+      setRotation((current) => current + 1);
+    }, SWAP_INTERVAL_MS);
+
+    return () => window.clearInterval(timer);
+  }, [swapping]);
 
   return (
     <section
@@ -175,6 +198,14 @@ export default function AchievementsSection() {
             <div
               role="list"
               aria-label="Student achievement posters"
+              onMouseEnter={() => setHovered(true)}
+              onMouseLeave={() => setHovered(false)}
+              onFocus={() => setFocused(true)}
+              onBlur={(event) => {
+                if (!event.currentTarget.contains(event.relatedTarget)) {
+                  setFocused(false);
+                }
+              }}
               className="mx-auto mt-5 max-w-[1170px] columns-2 gap-3 sm:relative sm:mt-8 sm:aspect-[16/10] sm:columns-auto sm:[container-type:size] lg:mt-10"
             >
               {/* Trunk and branches, mostly hidden behind the leaves. */}
@@ -200,7 +231,9 @@ export default function AchievementsSection() {
               </svg>
 
               {posterImages.map((poster, index) => {
-                const leaf = LEAVES[index];
+                // The poster at `rotation` sits in the centre leaf; the rest
+                // follow in order around the canopy.
+                const leaf = LEAVES[(index - (rotation % total) + total) % total];
                 const ratio = ratios[poster.id] ?? DEFAULT_RATIO;
 
                 return (
@@ -218,7 +251,7 @@ export default function AchievementsSection() {
                         "--z": leaf.z,
                       } as CSSProperties
                     }
-                    className="group mb-3 break-inside-avoid sm:absolute sm:left-[var(--x)] sm:top-[var(--y)] sm:z-[var(--z)] sm:mb-0 sm:w-[min(var(--bw),calc(var(--bh)*var(--ratio)))] sm:-translate-x-1/2 sm:-translate-y-1/2 sm:hover:z-50 sm:focus-within:z-50"
+                    className="group mb-3 break-inside-avoid sm:absolute sm:left-[var(--x)] sm:top-[var(--y)] sm:z-[var(--z)] sm:mb-0 sm:w-[min(var(--bw),calc(var(--bh)*var(--ratio)))] sm:-translate-x-1/2 sm:-translate-y-1/2 sm:transition-[left,top,width] sm:duration-[1200ms] sm:ease-[cubic-bezier(0.65,0,0.35,1)] sm:hover:z-50 sm:focus-within:z-50"
                   >
                     <button
                       type="button"
@@ -230,7 +263,7 @@ export default function AchievementsSection() {
                           "--intro-delay": `${index * 120}ms`,
                         } as CSSProperties
                       }
-                      className="intro-item poster-crawl block w-full rotate-[var(--rot)] cursor-zoom-in rounded-xl bg-card-cream p-1.5 shadow-[0_12px_18px_rgba(44,34,25,0.22)] transition-[rotate,scale,box-shadow] duration-500 hover:rotate-0 hover:scale-[1.06] hover:shadow-[0_20px_35px_rgba(44,34,25,0.3)] focus-visible:rotate-0 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#a96b39] sm:rounded-[18px] sm:p-2.5"
+                      className="intro-item poster-crawl block w-full rotate-[var(--rot)] cursor-zoom-in rounded-xl bg-card-cream p-1.5 shadow-[0_12px_18px_rgba(44,34,25,0.22)] transition-[rotate,scale,box-shadow] duration-700 hover:rotate-0 hover:scale-[1.06] hover:shadow-[0_20px_35px_rgba(44,34,25,0.3)] focus-visible:rotate-0 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#a96b39] sm:rounded-[18px] sm:p-2.5"
                     >
                       <div
                         className="relative w-full overflow-hidden rounded-lg bg-photo-placeholder sm:rounded-[12px]"
