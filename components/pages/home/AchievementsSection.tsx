@@ -149,7 +149,7 @@ export default function AchievementsSection() {
               id="achievements-heading"
               play={play}
               startDelay={1800}
-              className="intro-item font-heading text-[0.95rem] font-semibold leading-tight text-black sm:text-3xl lg:text-[48px]"
+              className="intro-item font-heading text-lg font-semibold leading-tight text-black sm:text-3xl lg:text-[48px]"
               layout={HEADING.join(" ")}
             >
               <DecodeText text={HEADING[0]} play={play} delay={150} />{" "}
@@ -165,7 +165,7 @@ export default function AchievementsSection() {
           </div>
 
           <p
-            className="intro-item intro-fade mx-auto mt-1 max-w-2xl text-xs leading-relaxed text-black sm:mt-2 sm:text-xl lg:text-[26px]"
+            className="intro-item intro-fade mx-auto mt-1 max-w-2xl text-sm leading-relaxed text-black sm:mt-2 sm:text-xl lg:text-[26px]"
             style={{ "--intro-delay": "650ms" } as CSSProperties}
           >
             Celebrating placements, internships and achievements of our students
