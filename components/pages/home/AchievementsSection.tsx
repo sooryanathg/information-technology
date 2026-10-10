@@ -232,21 +232,24 @@ export default function AchievementsSection() {
                         "--intro-delay": position === 1 ? "160ms" : "0ms",
                       } as CSSProperties
                     }
-                    className={`intro-item poster-crawl mx-auto w-full cursor-pointer overflow-hidden rounded-xl shadow-[0_12px_18px_rgba(44,34,25,0.22)] transition-all duration-500 hover:z-10 hover:scale-[1.04] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#a96b39] sm:rounded-[20px] sm:hover:scale-[1.12] ${
+                    className={`intro-item poster-crawl mx-auto w-full cursor-pointer rounded-xl bg-card-cream p-1.5 shadow-[0_12px_18px_rgba(44,34,25,0.22)] transition-all duration-500 hover:z-10 hover:scale-[1.04] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#a96b39] sm:rounded-[20px] sm:p-3 sm:hover:scale-[1.12] ${
                       position === 1
                         ? "max-w-[min(68vw,280px)] sm:-mt-2 sm:max-w-[460px]"
                         : "hidden max-w-[140px] sm:mt-10 sm:block sm:max-w-[390px]"
                     }`}
                   >
-                    <Image
-                      src={poster.imageUrl}
-                      alt={poster.name}
-                      width={800}
-                      height={1000}
-                      unoptimized
-                      className="h-auto w-full"
-                      priority={position === 1}
-                    />
+                    {/* Fixed 4:5 frame so posters of any shape render at the same size. */}
+                    <div className="relative aspect-[4/5] w-full overflow-hidden rounded-lg bg-photo-placeholder sm:rounded-[14px]">
+                      <Image
+                        src={poster.imageUrl}
+                        alt={poster.name}
+                        fill
+                        unoptimized
+                        sizes="(min-width: 640px) 460px, 68vw"
+                        className="object-cover"
+                        priority={position === 1}
+                      />
+                    </div>
                   </button>
                 );
               })}
