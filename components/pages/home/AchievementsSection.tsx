@@ -149,7 +149,7 @@ export default function AchievementsSection() {
               id="achievements-heading"
               play={play}
               startDelay={1800}
-              className="intro-item font-heading text-lg font-semibold leading-tight text-black sm:text-3xl lg:text-[48px]"
+              className="intro-item font-heading text-[1.2rem] font-semibold leading-tight text-black sm:text-3xl lg:text-[48px]"
               layout={HEADING.join(" ")}
             >
               <DecodeText text={HEADING[0]} play={play} delay={150} />{" "}
