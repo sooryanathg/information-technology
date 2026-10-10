@@ -1,85 +1,134 @@
+
 "use client";
 
 import Image from "next/image";
 import { ChevronLeft, ChevronRight, Star } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import type { CSSProperties } from "react";
 import DecodeText from "@/components/transitions/DecodeText";
 import PixelText from "@/components/transitions/PixelText";
 import { useInView, useIntroReady } from "@/lib/intro";
 
 const HEADING = ["Our Students are", "Making Us Proud"];
 
-const posterImages = [
-  "/home/achievements/achievement1.png",
-  "/home/achievements/achievement2.png",
-  "/home/achievements/achievement3.png",
-  "/home/achievements/achievement4.png",
-];
+type AchievementImage = {
+  id: string;
+  name: string;
+  createdTime: string | null;
+  imageUrl: string;
+};
 
 export default function AchievementsSection() {
+  const [posterImages, setPosterImages] = useState<AchievementImage[]>([]);
   const [activeSlide, setActiveSlide] = useState(0);
+  const [loading, setLoading] = useState(true);
 
   const totalSlides = posterImages.length;
 
-  const goToNext = () => {
-    setActiveSlide((current) => (current + 1) % totalSlides);
-  };
+  // Fetch the latest six images from Google Drive.
+  const fetchAchievements = useCallback(async (initial = false) => {
+    try {
+      const response = await fetch("/api/home-achievements", {
+        cache: "no-store",
+      });
 
-  const goToPrevious = () => {
-    setActiveSlide(
-      (current) => (current - 1 + totalSlides) % totalSlides,
+      if (!response.ok) {
+        throw new Error("Failed to fetch achievements");
+      }
+
+      const data: { images?: AchievementImage[] } = await response.json();
+      const latestImages = data.images ?? [];
+
+      setPosterImages((previous) => {
+        // Avoid resetting the carousel when the image list has not changed.
+        if (
+          previous.length === latestImages.length &&
+          previous.every(
+            (image, index) => image.id === latestImages[index]?.id
+          )
+        ) {
+          return previous;
+        }
+
+        return latestImages;
+      });
+
+      setActiveSlide((current) =>
+        latestImages.length ? current % latestImages.length : 0
+      );
+    } catch (error) {
+      console.error("Failed to load achievements:", error);
+    } finally {
+      if (initial) setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    void fetchAchievements(true);
+
+    const timer = window.setInterval(() => {
+      void fetchAchievements();
+    }, 60_000);
+
+    return () => window.clearInterval(timer);
+  }, [fetchAchievements]);
+
+  const goToNext = useCallback(() => {
+    setActiveSlide((current) =>
+      totalSlides ? (current + 1) % totalSlides : 0
     );
-  };
+  }, [totalSlides]);
+
+  const goToPrevious = useCallback(() => {
+    setActiveSlide((current) =>
+      totalSlides ? (current - 1 + totalSlides) % totalSlides : 0
+    );
+  }, [totalSlides]);
 
   const goToSlide = (index: number) => {
     setActiveSlide(index);
   };
 
-  // Keyboard navigation
+  // Keyboard navigation.
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "ArrowRight") {
-        event.preventDefault();
         goToNext();
-      }
-
-      if (event.key === "ArrowLeft") {
-        event.preventDefault();
+      } else if (event.key === "ArrowLeft") {
         goToPrevious();
+      } else {
+        return;
       }
     };
 
     window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [goToNext, goToPrevious]);
 
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, []);
-
-  // Automatic movement
+  // Automatic movement every three seconds.
   useEffect(() => {
-    const timer = setInterval(() => {
-      goToNext();
-    }, 3000);
+    if (totalSlides <= 1) return;
 
-    return () => clearInterval(timer);
-  }, []);
+    const timer = window.setInterval(goToNext, 3000);
+    return () => window.clearInterval(timer);
+  }, [goToNext, totalSlides]);
 
-  // Every time the heading scrolls into view it decodes, like the hero's, and
-  // it gets the hero heading's gold pixel sweep and hover glow.
   const headingRef = useRef<HTMLDivElement>(null);
   const inView = useInView(headingRef, { threshold: 0.6, once: false });
   const ready = useIntroReady();
   const play = inView && ready;
-  // The posters step in on their own, whenever they scroll into view.
-  const postersRef = useRef<HTMLDivElement>(null);
-  const postersPlay = useInView(postersRef, { threshold: 0.15, once: false }) && ready;
 
-  // Previous, current and next posters
-  const visiblePosters = [-1, 0, 1].map(
-    (offset) =>
-      (activeSlide + offset + totalSlides) % totalSlides,
-  );
+  const postersRef = useRef<HTMLDivElement>(null);
+  const postersPlay =
+    useInView(postersRef, { threshold: 0.15, once: false }) && ready;
+
+  // Show the previous, current and next posters.
+  const visiblePosters =
+    totalSlides > 0
+      ? [-1, 0, 1].map(
+          (offset) => (activeSlide + offset + totalSlides) % totalSlides
+        )
+      : [];
 
   return (
     <section
@@ -88,19 +137,15 @@ export default function AchievementsSection() {
     >
       <div className="relative z-10 mx-auto max-w-[1515px] text-center">
         <div data-intro={play ? "play" : "pending"}>
-          {/* Section heading decoration */}
           <div
             aria-hidden="true"
             className="intro-item intro-fade mb-1 flex items-center justify-center gap-2 text-[#a96b39] sm:mb-3 sm:gap-5"
           >
             <span className="h-[2px] w-6 bg-[#a96b39] sm:h-[3px] sm:w-24" />
-
             <Star className="h-4 w-4 fill-current sm:h-8 sm:w-8" />
-
             <span className="h-[2px] w-6 bg-[#a96b39] sm:h-[3px] sm:w-24" />
           </div>
 
-          {/* Heading */}
           <div ref={headingRef}>
             <PixelText
               as="h2"
@@ -112,15 +157,19 @@ export default function AchievementsSection() {
             >
               <DecodeText text={HEADING[0]} play={play} delay={150} />{" "}
               <span className="text-[#ad7746]">
-                <DecodeText text={HEADING[1]} play={play} delay={150} offset={HEADING[0].length} />
+                <DecodeText
+                  text={HEADING[1]}
+                  play={play}
+                  delay={150}
+                  offset={HEADING[0].length}
+                />
               </span>
             </PixelText>
           </div>
 
-          {/* Subtitle */}
           <p
             className="intro-item intro-fade mx-auto mt-1 max-w-2xl text-xs leading-relaxed text-black sm:mt-2 sm:text-xl lg:text-[26px]"
-            style={{ "--intro-delay": "650ms" } as React.CSSProperties}
+            style={{ "--intro-delay": "650ms" } as CSSProperties}
           >
             Celebrating placements, internships and achievements of our students
           </p>
@@ -129,19 +178,24 @@ export default function AchievementsSection() {
         <div
           ref={postersRef}
           data-intro={postersPlay ? "play" : "pending"}
-          // The slide dots fade in slowly, once the posters have settled.
-          style={{ "--intro-fade-duration": "1100ms", "--intro-fade-steps": 10 } as React.CSSProperties}
+          style={
+            {
+              "--intro-fade-duration": "1100ms",
+              "--intro-fade-steps": 10,
+            } as CSSProperties
+          }
         >
-          {/* Achievement Posters */}
           <div className="relative mx-auto max-w-[1170px]">
-            <button
-              type="button"
-              aria-label="Previous achievement poster"
-              onClick={goToPrevious}
-              className="absolute -left-1 top-1/2 z-20 flex -translate-y-1/2 items-center justify-center rounded-full border border-[#c9b497] bg-white/90 p-1.5 text-[#5f3b1d] shadow-[0_8px_18px_rgba(44,34,25,0.12)] transition hover:scale-105 hover:bg-white sm:-left-2 sm:p-2"
-            >
-              <ChevronLeft className="h-4 w-4 sm:h-6 sm:w-6" />
-            </button>
+            {totalSlides > 1 && (
+              <button
+                type="button"
+                aria-label="Previous achievement poster"
+                onClick={goToPrevious}
+                className="absolute -left-1 top-1/2 z-20 flex -translate-y-1/2 items-center justify-center rounded-full border border-[#c9b497] bg-white/90 p-1.5 text-[#5f3b1d] shadow-[0_8px_18px_rgba(44,34,25,0.12)] transition hover:scale-105 hover:bg-white sm:-left-2 sm:p-2"
+              >
+                <ChevronLeft className="h-4 w-4 sm:h-6 sm:w-6" />
+              </button>
+            )}
 
             <div
               aria-label="Student achievement posters"
@@ -150,58 +204,75 @@ export default function AchievementsSection() {
               tabIndex={0}
               className="mx-auto mt-4 grid max-w-[1170px] grid-cols-1 items-center gap-2 outline-none sm:mt-8 sm:grid-cols-3 sm:gap-6 lg:mt-10 lg:gap-7"
             >
-              {visiblePosters.map((posterIndex, position) => (
-                <button
-                  key={posterIndex}
-                  type="button"
-                  aria-label={`Show achievement poster ${posterIndex + 1}`}
-                  onClick={() => goToSlide(posterIndex)}
-                  // The outer two crawl down into place and the middle one crawls
-                  // up; a poster the carousel brings in later arrives the same way.
-                  style={
-                    {
-                      "--poster-from": position === 1 ? "64px" : "-64px",
-                      "--intro-delay": position === 1 ? "160ms" : "0ms",
-                    } as React.CSSProperties
-                  }
-                  className={`intro-item poster-crawl mx-auto w-full cursor-pointer overflow-hidden rounded-xl shadow-[0_12px_18px_rgba(44,34,25,0.22)] transition-all duration-500 hover:z-10 hover:scale-[1.04] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#a96b39] sm:rounded-[20px] sm:hover:scale-[1.12] ${
-                    position === 1
-                      ? "max-w-[min(68vw,280px)] sm:-mt-2 sm:max-w-[460px]"
+              {loading && posterImages.length === 0 && (
+                <p className="col-span-full py-10 text-sm text-gray-600">
+                  Loading achievements...
+                </p>
+              )}
+
+              {!loading && posterImages.length === 0 && (
+                <p className="col-span-full py-10 text-sm text-gray-600">
+                  No achievement posters are available right now.
+                </p>
+              )}
+
+              {visiblePosters.map((posterIndex, position) => {
+                const poster = posterImages[posterIndex];
+                if (!poster) return null;
+
+                return (
+                  <button
+                    key={poster.id}
+                    type="button"
+                    aria-label={`Show achievement poster ${posterIndex + 1}`}
+                    onClick={() => goToSlide(posterIndex)}
+                    style={
+                      {
+                        "--poster-from": position === 1 ? "64px" : "-64px",
+                        "--intro-delay": position === 1 ? "160ms" : "0ms",
+                      } as CSSProperties
+                    }
+                    className={`intro-item poster-crawl mx-auto w-full cursor-pointer overflow-hidden rounded-xl shadow-[0_12px_18px_rgba(44,34,25,0.22)] transition-all duration-500 hover:z-10 hover:scale-[1.04] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#a96b39] sm:rounded-[20px] sm:hover:scale-[1.12] ${
+                      position === 1
+                        ? "max-w-[min(68vw,280px)] sm:-mt-2 sm:max-w-[460px]"
                         : "hidden max-w-[140px] sm:mt-10 sm:block sm:max-w-[390px]"
-                  }`}
-                >
-                  <Image
-                    src={posterImages[posterIndex]}
-                    alt={`Student achievement poster ${posterIndex + 1}`}
-                    width={800}
-                    height={1000}
-                    className="h-auto w-full"
-                    priority={position === 1}
-                  />
-                </button>
-              ))}
+                    }`}
+                  >
+                    <Image
+                      src={poster.imageUrl}
+                      alt={poster.name}
+                      width={800}
+                      height={1000}
+                      unoptimized
+                      className="h-auto w-full"
+                      priority={position === 1}
+                    />
+                  </button>
+                );
+              })}
             </div>
 
-            <button
-              type="button"
-              aria-label="Next achievement poster"
-              onClick={goToNext}
-              className="absolute -right-1 top-1/2 z-20 flex -translate-y-1/2 items-center justify-center rounded-full border border-[#c9b497] bg-white/90 p-1.5 text-[#5f3b1d] shadow-[0_8px_18px_rgba(44,34,25,0.12)] transition hover:scale-105 hover:bg-white sm:-right-2 sm:p-2"
-            >
-              <ChevronRight className="h-4 w-4 sm:h-6 sm:w-6" />
-            </button>
+            {totalSlides > 1 && (
+              <button
+                type="button"
+                aria-label="Next achievement poster"
+                onClick={goToNext}
+                className="absolute -right-1 top-1/2 z-20 flex -translate-y-1/2 items-center justify-center rounded-full border border-[#c9b497] bg-white/90 p-1.5 text-[#5f3b1d] shadow-[0_8px_18px_rgba(44,34,25,0.12)] transition hover:scale-105 hover:bg-white sm:-right-2 sm:p-2"
+              >
+                <ChevronRight className="h-4 w-4 sm:h-6 sm:w-6" />
+              </button>
+            )}
           </div>
 
-          {/* Slide Indicators */}
           <div
             className="intro-item intro-fade mx-auto mt-3 flex w-fit items-center gap-1 rounded-full bg-white/80 px-2 py-1 shadow-[0_2px_8px_rgba(44,34,25,0.12)] sm:mt-6 sm:gap-2 sm:px-3 sm:py-2"
-            style={{ "--intro-delay": "900ms" } as React.CSSProperties}
+            style={{ "--intro-delay": "900ms" } as CSSProperties}
             role="group"
             aria-label="Choose achievement poster"
           >
-            {posterImages.map((_, index) => (
+            {posterImages.map((poster, index) => (
               <button
-                key={index}
+                key={poster.id}
                 type="button"
                 aria-label={`Show achievement slide ${index + 1}`}
                 aria-current={activeSlide === index ? "true" : undefined}
@@ -210,16 +281,13 @@ export default function AchievementsSection() {
               >
                 <span
                   className={`absolute inset-0 origin-left rounded-full bg-[#a96b39] transition-transform duration-300 ${
-                  activeSlide === index
-                      ? "scale-x-100"
-                      : "scale-x-0"
+                    activeSlide === index ? "scale-x-100" : "scale-x-0"
                   }`}
                 />
               </button>
             ))}
           </div>
         </div>
-
       </div>
     </section>
   );
