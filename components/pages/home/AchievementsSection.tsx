@@ -133,7 +133,7 @@ export default function AchievementsSection() {
   return (
     <section
       aria-labelledby="achievements-heading"
-      className="px-5 pb-5 pt-2 sm:px-8 sm:pb-10 sm:pt-6"
+      className="px-8 pb-5 pt-2 sm:px-10 sm:pb-10 sm:pt-6 lg:px-14"
     >
       <div className="relative z-10 mx-auto max-w-[1515px] text-center">
         <div data-intro={play ? "play" : "pending"}>
@@ -191,9 +191,9 @@ export default function AchievementsSection() {
                 type="button"
                 aria-label="Previous achievement poster"
                 onClick={goToPrevious}
-                className="absolute -left-1 top-1/2 z-20 flex -translate-y-1/2 items-center justify-center rounded-full border border-[#c9b497] bg-white/90 p-1.5 text-[#5f3b1d] shadow-[0_8px_18px_rgba(44,34,25,0.12)] transition hover:scale-105 hover:bg-white sm:-left-2 sm:p-2"
+                className="absolute -left-1 top-1/2 z-20 flex -translate-y-1/2 items-center justify-center rounded-full border border-[#c9b497] bg-white/90 p-0.5 text-[#5f3b1d] shadow-[0_8px_18px_rgba(44,34,25,0.12)] transition hover:scale-105 hover:bg-white sm:-left-2 sm:p-1"
               >
-                <ChevronLeft className="h-4 w-4 sm:h-6 sm:w-6" />
+                <ChevronLeft className="h-3 w-3 sm:h-4 sm:w-4" />
               </button>
             )}
 
@@ -232,19 +232,18 @@ export default function AchievementsSection() {
                         "--intro-delay": position === 1 ? "160ms" : "0ms",
                       } as CSSProperties
                     }
-                    className={`intro-item poster-crawl mx-auto w-full cursor-pointer overflow-hidden rounded-xl shadow-[0_12px_18px_rgba(44,34,25,0.22)] transition-all duration-500 hover:z-10 hover:scale-[1.04] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#a96b39] sm:rounded-[20px] sm:hover:scale-[1.12] ${
+                    className={`intro-item poster-crawl relative mx-auto aspect-[4/5] w-full cursor-pointer overflow-hidden rounded-xl bg-white shadow-[0_12px_18px_rgba(44,34,25,0.22)] transition-all duration-500 hover:z-10 hover:scale-[1.04] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#a96b39] sm:rounded-[20px] sm:hover:scale-[1.12] ${
                       position === 1
-                        ? "max-w-[min(68vw,280px)] sm:-mt-2 sm:max-w-[460px]"
+                        ? "max-w-[min(88vw,380px)] sm:-mt-2 sm:max-w-[460px]"
                         : "hidden max-w-[140px] sm:mt-10 sm:block sm:max-w-[390px]"
                     }`}
                   >
                     <Image
                       src={poster.imageUrl}
                       alt={poster.name}
-                      width={800}
-                      height={1000}
+                      fill
                       unoptimized
-                      className="h-auto w-full"
+                      className="object-contain"
                       priority={position === 1}
                     />
                   </button>
@@ -257,9 +256,9 @@ export default function AchievementsSection() {
                 type="button"
                 aria-label="Next achievement poster"
                 onClick={goToNext}
-                className="absolute -right-1 top-1/2 z-20 flex -translate-y-1/2 items-center justify-center rounded-full border border-[#c9b497] bg-white/90 p-1.5 text-[#5f3b1d] shadow-[0_8px_18px_rgba(44,34,25,0.12)] transition hover:scale-105 hover:bg-white sm:-right-2 sm:p-2"
+                className="absolute -right-1 top-1/2 z-20 flex -translate-y-1/2 items-center justify-center rounded-full border border-[#c9b497] bg-white/90 p-0.5 text-[#5f3b1d] shadow-[0_8px_18px_rgba(44,34,25,0.12)] transition hover:scale-105 hover:bg-white sm:-right-2 sm:p-1"
               >
-                <ChevronRight className="h-4 w-4 sm:h-6 sm:w-6" />
+                <ChevronRight className="h-3 w-3 sm:h-4 sm:w-4" />
               </button>
             )}
           </div>
