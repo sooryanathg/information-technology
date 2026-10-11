@@ -17,11 +17,11 @@ export default function UpdatesSection() {
   return (
     <section
       aria-label="Department resources and notifications"
-      className="relative bg-[#6b5541] px-8 py-12 sm:px-10 sm:py-14 lg:px-14 lg:py-16"
+      className="relative bg-[#6b5541] px-8 pb-6 pt-0 sm:px-10 sm:pb-8 sm:pt-2 lg:px-14 lg:pb-10 lg:pt-4"
     >
       {/* Hilbert curves behind the panels, which frame them the way the checks frame the cream sections. */}
       <HilbertLines />
-      <div ref={gridRef} className="relative z-10 mx-auto grid max-w-[1357px] gap-8 md:grid-cols-2 md:gap-8">
+      <div ref={gridRef} className="relative z-10 mx-auto grid max-w-[1080px] gap-12 md:grid-cols-2 md:gap-10">
         <NotificationsSection />
         <ResourcesSection />
         <HilbertReveal play={inView && ready} />

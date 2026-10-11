@@ -64,13 +64,18 @@ export default function AchievementsSection() {
   }, []);
 
   useEffect(() => {
-    void fetchAchievements(true);
+    const initialTimer = window.setTimeout(() => {
+      void fetchAchievements(true);
+    }, 0);
 
     const timer = window.setInterval(() => {
       void fetchAchievements();
     }, 60_000);
 
-    return () => window.clearInterval(timer);
+    return () => {
+      window.clearTimeout(initialTimer);
+      window.clearInterval(timer);
+    };
   }, [fetchAchievements]);
 
   const goToNext = useCallback(() => {

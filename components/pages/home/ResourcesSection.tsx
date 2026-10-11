@@ -284,7 +284,7 @@ export default function ResourcesSection() {
       <section
         data-reveal
         aria-labelledby="resources-heading"
-        className="rounded-[19px] border border-[#d4c2aa] bg-[#f0e3d0] p-4 shadow-[0_2px_5px_rgba(44,32,21,0.12)] sm:p-8"
+        className="rounded-[19px] border border-[#d4c2aa] bg-[#f0e3d0] p-3 shadow-[0_2px_5px_rgba(44,32,21,0.12)] sm:p-6"
       >
         {/* ==================================================
             TITLE
@@ -292,7 +292,7 @@ export default function ResourcesSection() {
 
         <h2
           id="resources-heading"
-          className="font-heading text-[1.2rem] font-bold uppercase text-[#30251c] sm:text-[2rem]"
+          className="font-heading text-[1.1rem] font-bold uppercase text-[#30251c] sm:text-[1.65rem]"
         >
           Resources
         </h2>
@@ -301,7 +301,7 @@ export default function ResourcesSection() {
             PROGRAMS
         ================================================== */}
 
-        <div className="mt-3 flex flex-wrap gap-2 border-b border-[#dbc9b0] pb-3 sm:mt-5 sm:gap-2.5 sm:pb-4">
+        <div className="mt-2.5 flex flex-wrap gap-2 border-b border-[#dbc9b0] pb-2.5 sm:mt-4 sm:gap-2 sm:pb-3">
           {programs.map((program) => (
             <button
               key={program}
@@ -309,7 +309,7 @@ export default function ResourcesSection() {
               onClick={() =>
                 handleProgramChange(program)
               }
-              className={`rounded-[9px] border px-3.5 py-1.5 text-[0.72rem] font-medium transition-colors sm:px-5 sm:py-2 sm:text-[0.9rem] ${
+              className={`rounded-[9px] border px-3 py-1.5 text-[0.7rem] font-medium transition-colors sm:px-4 sm:py-1.5 sm:text-[0.84rem] ${
                 selectedProgram === program
                   ? "border-[#65472d] bg-[#65472d] text-white"
                   : "border-[#d9c2a2] bg-transparent text-[#594430] hover:bg-[#e7d6be]"
@@ -325,7 +325,7 @@ export default function ResourcesSection() {
         ================================================== */}
 
         {selectedProgram === "B.Tech" && (
-          <div className="mt-3 flex flex-wrap gap-1.5 sm:mt-4 sm:gap-2.5">
+          <div className="mt-2.5 flex flex-wrap gap-1.5 sm:mt-3 sm:gap-2">
             {btechSchemes.map((scheme) => (
               <button
                 key={scheme}
@@ -336,7 +336,7 @@ export default function ResourcesSection() {
                 aria-pressed={
                   selectedScheme === scheme
                 }
-                className={`rounded-[6px] border px-3.5 py-1.5 text-[0.72rem] font-medium transition-colors sm:px-5 sm:py-2 sm:text-[0.9rem] ${
+                className={`rounded-[6px] border px-3 py-1.5 text-[0.7rem] font-medium transition-colors sm:px-4 sm:py-1.5 sm:text-[0.84rem] ${
                   selectedScheme === scheme
                     ? "border-[#806d5d] bg-[#806d5d] text-white"
                     : "border-[#d9c2a2] bg-[#f8efe3] text-[#34281e] hover:bg-[#e6d4bb]"
@@ -352,7 +352,7 @@ export default function ResourcesSection() {
             SEMESTERS
         ================================================== */}
 
-        <div className="mt-3 flex flex-wrap gap-1.5 sm:mt-4 sm:gap-2.5">
+        <div className="mt-2.5 flex flex-wrap gap-1.5 sm:mt-3 sm:gap-2">
           {visibleSemesters.map((semester) => (
             <button
               key={semester}
@@ -363,7 +363,7 @@ export default function ResourcesSection() {
               aria-pressed={
                 selectedSemester === semester
               }
-              className={`min-w-8 rounded-[3px] px-2 py-1.5 text-[0.72rem] transition-colors sm:min-w-11 sm:px-3 sm:py-2 sm:text-[0.9rem] ${
+              className={`min-w-8 rounded-[3px] px-2 py-1 text-[0.7rem] transition-colors sm:min-w-10 sm:px-2.5 sm:py-1.5 sm:text-[0.84rem] ${
                 selectedSemester === semester
                   ? "bg-[#806d5d] text-white"
                   : "bg-[#f8efe3] text-[#34281e] hover:bg-[#e6d4bb]"
@@ -378,7 +378,7 @@ export default function ResourcesSection() {
             RESOURCE CARDS
         ================================================== */}
 
-        <ul className="mt-4 grid grid-cols-3 gap-2 sm:mt-6 sm:gap-4">
+        <ul className="mt-3 grid grid-cols-3 gap-2 sm:mt-4 sm:gap-3">
           {resources.map(({ label, Icon }) => (
             <li key={label}>
               <button
@@ -386,17 +386,17 @@ export default function ResourcesSection() {
                 onClick={() =>
                   handleResourceClick(label)
                 }
-                className="flex min-h-[84px] w-full flex-col items-center justify-center gap-2 rounded-[6px] sm:min-h-[150px] sm:gap-3 border border-[#e1cdb0] bg-[#ead8be] px-2 py-3 text-center text-[#33271d] shadow-[0_2px_4px_rgba(60,43,27,0.12)] transition-colors hover:bg-[#e2ccb0] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#765538]"
+                className="flex min-h-[72px] w-full flex-col items-center justify-center gap-1.5 rounded-[6px] border border-[#e1cdb0] bg-[#ead8be] px-1.5 py-2 text-center text-[#33271d] shadow-[0_2px_4px_rgba(60,43,27,0.12)] transition-colors hover:bg-[#e2ccb0] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#765538] sm:min-h-[118px] sm:gap-2"
               >
-                <span className="flex h-7 w-7 items-center justify-center rounded-[3px] bg-[#bc8b57] text-[#33271d] sm:h-11 sm:w-11">
+                <span className="flex h-5 w-5 items-center justify-center rounded-[3px] bg-[#bc8b57] text-[#33271d] sm:h-8 sm:w-8">
                   <Icon
                     aria-hidden="true"
-                    className="h-4 w-4 sm:h-6 sm:w-6"
+                    className="h-3 w-3 sm:h-4 sm:w-4"
                     strokeWidth={1.8}
                   />
                 </span>
 
-                <span className="text-[0.68rem] font-medium leading-tight sm:text-[0.95rem]">
+                <span className="text-[0.64rem] font-medium leading-tight sm:text-[0.82rem]">
                   {label}
                 </span>
               </button>

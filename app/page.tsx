@@ -9,7 +9,7 @@ export default function Home() {
     <main className="overflow-x-hidden">
       <HeroSection />
       {/* The cream sections share one checked background, whose checks flip and react to the cursor. */}
-      <div className="relative bg-pixel-cream pb-28 sm:pb-48">
+      <div className="relative bg-pixel-cream pb-12 sm:pb-20">
         <PixelChecks below={[107, 85, 65]} />
         <StatsSection />
         <AchievementsSection />

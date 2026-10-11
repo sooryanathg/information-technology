@@ -102,7 +102,7 @@ export default function NotificationsSection() {
     <section
       data-reveal
       aria-labelledby="notifications-heading"
-      className="flex flex-col rounded-[19px] border border-[#d4cfc7] bg-[#fffaf3] p-4 shadow-[0_2px_5px_rgba(44,32,21,0.12)] sm:p-8"
+      className="flex flex-col rounded-[19px] border border-[#d4cfc7] bg-[#fffaf3] p-3 shadow-[0_2px_5px_rgba(44,32,21,0.12)] sm:p-6"
     >
       {/* ==================================================
           TITLE
@@ -110,7 +110,7 @@ export default function NotificationsSection() {
 
       <h2
         id="notifications-heading"
-        className="font-heading text-[1.2rem] font-bold uppercase text-[#30251c] sm:text-[2rem]"
+        className="font-heading text-[1.1rem] font-bold uppercase text-[#30251c] sm:text-[1.65rem]"
       >
         Notification
       </h2>
@@ -119,7 +119,7 @@ export default function NotificationsSection() {
           CATEGORY FILTERS
       ================================================== */}
 
-      <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1 border-b border-[#e7d8c5] pb-3 sm:mt-5 sm:gap-x-6 sm:pb-4">
+      <div className="mt-2.5 flex flex-wrap gap-x-4 gap-y-1 border-b border-[#e7d8c5] pb-2.5 sm:mt-4 sm:gap-x-5 sm:pb-3">
         {categories.map((category) => (
           <button
             key={category}
@@ -142,7 +142,7 @@ export default function NotificationsSection() {
           NOTIFICATION LIST
       ================================================== */}
 
-      <ul className="mt-1 flex-1 divide-y divide-[#eee4d8] sm:mt-2">
+      <ul className="mt-1 flex-1 divide-y divide-[#eee4d8] sm:mt-1.5">
         {loading ? (
           <li className="py-5 text-center text-xs text-[#594430]">
             Loading notifications...
@@ -161,21 +161,21 @@ export default function NotificationsSection() {
               return (
                 <li
                   key={`${title}-${date}`}
-                  className="flex min-h-[44px] items-center gap-x-3 py-2 sm:min-h-[66px] sm:gap-x-4 sm:py-3"
+                  className="flex min-h-[40px] items-center gap-x-3 py-1 sm:min-h-[54px] sm:gap-x-3 sm:py-2"
                 >
                   {/* ICON */}
 
-                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-[4px] bg-[#f0dfc5] text-[#7c5633] sm:h-10 sm:w-10">
+                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-[4px] bg-[#f0dfc5] text-[#7c5633] sm:h-9 sm:w-9">
                     <Icon
                       aria-hidden="true"
-                      className="h-4 w-4 sm:h-5 sm:w-5"
+                      className="h-3.5 w-3.5 sm:h-[18px] sm:w-[18px]"
                       strokeWidth={1.7}
                     />
                   </span>
 
                   {/* TITLE */}
 
-                  <span className="min-w-0 flex-1 text-[0.76rem] font-medium leading-snug text-[#33271d] sm:text-[0.95rem]">
+                  <span className="min-w-0 flex-1 text-[0.74rem] font-medium leading-snug text-[#33271d] sm:text-[0.88rem]">
                     {title}
                   </span>
 
