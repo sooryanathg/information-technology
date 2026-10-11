@@ -12,6 +12,21 @@ const nextConfig: NextConfig = {
         hostname: "drive.google.com",
       },
     ],
+    localPatterns: [
+      {
+        // Covers every ordinary local image (logo, icons, section
+        // backgrounds, etc.) with no query string.
+        pathname: "/**",
+      },
+      {
+        pathname: "/api/home-achievements",
+        search: "?id=*",
+      },
+      {
+        pathname: "/api/gallery",
+        search: "?id=*",
+      },
+    ],
   },
 };
 
