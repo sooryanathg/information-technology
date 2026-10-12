@@ -53,6 +53,10 @@ page live in `components/pages/<page>/`.
 
 ## Where to change things
 
+Content that comes from Google Sheets, Drive and Forms (notifications, placements,
+research projects, achievements, PYQ and notes links) is listed with links in
+[CONTENT_SOURCES.md](CONTENT_SOURCES.md).
+
 | To change…                               | Edit                                                   |
 | ---------------------------------------- | ------------------------------------------------------ |
 | Navbar and footer links                  | `app/data/navigation.ts`                               |

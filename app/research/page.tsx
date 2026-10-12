@@ -1,15 +1,15 @@
 import ResearchHero from "@/components/research/ResearchHero";
-import PublishedWorks from "@/components/research/PublishedWorks";
-import ResearchProjects from "@/components/research/ResearchProjects";
+import AcademicProjects from "@/components/research/AcademicProjects";
+import ProjectArchive from "@/components/research/ProjectArchive";
 
 export default function ResearchPage() {
   return (
     <main className="min-h-screen w-full overflow-x-hidden">
       <ResearchHero />
 
-      <PublishedWorks />
+      <AcademicProjects />
 
-      <ResearchProjects />
+      <ProjectArchive />
     </main>
   );
 }
