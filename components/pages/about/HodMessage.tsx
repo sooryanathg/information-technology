@@ -6,6 +6,7 @@ import { Poppins } from "next/font/google";
 import HilbertReveal from "@/components/transitions/HilbertReveal";
 import { useInView, useIntroReady } from "@/lib/intro";
 import SectionHeading from "./SectionHeading";
+import ReadMore from "./ReadMore";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -76,67 +77,68 @@ export default function HodMessage() {
               barClassName="mx-auto mt-2 h-[3px] w-[60px] rounded-full bg-[#C9963A]"
             />
 
-            <div
-              data-intro={intro}
-              className="mt-6 space-y-6 text-justify text-base italic leading-normal text-[#1E1B18] md:text-center"
-            >
-              <p className="intro-item intro-fade" style={stepIn(0)}>
-                It gives me great pride to welcome you to the Department of
-                Information Technology at Government Engineering College,
-                Sreekrishnapuram (GEC Palakkad). Since the founding of our
-                B.Tech programme in 1999, and through the years of affiliation
-                with the APJ Abdul Kalam Technological University, this
-                department has grown into a vibrant academic community
-                dedicated to nurturing engineers who are as skilled in
-                fundamentals as they are curious about what comes next. Our NBA
-                accreditation stands as a testament to the rigour of our
-                curriculum and the commitment of our faculty, staff, and
-                students.
-              </p>
+            <ReadMore fadeTo="#CBAE8D" collapsedHeight="16rem">
+              <div
+                data-intro={intro}
+                className="mt-6 space-y-6 text-left text-base italic leading-normal text-[#1E1B18] md:text-center"
+              >
+                <p className="intro-item intro-fade" style={stepIn(0)}>
+                  It gives me great pride to welcome you to the Department of
+                  Information Technology at Government Engineering College,
+                  Sreekrishnapuram (GEC Palakkad). Since the founding of our
+                  B.Tech programme in 1999, and through the years of affiliation
+                  with the APJ Abdul Kalam Technological University, this
+                  department has grown into a vibrant academic community
+                  dedicated to nurturing engineers who are as skilled in
+                  fundamentals as they are curious about what comes next. Our
+                  NBA accreditation stands as a testament to the rigour of our
+                  curriculum and the commitment of our faculty, staff, and
+                  students.
+                </p>
 
-              <p className="intro-item intro-fade" style={stepIn(1)}>
-                We stand today at a remarkable moment in the history of
-                computing. Artificial intelligence, data science, and
-                intelligent automation are not distant possibilities but
-                present realities reshaping every industry and profession. In
-                recognition of this shift, our department has expanded its
-                offerings with a dedicated M.Tech programme in Artificial
-                Intelligence and Data Science, equipping postgraduate scholars
-                to lead research and innovation in this transformative field.
-                Alongside our well-established undergraduate programme, our
-                laboratories, research initiatives, and industry-linked
-                activities are designed to give students hands-on exposure to
-                emerging technologies — from machine learning and data
-                engineering to software systems and networked computing.
-              </p>
+                <p className="intro-item intro-fade" style={stepIn(1)}>
+                  We stand today at a remarkable moment in the history of
+                  computing. Artificial intelligence, data science, and
+                  intelligent automation are not distant possibilities but
+                  present realities reshaping every industry and profession. In
+                  recognition of this shift, our department has expanded its
+                  offerings with a dedicated M.Tech programme in Artificial
+                  Intelligence and Data Science, equipping postgraduate scholars
+                  to lead research and innovation in this transformative field.
+                  Alongside our well-established undergraduate programme, our
+                  laboratories, research initiatives, and industry-linked
+                  activities are designed to give students hands-on exposure to
+                  emerging technologies — from machine learning and data
+                  engineering to software systems and networked computing.
+                </p>
 
-              <p className="intro-item intro-fade" style={stepIn(2)}>
-                Our vision — to achieve excellence in IT education and research
-                by keeping pace with innovation — has never felt more relevant.
-                We believe that true engineering education lies not merely in
-                mastering today&apos;s tools, but in cultivating the adaptability,
-                ethical grounding, and problem-solving temperament needed to
-                navigate a future being redefined by AI. Our faculty combine
-                academic depth with active engagement in research and industry
-                collaboration, and our students consistently carry forward
-                this spirit through projects, internships, and placements with
-                leading organisations.
-              </p>
+                <p className="intro-item intro-fade" style={stepIn(2)}>
+                  Our vision — to achieve excellence in IT education and
+                  research by keeping pace with innovation — has never felt more
+                  relevant. We believe that true engineering education lies not
+                  merely in mastering today&apos;s tools, but in cultivating the
+                  adaptability, ethical grounding, and problem-solving
+                  temperament needed to navigate a future being redefined by AI.
+                  Our faculty combine academic depth with active engagement in
+                  research and industry collaboration, and our students
+                  consistently carry forward this spirit through projects,
+                  internships, and placements with leading organisations.
+                </p>
 
-              <p className="intro-item intro-fade" style={stepIn(3)}>
-                As we look ahead, the Department of Information Technology
-                remains committed to being a nurturing ground for talented,
-                socially conscious technologists — professionals and
-                entrepreneurs who will shape, question, and responsibly steer
-                the age of intelligent technology. I invite prospective
-                students, collaborators, and well-wishers to be part of this
-                journey with us.
-              </p>
-            </div>
+                <p className="intro-item intro-fade" style={stepIn(3)}>
+                  As we look ahead, the Department of Information Technology
+                  remains committed to being a nurturing ground for talented,
+                  socially conscious technologists — professionals and
+                  entrepreneurs who will shape, question, and responsibly steer
+                  the age of intelligent technology. I invite prospective
+                  students, collaborators, and well-wishers to be part of this
+                  journey with us.
+                </p>
+              </div>
+            </ReadMore>
           </div>
         </div>
       </div>
     </section>
   );
 }
-

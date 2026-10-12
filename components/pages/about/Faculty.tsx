@@ -11,17 +11,13 @@ const poppins = Poppins({ subsets: ["latin"], weight: ["400", "500", "600", "700
 
 const TABS: FacultyCategory[] = ["Teaching staff", "Technical staff"];
 
-const MOBILE_PAGE_SIZE = 2;
-
 // The cards crawl into place one after another, rising and falling in turn
 // like the posters on the home page.
 const crawl = (i: number) =>
   ({ "--poster-from": i % 2 ? "-64px" : "64px", "--intro-delay": `${200 + i * 110}ms` }) as React.CSSProperties;
-const stepIn = (i: number) => ({ "--intro-delay": `${i * 110}ms` }) as React.CSSProperties;
 
 export default function Faculty() {
   const [activeTab, setActiveTab] = useState<FacultyCategory>("Teaching staff");
-  const [visibleCount, setVisibleCount] = useState(MOBILE_PAGE_SIZE);
   const scrollRef = useRef<HTMLDivElement>(null);
   const [activeDot, setActiveDot] = useState(0);
   // Every time the cards scroll into view they step in again.
@@ -38,7 +34,6 @@ export default function Faculty() {
 
   function handleTabChange(tab: FacultyCategory) {
     setActiveTab(tab);
-    setVisibleCount(MOBILE_PAGE_SIZE); 
     setActiveDot(0);
     scrollRef.current?.scrollTo({ left: 0 });
   }
@@ -65,8 +60,6 @@ export default function Faculty() {
     if (!el) return;
     el.scrollBy({ left: dir * 324, behavior: "smooth" });
   }
-
-  const mobileVisible = filtered.slice(0, visibleCount);
 
   return (
     <section className={`${poppins.className} md:min-h-[700px] `}>
@@ -98,19 +91,23 @@ export default function Faculty() {
             })}
           </div>
 
-          <div className="mt-15 hidden md:block">
+          {/* One swipeable strip of cards on every screen size; arrows on desktop, swipe on touch. */}
+          <p className="intro-item intro-fade mt-6 text-sm text-[#6B6560] md:hidden">
+            Swipe to see all {filtered.length} →
+          </p>
+          <div className="mt-3 md:mt-15">
             <div className="relative">
               <div
                 ref={scrollRef}
                 onScroll={handleScroll}
-                className="flex snap-x snap-proximity scroll-smooth gap-6 overflow-x-auto pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+                className="flex snap-x snap-mandatory scroll-smooth gap-4 overflow-x-auto pb-2 [scrollbar-width:none] md:snap-proximity md:gap-6 [&::-webkit-scrollbar]:hidden"
               >
                 {filtered.map((member, i) => (
                   <div
                     // Keyed by tab too, so a new tab's cards crawl in afresh.
                     key={`${activeTab}-${member.id}`}
                     style={crawl(i)}
-                    className="intro-item poster-crawl w-[220px] shrink-0 snap-start overflow-hidden rounded-2xl bg-[#FBF3E8] shadow-sm sm:w-[240px] lg:w-[19%] lg:min-w-[230px] lg:max-w-[270px]"
+                    className="intro-item poster-crawl w-[44vw] max-w-[220px] shrink-0 snap-start overflow-hidden rounded-2xl bg-[#FBF3E8] shadow-sm sm:w-[240px] sm:max-w-none lg:w-[19%] lg:min-w-[230px] lg:max-w-[270px]"
                   >
                     <div className="relative aspect-square w-full">
                       <Image
@@ -121,9 +118,17 @@ export default function Faculty() {
                         className="object-cover object-top"
                       />
                     </div>
-                    <div className="p-5">
-                    <p className="text-base font-bold text-[#2A2522]">{member.name}</p>
-                      <p className="text-sm text-[#6B6560]">{member.designation}</p>
+                    <div className="p-3 sm:p-5">
+                      <p className="text-sm font-bold leading-snug text-[#2A2522] sm:text-base">{member.name}</p>
+                      <p className="text-xs text-[#6B6560] sm:text-sm">{member.designation}</p>
+                      {member.email && (
+                        <a
+                          href={`mailto:${member.email}`}
+                          className="mt-1 block truncate text-[11px] italic text-[#8A7B6D] hover:text-[#B9752F] sm:text-xs"
+                        >
+                          {member.email}
+                        </a>
+                      )}
                     </div>
                   </div>
                 ))}
@@ -132,14 +137,14 @@ export default function Faculty() {
               <button
                 onClick={() => scrollByCard(-1)}
                 aria-label="Scroll left"
-                className="absolute left-2 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-lg text-[#2A2522] shadow-md transition hover:bg-white"
+                className="absolute left-2 top-1/2 hidden h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-lg text-[#2A2522] shadow-md transition hover:bg-white md:flex"
               >
                 ‹
               </button>
               <button
                 onClick={() => scrollByCard(1)}
                 aria-label="Scroll right"
-                className="absolute right-2 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-lg text-[#2A2522] shadow-md transition hover:bg-white"
+                className="absolute right-2 top-1/2 hidden h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-lg text-[#2A2522] shadow-md transition hover:bg-white md:flex"
               >
                 ›
               </button>
@@ -147,15 +152,15 @@ export default function Faculty() {
 
             {filtered.length > 1 && (
               <div
-                className="intro-item intro-fade mt-12 flex justify-center"
+                className="intro-item intro-fade mt-6 flex justify-center md:mt-12"
                 // The dots fade in slowly, once the cards have settled.
                 style={{ "--intro-delay": "900ms", "--intro-fade-duration": "1100ms", "--intro-fade-steps": 10 } as React.CSSProperties}
               >
-                <div className="flex items-center gap-3 rounded-full bg-[#FBEBD3] px-4 py-3 shadow-[0_2px_6px_rgba(0,0,0,0.08)]">
+                <div className="flex items-center gap-1.5 rounded-full bg-[#FBEBD3] px-3 py-2.5 shadow-[0_2px_6px_rgba(0,0,0,0.08)] md:gap-3 md:px-4 md:py-3">
                   {filtered.map((member, i) => (
                     <span
                       key={member.id}
-                      className={`h-2 w-[46px] rounded-full transition-colors ${
+                      className={`h-1.5 w-3.5 rounded-full transition-colors md:h-2 md:w-[46px] ${
                         i === activeDot ? "bg-[#EE9B1E]" : "bg-[#FFD69B]"
                       }`}
                     />
@@ -165,42 +170,6 @@ export default function Faculty() {
             )}
           </div>
 
-          <div className="mt-6 flex flex-col gap-4 md:hidden">
-            {mobileVisible.map((member, i) => (
-              <div
-                key={`${activeTab}-${member.id}`}
-                // Cards that "Load More" adds step in on their own when they mount.
-                style={stepIn(i % MOBILE_PAGE_SIZE)}
-                className="intro-item intro-fade flex items-center gap-4 rounded-xl border-l-4 border-[#C9963A] bg-[#FBF3E8] p-4 shadow-sm"
-              >
-                <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-full ring-2 ring-[#C9963A]">
-                  <Image
-                    src={member.photo}
-                    alt={member.name}
-                    fill
-                    sizes="64px"
-                    className="object-cover object-top"
-                  />
-                </div>
-                <div>
-                  <p className="text-base font-bold text-[#2A2522]">{member.name}</p>
-                  <p className="text-sm text-[#6B6560]">{member.designation}</p>
-                  <p className="text-sm italic text-[#6B6560]">{member.email}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {visibleCount < filtered.length && (
-            <div className="mt-6 flex justify-center md:hidden">
-              <button
-                onClick={() => setVisibleCount((c) => c + MOBILE_PAGE_SIZE)}
-                className="pixel-glitch rounded-lg border border-[#B9752F] px-6 py-2 text-sm font-medium text-[#2A2522] transition hover:bg-[#E3B67C]"
-              >
-                Load More
-              </button>
-            </div>
-          )}
         </div>
       </div>
     </section>
