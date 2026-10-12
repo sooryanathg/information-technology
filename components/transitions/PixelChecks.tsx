@@ -21,7 +21,7 @@ const WAVE_FALLOFF = 0.55; // share of that lost by the far corner
 const WAVE_LEVELS = 6; // shades a check steps through, for the pixel feel
 const WAVE_ORIGIN = [-0.08, -0.12]; // of the width and height, so just outside the corner
 
-// Ripples: the mouse drops rings of its own, which spread out and push the
+// Ripples: the mouse, taps and finger swipes drop rings of their own, which spread out and push the
 // waves out of step where they pass.
 const RIPPLE_GAP = 46; // px the mouse travels between two ripples
 const RIPPLE_LIFE = 1700; // ms
@@ -74,7 +74,7 @@ type Props = {
 /**
  * Brings the checks of the cream background to life. Rings of gold and copper
  * spread from the top-left corner and travel diagonally across the checks,
- * one check a shade; the mouse drops ripples that spread out and push those
+ * one check a shade; the mouse, taps and swipes drop ripples that spread out and push those
  * waves out of step where they pass. Blocks fall
  * in under the top edge, and along the bottom the checks blend into the colour
  * of the section below, down to a chipped edge of solid checks in that colour,
@@ -222,20 +222,32 @@ export default function PixelChecks({ below }: Props) {
       ctx.restore();
     };
 
-    const onMove = (e: PointerEvent) => {
-      if (e.pointerType !== "mouse") return;
+    // Drop a ripple at a point on screen. Trails (mouse moves, finger swipes)
+    // space theirs out by RIPPLE_GAP; a tap or click always drops one.
+    const ripple = (clientX: number, clientY: number, force = false) => {
       const box = canvas.getBoundingClientRect();
-      const x = e.clientX - box.left;
-      const y = e.clientY - box.top;
+      const x = clientX - box.left;
+      const y = clientY - box.top;
       if (x < 0 || y < 0 || x > box.width || y > box.height) {
         dropped = null;
         return;
       }
-      if (dropped && Math.hypot(x - dropped.x, y - dropped.y) < RIPPLE_GAP) return;
+      if (!force && dropped && Math.hypot(x - dropped.x, y - dropped.y) < RIPPLE_GAP) return;
       dropped = { x, y };
       ripples.push({ x, y, at: performance.now() });
       if (ripples.length > RIPPLES) ripples.shift();
     };
+
+    const onMove = (e: PointerEvent) => {
+      if (e.pointerType === "mouse") ripple(e.clientX, e.clientY);
+    };
+    const onDown = (e: PointerEvent) => ripple(e.clientX, e.clientY, true);
+    // Touch: the finger leaves a trail as it swipes, scrolling included.
+    // (Touch pointer events stop once the page starts scrolling, touch events don't.)
+    const onTouchMove = (e: TouchEvent) => {
+      for (const t of e.touches) ripple(t.clientX, t.clientY);
+    };
+    const onTouchEnd = () => (dropped = null);
 
     // Only tick while some of the host is on screen.
     let timer = 0;
@@ -247,11 +259,17 @@ export default function PixelChecks({ below }: Props) {
     const ro = new ResizeObserver(measure);
     ro.observe(host);
     window.addEventListener("pointermove", onMove, { passive: true });
+    window.addEventListener("pointerdown", onDown, { passive: true });
+    window.addEventListener("touchmove", onTouchMove, { passive: true });
+    window.addEventListener("touchend", onTouchEnd, { passive: true });
     return () => {
       clearInterval(timer);
       io.disconnect();
       ro.disconnect();
       window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("pointerdown", onDown);
+      window.removeEventListener("touchmove", onTouchMove);
+      window.removeEventListener("touchend", onTouchEnd);
       host.style.removeProperty("--check");
     };
   }, [reduced, br, bg, bb]);
