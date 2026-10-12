@@ -1,3 +1,6 @@
+// id of the photo grid, which the hero's "Browse Photos" button scrolls to
+export const GALLERY_ANCHOR = "photos";
+
 export interface GalleryItem {
     id: string;
     image: string;
