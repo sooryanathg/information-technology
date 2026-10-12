@@ -3,6 +3,9 @@
 import { useEffect, useMemo, useState } from "react";
 import type { ProjectBatch } from "@/types/research";
 
+// On phones each batch starts with this many projects and a "View more" button.
+const MOBILE_PREVIEW = 5;
+
 // Every word of the query must appear in the title, a member's name or the guide.
 const matches = (query: string) => {
   const words = query.toLowerCase().split(/\s+/).filter(Boolean);
@@ -14,6 +17,15 @@ export default function ProjectArchive() {
   const [status, setStatus] = useState<"loading" | "ready" | "error">("loading");
   const [selected, setSelected] = useState("");
   const [query, setQuery] = useState("");
+  // Batches opened in full on phones (desktop always shows everything).
+  const [expanded, setExpanded] = useState<Set<string>>(new Set());
+  const toggleBatch = (batch: string) =>
+    setExpanded((prev) => {
+      const next = new Set(prev);
+      if (next.has(batch)) next.delete(batch);
+      else next.add(batch);
+      return next;
+    });
 
   useEffect(() => {
     fetch("/api/project-archive")
@@ -160,8 +172,11 @@ export default function ProjectArchive() {
         )}
 
         {/* Projects, grouped by batch */}
-        {visible.map((b) => (
-          <div key={b.batch} className="mt-6">
+        {visible.map((b) => {
+          const open = expanded.has(b.batch);
+          const hidden = b.projects.length - MOBILE_PREVIEW;
+          return (
+          <div key={b.batch} id={`batch-${b.batch}`} className="mt-6 scroll-mt-24">
             <div className="flex items-baseline gap-3 border-b border-[#A88B6C]/50 pb-2">
               <h3 className="text-[17px] font-bold text-[#29231E]">{b.batch} Batch</h3>
               <span className="text-[12px] font-medium uppercase tracking-wide text-[#7A5A3A]">
@@ -170,10 +185,11 @@ export default function ProjectArchive() {
             </div>
 
             <ul className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-              {b.projects.map((p) => (
+              {b.projects.map((p, i) => (
                 <li
                   key={p.title}
-                  className="
+                  className={`
+                    ${!open && i >= MOBILE_PREVIEW ? "max-md:hidden" : ""}
                     flex
                     flex-col
                     rounded-[8px]
@@ -183,7 +199,7 @@ export default function ProjectArchive() {
                     px-4
                     py-3
                     shadow-[0_3px_7px_rgba(65,45,28,0.10)]
-                  "
+                  `}
                 >
                   <p className="text-[14px] font-bold leading-[19px] text-[#171717]">
                     {p.title}
@@ -199,8 +215,25 @@ export default function ProjectArchive() {
                 </li>
               ))}
             </ul>
+
+            {hidden > 0 && (
+              <button
+                type="button"
+                onClick={() => {
+                  // Collapsing from far down the list: go back to the batch heading.
+                  if (open) document.getElementById(`batch-${b.batch}`)?.scrollIntoView({ behavior: "smooth" });
+                  toggleBatch(b.batch);
+                }}
+                aria-expanded={open}
+                className="mx-auto mt-4 flex items-center gap-1.5 rounded-full border border-[#8F7357] bg-[rgba(255,248,238,0.5)] px-5 py-2 text-[13px] font-semibold text-[#3D2B1F] transition hover:bg-[rgba(255,248,238,0.8)] md:hidden"
+              >
+                {open ? "Show less" : `View ${hidden} more`}
+                <span aria-hidden className={`transition-transform ${open ? "rotate-180" : ""}`}>↓</span>
+              </button>
+            )}
           </div>
-        ))}
+          );
+        })}
         </>
         )}
 

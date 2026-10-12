@@ -53,8 +53,8 @@ order A–C. Changes show up on the next page load.
 | Tab                                                                                                                              | Shown on                                  | Read by                            |
 | -------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------- | ---------------------------------- |
 | [`placement_notif.csv`](https://docs.google.com/spreadsheets/d/1VO8vC4HueszvQyaMJrt0fi_ImbjEM5R1Os5_vgwIl3w/edit#gid=1565757087) | Placement page, notice board              | `app/api/placements/route.ts`      |
-| [`research`](https://docs.google.com/spreadsheets/d/1VO8vC4HueszvQyaMJrt0fi_ImbjEM5R1Os5_vgwIl3w/edit#gid=192598726)             | Research page, Student Academic Projects  | `app/api/research/route.ts`        |
-| [`project_archive`](https://docs.google.com/spreadsheets/d/1VO8vC4HueszvQyaMJrt0fi_ImbjEM5R1Os5_vgwIl3w/edit#gid=330873339)      | Research page, Final Year & Mini Projects | `app/api/project-archive/route.ts` |
+| [`research`](https://docs.google.com/spreadsheets/d/1VO8vC4HueszvQyaMJrt0fi_ImbjEM5R1Os5_vgwIl3w/edit#gid=192598726)             | Projects page, Student Academic Projects  | `app/api/research/route.ts`        |
+| [`project_archive`](https://docs.google.com/spreadsheets/d/1VO8vC4HueszvQyaMJrt0fi_ImbjEM5R1Os5_vgwIl3w/edit#gid=330873339)      | Projects page, Final Year & Mini Projects | `app/api/project-archive/route.ts` |
 
 Columns in these tabs are found by header name, so they can be reordered, but the
 header text must stay the same. Changes show up within about 5 minutes (responses are
@@ -90,7 +90,7 @@ register numbers; only names are shown.
 
 | Form                         | Used on                              | Set in                   |
 | ---------------------------- | ------------------------------------ | ------------------------ |
-| Project submission (pending) | Research page, "Submit your project" | `data/research/links.ts` |
+| Project submission (pending) | Projects page, "Submit your project" | `data/research/links.ts` |
 
 Responses are collected only, never published directly. Until the URL is set, the
 button reads "Project submission form opening soon".

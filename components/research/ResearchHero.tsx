@@ -33,7 +33,7 @@ export default function ResearchHero() {
 
         <Image
           src="/research/research-hero-page.png"
-          alt="IT Department Research Lab"
+          alt="IT Department lab"
           fill
           priority
           sizes="100vw"

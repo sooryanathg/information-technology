@@ -2,7 +2,7 @@ import ResearchHero from "@/components/research/ResearchHero";
 import AcademicProjects from "@/components/research/AcademicProjects";
 import ProjectArchive from "@/components/research/ProjectArchive";
 
-export default function ResearchPage() {
+export default function ProjectsPage() {
   return (
     <main className="min-h-screen w-full overflow-x-hidden">
       <ResearchHero />

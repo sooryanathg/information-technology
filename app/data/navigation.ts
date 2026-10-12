@@ -3,6 +3,6 @@ export const navigationLinks = [
   { label: "About", href: "/about" },
   { label: "Events", href: "/events" },
   { label: "Gallery", href: "/gallery" },
-  { label: "Research", href: "/research" },
+  { label: "Projects", href: "/projects" },
   { label: "Placement", href: "/placement" },
 ];
