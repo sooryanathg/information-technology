@@ -6,6 +6,10 @@ import PixelText from '@/components/transitions/PixelText';
 import StarDivider from '@/components/StarDivider';
 import { useInView, useIntroReady } from '@/lib/intro';
 
+/** Size scale shared by the placement page's section titles. */
+export const SECTION_TITLE =
+  'font-poppins font-bold uppercase leading-tight text-[24px] sm:text-[30px] lg:text-[36px]';
+
 interface PlacementHeadingProps {
   text: string;
   /** Classes for the <h2>. */

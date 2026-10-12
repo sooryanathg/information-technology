@@ -101,19 +101,19 @@ export default function Hero() {
 
         {/* Call-to-Action Button: built from falling pixels, like the home and events heroes' */}
         <div
-          className="absolute left-6 sm:left-12 lg:left-[80px] top-[430px] sm:top-[475px] lg:top-[510px] w-[calc(100%-48px)] sm:w-[446px]"
+          className="absolute left-6 sm:left-12 lg:left-[80px] top-[425px] sm:top-[470px] lg:top-[500px]"
         >
           <div data-assemble className="intro-item">
             <a
               href="https://gecskp.ac.in/it_placement.php"
               target="_blank"
               rel="noopener noreferrer"
-              className="pixel-glitch group w-full sm:w-[446px] h-[64px] sm:h-[72px] inline-flex items-center justify-center bg-[#D9C3A5] hover:bg-[#cbb393] active:scale-98 text-[#3D2B1F] font-bold rounded-[10px] px-4 sm:px-6 shadow-[0px_4px_14px_0px_rgba(61,43,31,0.25)] gap-2.5 transition-all duration-200 cursor-pointer font-poppins"
+              className="pixel-glitch group h-10 sm:h-14 inline-flex items-center justify-center bg-[#D9C3A5] hover:bg-[#cbb393] active:scale-98 text-[#3D2B1F] font-semibold rounded-lg sm:rounded-[10px] px-4 sm:px-8 shadow-[0px_4px_14px_0px_rgba(61,43,31,0.25)] gap-2 transition-all duration-200 cursor-pointer font-poppins"
             >
-              <span className="font-poppins font-bold text-[18px] sm:text-[20px] leading-tight tracking-normal text-[#3D2B1F]">
+              <span className="font-poppins font-semibold text-[13px] sm:text-[17px] leading-tight tracking-normal text-[#3D2B1F]">
                 View Placement Report
               </span>
-              <ArrowRight className="w-5 h-5 sm:w-6 sm:h-6 group-hover:translate-x-1.5 transition-transform duration-200 text-[#3D2B1F] stroke-[2.5]" />
+              <ArrowRight className="w-3.5 h-3.5 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform duration-200 text-[#3D2B1F] stroke-[2.5]" />
             </a>
           </div>
           <HilbertAssemble play={ready} delay={1500} color={CTA_BG} />

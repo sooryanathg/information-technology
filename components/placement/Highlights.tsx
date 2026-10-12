@@ -5,7 +5,7 @@ import CountUp from '@/components/transitions/CountUp';
 import HilbertReveal, { revealMidpoint } from '@/components/transitions/HilbertReveal';
 import { useInView, useIntroReady } from '@/lib/intro';
 import { highlightsData } from '@/data/placement/highlights';
-import PlacementHeading from './PlacementHeading';
+import PlacementHeading, { SECTION_TITLE } from './PlacementHeading';
 
 // Plain counts ("74", "33+") count up; ranges like "2021-2025" are shown as they are.
 const countable = (value: string) => /^\d+\+?$/.test(value);
@@ -108,30 +108,27 @@ export default function Highlights() {
   const play = inView && ready;
 
   return (
-    <section className="relative z-10 w-full font-inter py-16 sm:py-20 lg:py-24">
+    <section className="relative z-10 w-full font-inter pt-12 pb-8 sm:pt-16 sm:pb-10 lg:pt-20 lg:pb-12">
       {/* SECTION TITLE */}
-      <div className="w-[535px] max-w-full h-[119px] mx-auto flex flex-col items-center justify-center pt-[20px] px-4 mb-8 sm:mb-12">
-        <PlacementHeading
-          text="PLACEMENT HIGHLIGHTS"
-          className="font-poppins font-bold text-[26px] sm:text-[36px] leading-[100%] uppercase text-[#3D2B1F] text-center"
-        />
+      <div className="mx-auto px-4 mb-6 sm:mb-8 lg:mb-10">
+        <PlacementHeading text="PLACEMENT HIGHLIGHTS" className={`${SECTION_TITLE} text-[#3D2B1F]`} />
       </div>
 
       {/* HIGHLIGHT CARDS GRID */}
-      <div ref={gridRef} className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 sm:gap-5 justify-items-center">
+      <div ref={gridRef} className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4 lg:gap-5">
         {highlightsData.map((item, i) => (
           <div
             key={item.id}
             data-reveal
-            className="pixel-glitch bg-[#FFFCF8] rounded-2xl flex flex-col items-center text-center border border-[#E8DCCB] shadow-[0_8px_24px_rgba(61,43,31,0.06)] hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 group h-[254px] w-full pt-[53px]"
+            className="pixel-glitch bg-[#FFFCF8] rounded-2xl flex flex-col items-center text-center border border-[#E8DCCB] shadow-[0_8px_24px_rgba(61,43,31,0.06)] hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group w-full px-3 py-5 sm:py-6"
           >
             {/* ICON */}
-            <div className="w-8 h-8 flex items-center justify-center mb-[66px] group-hover:scale-110 transition-transform">
+            <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-[#C89B3C]/10 flex items-center justify-center mb-3 sm:mb-4 group-hover:scale-110 transition-transform [&_svg]:w-5 [&_svg]:h-5 sm:[&_svg]:w-6 sm:[&_svg]:h-6">
               {item.renderIcon ? item.renderIcon() : highlightIcons[item.id]}
             </div>
 
             {/* VALUE */}
-            <div className="w-[119px] h-[29px] flex items-center justify-center font-inter font-bold text-[24px] leading-[100%] text-[#3D2B1F] text-center whitespace-nowrap">
+            <div className="font-inter font-bold text-[20px] sm:text-[22px] lg:text-[24px] leading-none text-[#3D2B1F] text-center whitespace-nowrap">
               {countable(item.value) ? (
                 <CountUp text={item.value} play={play} delay={revealMidpoint(i)} />
               ) : (
@@ -140,7 +137,7 @@ export default function Highlights() {
             </div>
 
             {/* LABEL */}
-            <div className="w-full px-2 flex items-center justify-center font-inter font-normal text-[15px] leading-tight text-[#7A6758] text-center mt-[16px]">
+            <div className="w-full font-inter font-normal text-[12px] sm:text-[13px] leading-snug text-[#7A6758] text-center mt-2">
               {item.label}
             </div>
           </div>
