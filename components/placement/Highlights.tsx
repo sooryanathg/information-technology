@@ -1,10 +1,18 @@
-import React from 'react';
-import StarDivider from '@/components/StarDivider';
+'use client';
+
+import React, { useRef } from 'react';
+import CountUp from '@/components/transitions/CountUp';
+import HilbertReveal, { revealMidpoint } from '@/components/transitions/HilbertReveal';
+import { useInView, useIntroReady } from '@/lib/intro';
 import { highlightsData } from '@/data/placement/highlights';
+import PlacementHeading from './PlacementHeading';
+
+// Plain counts ("74", "33+") count up; ranges like "2021-2025" are shown as they are.
+const countable = (value: string) => /^\d+\+?$/.test(value);
 
 // SVG icon helpers for each highlight metric
 const highlightIcons: Record<string, React.ReactNode> = {
-  rate: (
+  'placed-recent': (
     <svg
       viewBox="0 0 24 24"
       fill="none"
@@ -20,7 +28,7 @@ const highlightIcons: Record<string, React.ReactNode> = {
       <path d="M16 3.13a4 4 0 0 1 0 7.75" />
     </svg>
   ),
-  highest: (
+  'offers-recent': (
     <svg
       viewBox="0 0 24 24"
       fill="none"
@@ -30,10 +38,11 @@ const highlightIcons: Record<string, React.ReactNode> = {
       strokeLinejoin="round"
       className="w-8 h-8"
     >
-      <path d="M6 3h12M6 8h12M6 13l7 8M6 13h3a4.5 4.5 0 0 0 0-9" />
+      <rect width="20" height="14" x="2" y="7" rx="2" ry="2" />
+      <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
     </svg>
   ),
-  avg: (
+  'offers-2025': (
     <svg
       viewBox="0 0 24 24"
       fill="none"
@@ -60,7 +69,7 @@ const highlightIcons: Record<string, React.ReactNode> = {
       <path d="M9 22v-4h6v4M8 6h.01M16 6h.01M12 6h.01M8 10h.01M12 10h.01M16 10h.01M8 14h.01M12 14h.01M16 14h.01" />
     </svg>
   ),
-  placed: (
+  'placed-2025': (
     <svg
       viewBox="0 0 24 24"
       fill="none"
@@ -91,22 +100,30 @@ const highlightIcons: Record<string, React.ReactNode> = {
 };
 
 export default function Highlights() {
+  // Every time the cards scroll into view, a Hilbert curve uncovers them one
+  // after another and the numbers count up, like the home page's stats panel.
+  const gridRef = useRef<HTMLDivElement>(null);
+  const inView = useInView(gridRef, { once: false });
+  const ready = useIntroReady();
+  const play = inView && ready;
+
   return (
-    <section className="w-full font-inter py-16 sm:py-20 lg:py-24">
+    <section className="relative z-10 w-full font-inter py-16 sm:py-20 lg:py-24">
       {/* SECTION TITLE */}
       <div className="w-[535px] max-w-full h-[119px] mx-auto flex flex-col items-center justify-center pt-[20px] px-4 mb-8 sm:mb-12">
-        <h2 className="font-poppins font-bold text-[36px] leading-[100%] uppercase text-[#3D2B1F] text-center">
-          PLACEMENT HIGHLIGHTS
-        </h2>
-        <StarDivider />
+        <PlacementHeading
+          text="PLACEMENT HIGHLIGHTS"
+          className="font-poppins font-bold text-[26px] sm:text-[36px] leading-[100%] uppercase text-[#3D2B1F] text-center"
+        />
       </div>
 
       {/* HIGHLIGHT CARDS GRID */}
-      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 sm:gap-5 justify-items-center">
-        {highlightsData.map((item) => (
+      <div ref={gridRef} className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 sm:gap-5 justify-items-center">
+        {highlightsData.map((item, i) => (
           <div
             key={item.id}
-            className="bg-[#FFFCF8] rounded-2xl flex flex-col items-center text-center border border-[#E8DCCB] shadow-[0_8px_24px_rgba(61,43,31,0.06)] hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 group h-[254px] w-full pt-[53px]"
+            data-reveal
+            className="pixel-glitch bg-[#FFFCF8] rounded-2xl flex flex-col items-center text-center border border-[#E8DCCB] shadow-[0_8px_24px_rgba(61,43,31,0.06)] hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 group h-[254px] w-full pt-[53px]"
           >
             {/* ICON */}
             <div className="w-8 h-8 flex items-center justify-center mb-[66px] group-hover:scale-110 transition-transform">
@@ -115,7 +132,11 @@ export default function Highlights() {
 
             {/* VALUE */}
             <div className="w-[119px] h-[29px] flex items-center justify-center font-inter font-bold text-[24px] leading-[100%] text-[#3D2B1F] text-center whitespace-nowrap">
-              {item.value}
+              {countable(item.value) ? (
+                <CountUp text={item.value} play={play} delay={revealMidpoint(i)} />
+              ) : (
+                item.value
+              )}
             </div>
 
             {/* LABEL */}
@@ -124,6 +145,7 @@ export default function Highlights() {
             </div>
           </div>
         ))}
+        <HilbertReveal play={play} />
       </div>
     </section>
   );

@@ -1,10 +1,12 @@
 import Hero from '@/components/placement/Hero';
 import Highlights from '@/components/placement/Highlights';
 import RecruitersAndInternships from '@/components/placement/RecruitersAndInternships';
-import AlumniSection from '@/components/placement/AlumniSection';
-import SuccessStories from '@/components/placement/SuccessStories';
+import ComingSoon from '@/components/placement/ComingSoon';
+import PixelChecks from '@/components/transitions/PixelChecks';
+// AlumniSection and SuccessStories are ready in components/placement; swap them back in
+// for the ComingSoon placeholders below once real alumni data and testimonials exist.
 
-export default function Home() {
+export default function PlacementPage() {
   return (
     <div
       className="min-h-screen flex flex-col"
@@ -15,17 +17,24 @@ export default function Home() {
         {/* 1. Placement Hero Banner */}
         <Hero />
 
-        {/* 2. Placement Highlights Cards */}
-        <Highlights />
+        {/* The cream sections share one checked background, like the home page's: its checks
+            ripple and react to the cursor, and blend into the alumni band as it scrolls in. */}
+        <div className="relative bg-pixel-cream pb-28 sm:pb-48">
+          <PixelChecks below={[61, 43, 31]} />
 
-        {/* 3. Top Recruiters & Internship Notice Board */}
-        <RecruitersAndInternships />
+          {/* 2. Placement Highlights Cards */}
+          <Highlights />
 
-        {/* 4. Alumni Connection */}
-        <AlumniSection />
+          {/* 3. Top Recruiters & Placement Notice Board */}
+          <RecruitersAndInternships />
+        </div>
 
-        {/* 5. Placement Success Stories Testimonials */}
-        <SuccessStories />
+        {/* 4. Alumni connection & success stories (one placeholder for now) */}
+        <ComingSoon
+          variant="dark"
+          title="Connect With Alumni"
+          description="Alumni profiles and placement success stories from our graduates are on their way."
+        />
       </main>
     </div>
   );

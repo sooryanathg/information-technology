@@ -12,16 +12,20 @@ export interface RecruiterItem {
 }
 
 /**
- * Internship notice board item.
+ * Internship / placement notice, read from the placement Google Sheet by /api/placements.
+ * Empty and "NA" cells come through as "" (or null for deadline / applyLink).
  */
-export interface InternshipNotice {
+export interface PlacementNotice {
   id: string;
-  role: string;
   company: string;
-  mode: 'Remote' | 'On-Site' | 'Hybrid' | string;
-  duration: string;
-  deadline: string;
-  applyUrl?: string;
+  role: string;
+  eligibility: string;
+  ctc: string;
+  deadline: string | null; // YYYY-MM-DD, or null when not specified
+  applyLink: string | null; // application URL from the "Link" column; null when it isn't a URL
+  linkNote: string; // the "Link" cell text when it isn't a URL, e.g. "check your email"
+  details: string; // longer description shown in the details modal
+  status: string;
 }
 
 /**
