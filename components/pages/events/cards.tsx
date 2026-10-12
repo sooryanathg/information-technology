@@ -9,6 +9,11 @@ import { events } from "./data/events";
 import { useInView, useIntroReady } from "@/lib/intro";
 
 const INITIAL_VISIBLE = 6;
+
+// Latest first, by the event's last day. Undated events go to the end.
+const sortedEvents = [...events].sort((a, b) =>
+  (b.endDate ?? b.date ?? "").localeCompare(a.endDate ?? a.date ?? "")
+);
 const NO_FILTERS: FilterState = { category: "all", status: "all", date: "", query: "" };
 
 export default function Cards() {
@@ -41,7 +46,7 @@ export default function Cards() {
 
   const matches = useMemo(() => {
     const query = filter.query.trim().toLowerCase();
-    return events.filter(
+    return sortedEvents.filter(
       (e) =>
         (filter.category === "all" || e.category === filter.category) &&
         (filter.status === "all" || eventStatus(e) === filter.status) &&

@@ -39,8 +39,8 @@ export const events: EventItem[] = [
   },
   {
     id: 3,
-    title: "Applied Cryptography Workshop",
-    description: "Foundational talk and lab session exploring hashing schemes, zero-knowledge proofs, and secure distributed communication.",
+    title: "21 Ways to Stay Alive in Crypto",
+    description: "Workshop #1 of the IT Association series: Mirzad Makhdoom, CEO & Founder of Tribe Academy, on navigating the crypto space safely.",
     duration: "2h",
     org: "IT Association",
     mode: "Offline",
