@@ -361,6 +361,18 @@ html:not([data-boot="run"]):not([data-boot="exit"]) .boot-loader {
   animation: card-fade-up 650ms cubic-bezier(0.16, 1, 0.3, 1) var(--stagger-delay, 0ms) backwards;
 }
 
+/* Gallery photo viewer: each photo fades and settles in as it opens. */
+.lightbox-photo {
+  animation: lightbox-in 280ms ease-out;
+}
+
+@keyframes lightbox-in {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+}
+
 @keyframes card-fade-up {
   from {
     opacity: 0;
@@ -383,5 +395,9 @@ html:not([data-boot="run"]):not([data-boot="exit"]) .boot-loader {
 
   .pixel-glitch::after {
     display: none;
+  }
+
+  .lightbox-photo {
+    animation: none;
   }
 }

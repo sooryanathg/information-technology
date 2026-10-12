@@ -1,9 +1,10 @@
 "use client";
 
-import { useRef } from "react";
+import { useCallback, useRef, useState } from "react";
 import Image from "next/image";
 import { Poppins } from "next/font/google";
 import { galleryItems, type GalleryItem } from "./data/gallery";
+import GalleryLightbox from "./GalleryLightbox";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -11,7 +12,11 @@ const poppins = Poppins({
 });
 
 export default function GalleryGrid() {
- 
+  // Index into galleryItems of the photo open in the viewer, or null.
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const closeViewer = useCallback(() => setOpenIndex(null), []);
+  const openPhoto = (item: GalleryItem) => setOpenIndex(galleryItems.indexOf(item));
+
   const rows: GalleryItem[][] = [];
   const rowIndexByNumber = new Map<number, number>();
 
@@ -31,16 +36,33 @@ export default function GalleryGrid() {
     >
       <div className="space-y-7">
         {rows.map((items, rowIndex) => (
-          <GalleryRow key={rowIndex} items={items} big={items[0]?.size === "big"} />
+          <GalleryRow key={rowIndex} items={items} big={items[0]?.size === "big"} onOpen={openPhoto} />
         ))}
       </div>
+
+      {openIndex !== null && (
+        <GalleryLightbox
+          items={galleryItems}
+          index={openIndex}
+          onIndexChange={setOpenIndex}
+          onClose={closeViewer}
+        />
+      )}
     </section>
   );
 }
 
 
 
-function GalleryRow({ items, big }: { items: GalleryItem[]; big: boolean }) {
+function GalleryRow({
+  items,
+  big,
+  onOpen,
+}: {
+  items: GalleryItem[];
+  big: boolean;
+  onOpen: (item: GalleryItem) => void;
+}) {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   function scrollByCard(direction: 1 | -1) {
@@ -71,10 +93,13 @@ function GalleryRow({ items, big }: { items: GalleryItem[]; big: boolean }) {
         className="flex snap-x snap-proximity gap-5 overflow-x-auto scroll-smooth pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
         {items.map((item) => (
-          <div
+          <button
             key={item.id}
+            type="button"
             data-gallery-card
-            className={`relative shrink-0 snap-start overflow-hidden rounded-md bg-[#8A7461] ${
+            onClick={() => onOpen(item)}
+            aria-label={`View photo${item.label ? `: ${item.label}` : ""}`}
+            className={`group relative shrink-0 cursor-zoom-in snap-start overflow-hidden rounded-md bg-[#8A7461] text-left focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-tan ${
               big
                 ? "aspect-[16/10] w-[380px] sm:w-[520px] md:w-[600px] lg:w-[650px]"
                 : "aspect-[4/3] w-[300px] sm:w-[380px] md:w-[450px] lg:w-[500px]"
@@ -86,7 +111,7 @@ function GalleryRow({ items, big }: { items: GalleryItem[]; big: boolean }) {
                 alt={item.label || "Gallery photo"}
                 fill
                 sizes="650px"
-                className="object-cover"
+                className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
               />
             )}
 
@@ -98,7 +123,7 @@ function GalleryRow({ items, big }: { items: GalleryItem[]; big: boolean }) {
                 </span>
               </div>
             )}
-          </div>
+          </button>
         ))}
       </div>
 
