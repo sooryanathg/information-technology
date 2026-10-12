@@ -3,8 +3,22 @@
 import { useRef, useState } from "react";
 import Image from "next/image";
 import { useInView, useIntroReady } from "@/lib/intro";
-import type { EventItem } from "./data/dataset";
+import { eventStatus, type EventItem } from "./data/dataset";
 import EventImageTransition from "./EventImageTransition";
+
+const dayFormat = new Intl.DateTimeFormat("en-IN", { day: "numeric", timeZone: "UTC" });
+const fullFormat = new Intl.DateTimeFormat("en-IN", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" });
+
+// "2026-08-11" -> "11 Aug 2026"; with an end date in the same month -> "11–14 Aug 2026".
+function formatEventDate(date?: string, endDate?: string) {
+  if (!date) return "";
+  const start = new Date(`${date}T00:00:00Z`);
+  if (!endDate || endDate === date) return fullFormat.format(start);
+  const end = new Date(`${endDate}T00:00:00Z`);
+  return date.slice(0, 7) === endDate.slice(0, 7)
+    ? `${dayFormat.format(start)}–${fullFormat.format(end)}`
+    : `${fullFormat.format(start)} – ${fullFormat.format(end)}`;
+}
 
 type Props = {
   event: EventItem;
@@ -17,6 +31,8 @@ export default function EventCard({ event, index }: Props) {
   const inView = useInView(ref, { threshold: 0.15, once: false });
   const ready = useIntroReady();
   const [isHovered, setIsHovered] = useState(false);
+  const isPast = eventStatus(event) === "past";
+  const dateLabel = formatEventDate(event.date, event.endDate);
 
   const imageList =
     event.images && event.images.length > 0
@@ -38,7 +54,10 @@ export default function EventCard({ event, index }: Props) {
       <article
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
-        className="group flex w-full flex-col overflow-hidden rounded-[32px] bg-card-cream shadow-card transition-all duration-300 ease-out hover:-translate-y-2 hover:shadow-[0_20px_35px_rgb(90_55_25_/_0.22)]"
+        // Past events are shown in black and white.
+        className={`group flex w-full flex-col overflow-hidden rounded-[32px] bg-card-cream shadow-card transition-all duration-300 ease-out hover:-translate-y-2 hover:shadow-[0_20px_35px_rgb(90_55_25_/_0.22)] ${
+          isPast ? "grayscale" : ""
+        }`}
       >
         <EventImageTransition
           images={imageList}
@@ -51,13 +70,41 @@ export default function EventCard({ event, index }: Props) {
         />
 
         <div className="flex grow flex-col px-7 pb-6 pt-7">
+          {isPast && (
+            <p className="mb-1.5 text-[11px] font-bold uppercase tracking-[0.12em] text-mocha/80">
+              Past event
+            </p>
+          )}
           <h3 className="mb-2 text-2xl font-extrabold leading-tight">{event.title}</h3>
           <p className="mb-4 text-sm leading-snug text-mocha">{event.description}</p>
 
-          <div className="mb-5 flex items-center gap-2 text-sm text-mocha">
-            <Image src="/events/clock.webp" alt="" width={16} height={16} />
-            <span>{event.duration}</span>
-          </div>
+          <dl className="mb-5 space-y-1.5 text-sm text-mocha">
+            {dateLabel && (
+              <div className="flex items-center gap-2">
+                <dt className="sr-only">Date</dt>
+                <svg aria-hidden viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.4" className="size-4 shrink-0">
+                  <rect x="2" y="3" width="12" height="11" rx="2" />
+                  <path d="M2 6.5h12M5.5 1.5v3M10.5 1.5v3" strokeLinecap="round" />
+                </svg>
+                <dd>{dateLabel}</dd>
+              </div>
+            )}
+            <div className="flex items-center gap-2">
+              <dt className="sr-only">Time</dt>
+              <Image src="/events/clock.webp" alt="" width={16} height={16} />
+              <dd>{event.time ?? event.duration}</dd>
+            </div>
+            {event.venue && (
+              <div className="flex items-center gap-2">
+                <dt className="sr-only">Venue</dt>
+                <svg aria-hidden viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.4" className="size-4 shrink-0">
+                  <path d="M8 14.5s4.75-4.2 4.75-8.1a4.75 4.75 0 0 0-9.5 0c0 3.9 4.75 8.1 4.75 8.1Z" />
+                  <circle cx="8" cy="6.4" r="1.6" />
+                </svg>
+                <dd>{event.venue}</dd>
+              </div>
+            )}
+          </dl>
 
           <div className="mt-auto flex items-center justify-between border-t border-cocoa/25 pt-5">
             <div className="flex items-center gap-3">
@@ -74,7 +121,7 @@ export default function EventCard({ event, index }: Props) {
               type="button"
               className="pixel-glitch rounded-full border border-clay px-5 py-1.5 text-xs font-bold uppercase tracking-[0.08em] text-clay transition-colors hover:bg-clay hover:text-white"
             >
-              {event.status === "past" ? "Recap" : "Register"}
+              {isPast ? "Recap" : "Register"}
             </button>
           </div>
         </div>

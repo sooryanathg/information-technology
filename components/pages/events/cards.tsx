@@ -4,15 +4,22 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import CategoryBar from "./CategoryBar";
 import EventCard from "./EventCard";
 import EventFilters, { PAST_EVENTS_ANCHOR, type FilterState } from "./EventFilters";
-import { events } from "./data/dataset";
+import { eventStatus } from "./data/dataset";
+import { events } from "./data/events";
 import { useInView, useIntroReady } from "@/lib/intro";
 
 const INITIAL_VISIBLE = 6;
-const INITIAL_FILTERS: FilterState = { category: "all", status: "upcoming", date: "", query: "" };
 const NO_FILTERS: FilterState = { category: "all", status: "all", date: "", query: "" };
 
 export default function Cards() {
-  const [filter, setFilter] = useState<FilterState>(INITIAL_FILTERS);
+  const hasUpcoming = events.some((e) => eventStatus(e) === "upcoming");
+  // With nothing coming up, open on past events instead of an empty list.
+  const [filter, setFilter] = useState<FilterState>(() => ({
+    category: "all",
+    status: hasUpcoming ? "upcoming" : "past",
+    date: "",
+    query: "",
+  }));
   const [showAll, setShowAll] = useState(false);
   const update = (patch: Partial<FilterState>) => setFilter((f) => ({ ...f, ...patch }));
   // Every time the filters scroll into view they step in again.
@@ -37,8 +44,8 @@ export default function Cards() {
     return events.filter(
       (e) =>
         (filter.category === "all" || e.category === filter.category) &&
-        (filter.status === "all" || e.status === filter.status) &&
-        (!filter.date || e.date === filter.date) &&
+        (filter.status === "all" || eventStatus(e) === filter.status) &&
+        (!filter.date || (!!e.date && e.date <= filter.date && filter.date <= (e.endDate ?? e.date))) &&
         (!query || `${e.title} ${e.description} ${e.org}`.toLowerCase().includes(query))
     );
   }, [filter]);
@@ -55,6 +62,13 @@ export default function Cards() {
       </div>
 
       <div className="mx-auto w-[90vw] max-w-[1344px] pb-20">
+        {!hasUpcoming && (
+          <p className="mx-auto mb-10 flex w-fit max-w-full items-center gap-3 rounded-full border border-cocoa/20 bg-white/70 px-5 py-2.5 text-center text-sm text-mocha shadow-soft">
+            <span aria-hidden className="size-2 shrink-0 rounded-full bg-cocoa/40" />
+            No upcoming events right now. Everything below is a past event; new ones will be
+            posted here soon.
+          </p>
+        )}
         {visible.length > 0 ? (
           <div className="grid grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-3">
             {visible.map((event, i) => (
@@ -62,7 +76,11 @@ export default function Cards() {
             ))}
           </div>
         ) : (
-          <p className="text-center text-lg">No events match these filters.</p>
+          <p className="text-center text-lg">
+            {filter.status === "upcoming" && !hasUpcoming
+              ? "No upcoming events right now. Check back soon."
+              : "No events match these filters."}
+          </p>
         )}
       </div>
 

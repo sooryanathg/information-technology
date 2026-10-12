@@ -42,7 +42,8 @@ components/pages/         Sections for each page
   home/                   HeroSection, HeroButton
   about/                  AboutHero
   events/                 herosection, cards, CategoryBar, EventFilters, EventCard
-    data/dataset.ts       Event categories and the events list
+    data/dataset.ts       Event types, categories and eventStatus()
+    data/events.ts        The events list
 
 public/                   Images and icons, grouped by page
   home/  about/  events/  images/  icons/  logo/
@@ -60,7 +61,8 @@ research projects, achievements, PYQ and notes links) is listed with links in
 | To change…                               | Edit                                                   |
 | ---------------------------------------- | ------------------------------------------------------ |
 | Navbar and footer links                  | `app/data/navigation.ts`                               |
-| Events and event categories              | `components/pages/events/data/dataset.ts`              |
+| Events                                   | `components/pages/events/data/events.ts`               |
+| Event categories                         | `components/pages/events/data/dataset.ts`              |
 | Footer address, email, socials, photo    | `app/components/Footer/Footer.tsx`                     |
 | Logo and "Dept. of IT" label             | `app/components/Navbar/Navbar.tsx`                     |
 | Home hero text and buttons               | `components/pages/home/HeroSection.tsx`                |
@@ -89,22 +91,28 @@ also matches its sub-pages, so `/events/anything` highlights "Events".
 
 ### Adding an event
 
-Add an entry to `events` in `components/pages/events/data/dataset.ts`:
+Add an entry to `events` in `components/pages/events/data/events.ts`:
 
 ```ts
 {
-  id: 9,                                  // unique
+  id: 11,                                 // unique
   title: "Workshop on Cloud Computing",
   description: "A hands-on introduction to deploying on the cloud.",
-  duration: "3h",
+  duration: "3h",                         // shown when there is no `time`
   org: "IEEE",
   mode: "Offline",                        // shown as the pill on the card
   category: "Tech",                       // "Tech" | "Non-Tech" | "Talks" | "Seminars"
-  status: "upcoming",                     // "upcoming" | "past"
   date: "2026-12-04",                     // yyyy-mm-dd, used by the date filter
+  endDate: "2026-12-05",                  // optional, last day of a multi-day event
+  time: "10:00 AM – 1:00 PM",             // optional
+  venue: "IT Lab 234",                    // optional
   image: "/events/cloud-workshop.webp",   // optional, place the file in public/events/
 },
 ```
+
+There is no status field: an event is upcoming until its last day has passed, then it
+moves to Past by itself and its card turns black and white. Events without a `date`
+count as past. When nothing is upcoming, the page opens on past events and says so.
 
 Cards without an `image` show a warm placeholder. The page shows the first six
 matching events, and "Explore All" clears the filters and shows everything.
