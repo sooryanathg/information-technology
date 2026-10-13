@@ -10,6 +10,7 @@ import { pageTileSize } from "@/lib/pixelFrame";
 const BASE_CELL = 32; // px
 const INSET = 2; // px kept clear on every side, so the grid's soft lines stay visible
 const FPS = 24;
+const PHONE_FPS = 12; // below the sm breakpoint, where every frame is dearer
 const FADE_IN = 96; // px from the top over which the checks fade in, like the texture
 
 // Waves: rings of colour that spread from the top-left corner and travel
@@ -124,10 +125,18 @@ export default function PixelChecks({ below }: Props) {
 
       const cols = Math.ceil(canvas.width / cell);
       const rows = Math.ceil(canvas.height / cell);
-      const inView = Math.max(0, window.innerHeight - canvas.getBoundingClientRect().bottom);
+      const box = canvas.getBoundingClientRect();
+      const inView = Math.max(0, window.innerHeight - box.bottom);
       const front = Math.min(BLEND_MAX * per, (inView * BLEND_RISE) / cell);
       const topRows = TOP_ROWS * per;
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // The canvas spans several sections, so only the rows on screen are
+      // drawn. A falling block paints up to DROP + 2 rows above the check it
+      // lands in, so rows that far below the screen are drawn too.
+      const firstRow = Math.max(0, Math.floor(-box.top / cell) - 1);
+      const lastRow = Math.min(rows, Math.ceil((window.innerHeight - box.top) / cell) + DROP + 3);
+      if (firstRow >= lastRow) return;
+      ctx.clearRect(0, firstRow * cell, canvas.width, (lastRow - firstRow) * cell);
 
       // A block dropping into check (c, r) a check at a time, trailing two
       // ghosts, then resting there for a while.
@@ -149,7 +158,8 @@ export default function PixelChecks({ below }: Props) {
       };
 
       const solid = new Path2D(); // the chipped edge, which gets the next section's lines
-      for (let r = 0; r < rows; r++) {
+      let hasSolid = false;
+      for (let r = firstRow; r < lastRow; r++) {
         const fade = Math.min(1, (r * cell) / FADE_IN);
         const k = rows - 1 - r; // rows above the bottom edge
         for (let c = 0; c < cols; c++) {
@@ -165,6 +175,7 @@ export default function PixelChecks({ below }: Props) {
             ctx.fillStyle = rgb(target);
             ctx.fillRect(c * cell, r * cell, cell, cell);
             solid.rect(c * cell, r * cell, cell, cell);
+            hasSolid = true;
             continue;
           }
           const depth = ((BLEND_BASE + (hash(c * 11 + 3) - 0.5) * 2) * per + chip + front - k) / (BLEND_EDGE * per);
@@ -211,6 +222,7 @@ export default function PixelChecks({ below }: Props) {
 
       // The row of Hilbert lines just above the next section, which continues
       // that section's pattern upwards, shown only on the solid checks.
+      if (!hasSolid) return; // the bottom edge is off screen
       ctx.save();
       ctx.clip(solid);
       ctx.translate(0, canvas.height);
@@ -253,7 +265,8 @@ export default function PixelChecks({ below }: Props) {
     let timer = 0;
     const io = new IntersectionObserver(([entry]) => {
       clearInterval(timer);
-      timer = entry.isIntersecting ? window.setInterval(draw, 1000 / FPS) : 0;
+      const fps = window.matchMedia("(max-width: 639px)").matches ? PHONE_FPS : FPS;
+      timer = entry.isIntersecting ? window.setInterval(draw, 1000 / fps) : 0;
     });
     io.observe(host);
     const ro = new ResizeObserver(measure);

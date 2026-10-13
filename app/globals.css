@@ -159,6 +159,12 @@ html:not([data-boot="run"]):not([data-boot="exit"]) .boot-loader {
     pixel-shimmer var(--shimmer-duration, 10s) step-end var(--shimmer-delay, 0ms) infinite;
 }
 
+/* PixelFrame sets data-offscreen while it is scrolled out of view. */
+[data-pixel-frame][data-offscreen] .pixel-shimmer,
+[data-pixel-frame][data-offscreen] .pixel-spark {
+  animation-play-state: paused;
+}
+
 @keyframes pixel-shimmer {
   80% {
     visibility: hidden;
