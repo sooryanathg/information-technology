@@ -10,6 +10,7 @@ import { pageTileSize } from "@/lib/pixelFrame";
 const BASE_CELL = 32; // px
 const INSET = 2; // px kept clear on every side, so the grid's soft lines stay visible
 const FPS = 24;
+const PHONE_FPS = 12; // below the sm breakpoint, where every frame is dearer
 const FADE_IN = 96; // px from the top over which the checks fade in, like the texture
 
 // Waves: rings of colour that spread from the top-left corner and travel
@@ -264,7 +265,8 @@ export default function PixelChecks({ below }: Props) {
     let timer = 0;
     const io = new IntersectionObserver(([entry]) => {
       clearInterval(timer);
-      timer = entry.isIntersecting ? window.setInterval(draw, 1000 / FPS) : 0;
+      const fps = window.matchMedia("(max-width: 639px)").matches ? PHONE_FPS : FPS;
+      timer = entry.isIntersecting ? window.setInterval(draw, 1000 / fps) : 0;
     });
     io.observe(host);
     const ro = new ResizeObserver(measure);

@@ -110,6 +110,18 @@ export default function PixelFrame({
     return () => ro.disconnect();
   }, []);
 
+  // The idle shimmer runs forever, so pause it (see globals.css) while the
+  // frame is scrolled off screen; it otherwise costs frames on phones.
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const io = new IntersectionObserver(([entry]) => {
+      el.toggleAttribute("data-offscreen", !entry.isIntersecting);
+    });
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
   // Blurred copy of the photo, cropped exactly like the hero crops it.
   useEffect(() => {
     const img = imgRef.current;

@@ -273,7 +273,6 @@ export default function AchievementsSection() {
                           src={poster.imageUrl}
                           alt={poster.name}
                           fill
-                          unoptimized
                           sizes="(min-width: 640px) 380px, 45vw"
                           className="object-cover"
                           priority={index === 0}
@@ -319,7 +318,6 @@ export default function AchievementsSection() {
               src={openPoster.imageUrl}
               alt={openPoster.name}
               fill
-              unoptimized
               sizes="100vw"
               className="object-contain"
             />
