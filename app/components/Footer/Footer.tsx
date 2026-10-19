@@ -8,8 +8,16 @@ import TypeText, { typingTime } from "@/components/transitions/TypeText";
 import { useInView } from "@/lib/intro";
 
 const socialLinks = [
-  { label: "LinkedIn", href: "#", icon: "/icons/footer-linkedin.svg" },
-  { label: "Instagram", href: "#", icon: "/icons/footer-instagram.svg" },
+  {
+    label: "LinkedIn",
+    href: "https://www.linkedin.com/company/department-of-information-technology-gec-palakkad/",
+    icon: "/icons/footer-linkedin.svg",
+  },
+  {
+    label: "Instagram",
+    href: "https://www.instagram.com/it_gecpkd?xtok=OHljOXZ5OHRvMDQz",
+    icon: "/icons/footer-instagram.svg",
+  },
 ];
 
 const sectionTitle =
