@@ -8,8 +8,10 @@ export const footerNavigationLinks = [
 ];
 
 export const footerSocialLinks = {
-  linkedinUrl: "#",
-  instagramUrl: "#",
+  linkedinUrl:
+    "https://www.linkedin.com/company/department-of-information-technology-gec-palakkad/",
+  instagramUrl:
+    "https://www.instagram.com/it_gecpkd?xtok=OHljOXZ5OHRvMDQz",
 };
 
 export const footerContact = {
