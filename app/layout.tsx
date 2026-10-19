@@ -19,10 +19,30 @@ const inter = Inter({
   variable: "--font-inter",
 });
 
+const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL ||
+  "https://information-technology-gamma.vercel.app";
+
 export const metadata: Metadata = {
-  title: "Department of Information Technology",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: "Department of Information Technology",
+    template: "%s | Department of Information Technology",
+  },
   description:
     "Empowering innovation through knowledge and technology, creating future ready engineers for a connected world",
+  openGraph: {
+    title: "Department of Information Technology",
+    description:
+      "Empowering innovation through knowledge and technology, creating future ready engineers for a connected world",
+    url: SITE_URL,
+    siteName: "Department of Information Technology",
+    locale: "en_US",
+    type: "website",
+  },
+  verification: {
+    google: "nR_iWA0YMYrkVcd_yVV1af16sS2CgrEcLFDy3hQT7y4",
+  },
 };
 
 // Runs before first paint: decides whether the boot loader plays this session.
