@@ -13,7 +13,7 @@ import { useEffect, useRef, useState } from "react";
 import { notesLinks } from "./Resources/NotesLinks";
 import { pyqLinks } from "./Resources/PyqLinks";
 
-const programs = ["All", "B.Tech", "M.Tech"];
+const programs = ["B.Tech", "M.Tech"];
 
 const btechSchemes = ["2019", "2024"];
 
@@ -38,7 +38,7 @@ const resources = [
 
 export default function ResourcesSection() {
   const [selectedProgram, setSelectedProgram] =
-    useState("All");
+  useState<string | null>(null);
 
   const [selectedScheme, setSelectedScheme] =
     useState("2024");
@@ -89,9 +89,11 @@ export default function ResourcesSection() {
   // --------------------------------------------------
 
   const visibleSemesters =
-    selectedProgram === "M.Tech"
-      ? semesters.slice(0, 4)
-      : semesters;
+  selectedProgram === "M.Tech"
+    ? semesters.slice(0, 4)
+    : selectedProgram === "B.Tech"
+      ? semesters
+      : [];
 
   // --------------------------------------------------
   // PROGRAM CHANGE
@@ -119,6 +121,10 @@ export default function ResourcesSection() {
   // --------------------------------------------------
 
   const handleResourceClick = (label: string) => {
+    if (!selectedProgram) {
+      showNotice("Please select B.Tech or M.Tech first.");
+      return;
+    }
     // ==================================================
     // OTHER RESOURCES
     // ==================================================
@@ -189,13 +195,6 @@ export default function ResourcesSection() {
     // ALL
     // ==================================================
 
-    if (selectedProgram === "All") {
-      showNotice(
-        `${label} is available after selecting B.Tech or M.Tech.`
-      );
-
-      return;
-    }
 
     // ==================================================
     // LINK NOT AVAILABLE
@@ -296,6 +295,9 @@ export default function ResourcesSection() {
         >
           Resources
         </h2>
+        <p className="mt-1 text-sm leading-relaxed text-[#594430] sm:text-base">
+  Select B.Tech or M.Tech to access resources.
+</p>
 
         {/* ==================================================
             PROGRAMS
@@ -346,12 +348,12 @@ export default function ResourcesSection() {
               </button>
             ))}
           </div>
-        )}
+         )}
 
         {/* ==================================================
             SEMESTERS
         ================================================== */}
-
+      {selectedProgram && (
         <div className="mt-3 flex flex-wrap gap-1.5 sm:mt-4 sm:gap-2.5">
           {visibleSemesters.map((semester) => (
             <button
@@ -373,7 +375,7 @@ export default function ResourcesSection() {
             </button>
           ))}
         </div>
-
+      )}
         {/* ==================================================
             RESOURCE CARDS
         ================================================== */}
@@ -383,10 +385,13 @@ export default function ResourcesSection() {
             <li key={label}>
               <button
                 type="button"
+                disabled={!selectedProgram}
                 onClick={() =>
                   handleResourceClick(label)
                 }
-                className="flex min-h-[84px] w-full flex-col items-center justify-center gap-2 rounded-[6px] sm:min-h-[150px] sm:gap-3 border border-[#e1cdb0] bg-[#ead8be] px-2 py-3 text-center text-[#33271d] shadow-[0_2px_4px_rgba(60,43,27,0.12)] transition-colors hover:bg-[#e2ccb0] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#765538]"
+               
+className="flex min-h-[84px] w-full flex-col items-center justify-center gap-2 rounded-[6px] sm:min-h-[150px] sm:gap-3 border border-[#e1cdb0] bg-[#ead8be] px-2 py-3 text-center text-[#33271d] shadow-[0_2px_4px_rgba(60,43,27,0.12)] transition-colors hover:bg-[#e2ccb0] disabled:cursor-not-allowed disabled:hover:bg-[#ead8be] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#765538]"
+
               >
                 <span className="flex h-7 w-7 items-center justify-center rounded-[3px] bg-[#bc8b57] text-[#33271d] sm:h-11 sm:w-11">
                   <Icon
